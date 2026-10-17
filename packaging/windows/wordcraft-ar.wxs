@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  WordCraft AR MSI (WiX Toolset v5), built by package-ar.ps1:
+
+    wix build wordcraft-ar.wxs -arch x64 -ext WixToolset.UI.wixext -ext WixToolset.Util.wixext
+      -d Version=0.7.0 -d BinDir=... -d EngineDir=... -d IconPath=... -d LicenseRtf=... -o out.msi
+
+  Per-machine install into Program Files\WordCraft AR with a Start Menu entry and a desktop
+  shortcut, plus the ServiceWord-AR engine folder beside the program. Self-contained: the
+  binaries link the C runtime statically, so an offline machine needs nothing else.
+
+  The UpgradeCode and component GUIDs below belong to WordCraft AR alone — they differ from
+  WordCraft's (wordcraft.wxs) on purpose, so both products install side by side and neither
+  installer replaces or removes the other.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs" xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui">
+  <Package
+      Name="WordCraft AR"
+      Manufacturer="WordCraft AR contributors"
+      Version="$(var.Version)"
+      UpgradeCode="52B023BA-D7B9-4CD2-A85F-5BBB01777043"
+      Scope="perMachine"
+      Compressed="yes"
+      Language="1033">
+    <SummaryInformation Description="WordCraft AR word processor (Arabic service writing)" Manufacturer="WordCraft AR contributors" />
+    <MajorUpgrade AllowSameVersionUpgrades="yes"
+        DowngradeErrorMessage="A newer version of WordCraft AR is already installed." />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Icon Id="WordcraftArIcon.ico" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="WordcraftArIcon.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/storytold/wordcraft" />
+
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch WordCraft AR" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
+    <Property Id="WixShellExecTarget" Value="[#WordcraftArExe]" />
+    <CustomAction Id="LaunchWordcraftAr" BinaryRef="Wix4UtilCA_$(sys.BUILDARCHSHORT)" DllEntry="WixShellExec"
+        Impersonate="yes" Return="ignore" />
+    <UI>
+      <ui:WixUI Id="WixUI_Minimal" />
+      <Publish Dialog="ExitDialog" Control="Finish" Event="DoAction" Value="LaunchWordcraftAr"
+          Condition="WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 AND NOT Installed" />
+    </UI>
+
+    <StandardDirectory Id="ProgramFiles6432Folder">
+      <Directory Id="INSTALLFOLDER" Name="WordCraft AR">
+        <Directory Id="ENGINEFOLDER" Name="servicewordar" />
+      </Directory>
+    </StandardDirectory>
+    <StandardDirectory Id="ProgramMenuFolder" />
+    <StandardDirectory Id="DesktopFolder" />
+
+    <Feature Id="Main" Title="WordCraft AR" Level="1">
+      <ComponentGroupRef Id="WordcraftArFiles" />
+      <ComponentGroupRef Id="EngineFiles" />
+    </Feature>
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="WordcraftArFiles" Directory="INSTALLFOLDER">
+      <Component Id="WordcraftArApp" Guid="1D441A39-E6B6-48F5-9946-C44D6214A1BB">
+        <File Id="WordcraftArExe" Source="$(var.BinDir)\WordCraft AR.exe" KeyPath="yes">
+          <Shortcut Id="StartMenuShortcut" Directory="ProgramMenuFolder" Name="WordCraft AR"
+              Description="WordCraft AR word processor" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+              Icon="WordcraftArIcon.ico" IconIndex="0" />
+          <Shortcut Id="DesktopShortcut" Directory="DesktopFolder" Name="WordCraft AR"
+              Description="WordCraft AR word processor" WorkingDirectory="INSTALLFOLDER" Advertise="yes"
+              Icon="WordcraftArIcon.ico" IconIndex="0" />
+        </File>
+        <RegistryValue Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\App Paths\WordCraft AR.exe" Value="[#WordcraftArExe]" Type="string" />
+      </Component>
+
+      <!-- "Open with" candidates for Word documents (never the default; the user picks that in
+           Settings › Default apps). Its own ProgIds, so WordCraft's stay untouched. -->
+      <Component Id="WordcraftArFileTypes" Guid="B1FA4CB3-CFCF-4014-9B84-D87D61105785">
+        <RegistryValue Root="HKLM" Key="Software\RegisteredApplications" Name="WordCraft AR" Value="Software\WordCraft AR\Capabilities" Type="string" KeyPath="yes" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities" Name="ApplicationName" Value="WordCraft AR" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities" Name="ApplicationDescription" Value="Arabic service writing; open and save Word files." Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities" Name="ApplicationIcon" Value="&quot;[#WordcraftArExe]&quot;,0" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\Applications\WordCraft AR.exe" Name="FriendlyAppName" Value="WordCraft AR" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\Applications\WordCraft AR.exe\shell\open\command" Value="&quot;[#WordcraftArExe]&quot; &quot;%1&quot;" Type="string" />
+
+        <ProgId Id="WordCraftAR.Document" Description="Word Document" Icon="WordcraftArExe" IconIndex="0" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\WordCraftAR.Document\shell\open\command" Value="&quot;[#WordcraftArExe]&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.docx\OpenWithProgids" Name="WordCraftAR.Document" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\Applications\WordCraft AR.exe\SupportedTypes" Name=".docx" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities\FileAssociations" Name=".docx" Value="WordCraftAR.Document" Type="string" />
+
+        <ProgId Id="WordCraftAR.LegacyDocument" Description="Legacy Word Document" Icon="WordcraftArExe" IconIndex="0" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\WordCraftAR.LegacyDocument\shell\open\command" Value="&quot;[#WordcraftArExe]&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.doc\OpenWithProgids" Name="WordCraftAR.LegacyDocument" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\Applications\WordCraft AR.exe\SupportedTypes" Name=".doc" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities\FileAssociations" Name=".doc" Value="WordCraftAR.LegacyDocument" Type="string" />
+
+        <ProgId Id="WordCraftAR.RichText" Description="Rich Text Document" Icon="WordcraftArExe" IconIndex="0" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\WordCraftAR.RichText\shell\open\command" Value="&quot;[#WordcraftArExe]&quot; &quot;%1&quot;" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\.rtf\OpenWithProgids" Name="WordCraftAR.RichText" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\Classes\Applications\WordCraft AR.exe\SupportedTypes" Name=".rtf" Value="" Type="string" />
+        <RegistryValue Root="HKLM" Key="Software\WordCraft AR\Capabilities\FileAssociations" Name=".rtf" Value="WordCraftAR.RichText" Type="string" />
+      </Component>
+
+      <Component Id="WordcraftArCli" Guid="1A6E477C-D997-4227-ACE4-717924C4F9A8">
+        <File Id="WordcraftArCliExe" Source="$(var.BinDir)\wordcraft-cli.exe" KeyPath="yes" />
+      </Component>
+    </ComponentGroup>
+
+    <!-- The ServiceWord-AR engine: every file under servicewordar\ (wheels included, for the
+         offline install of its Python libraries), harvested at build time. -->
+    <ComponentGroup Id="EngineFiles" Directory="ENGINEFOLDER">
+      <Files Include="$(var.EngineDir)\**" />
+    </ComponentGroup>
+  </Fragment>
+</Wix>
