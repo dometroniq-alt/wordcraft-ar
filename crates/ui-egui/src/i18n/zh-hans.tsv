@@ -2282,3 +2282,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	“公务”和“邮件”选项卡中的按钮会显示其功能的缩略图和一句界面语言的说明；开启后，当界面不是阿拉伯语时会追加阿拉伯语说明。
 	Old computer mode (no animations, fastest start)	旧电脑模式（无动画，最快启动）
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	适用于速度慢或老旧的电脑：关闭所有界面动画、闪烁的光标、迷你工具栏和对齐参考线，并以空白文档启动。
+	UI Kit	界面套件
+	UI\nKit	界面\n套件
+	Self-test	自检
+	Self-\nTest	自检
+	Checklist	检查清单
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR 界面套件
+	Filter:	筛选：
+	Command	命令
+	Parameters	参数
+	ms	毫秒
+	Answer	结果
+	Run the self-test	运行自检
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	在一份临时阿拉伯语公文上运行功能区的每个按钮（不改动您的文档），并列出每个按钮的结果。
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} 个按钮在 {ms} 毫秒内运行；{errors} 个返回错误（需要输入的对话框、需要选区的功能）；{pages} 页；公文循环 {ok}
+	{shown} of {total} entries	{total} 项中的 {shown} 项
+	{shown} of {total} icons	{total} 个图标中的 {shown} 个
+	No Arabic translation yet	尚无阿拉伯语翻译
+	No icon named {icon} (a lettered tile is drawn)	没有名为 {icon} 的图标（绘制字母方块）
+	{n} ribbon buttons without visual help	{n} 个功能区按钮没有图示帮助
+	{n} explanations without an Arabic translation	{n} 条说明没有阿拉伯语翻译
+	{n} icons in the set	图标集中有 {n} 个图标
+	{n} entries in the UI kit	界面套件中有 {n} 项
+	{n} commands in the registry	命令注册表中有 {n} 条命令
+	{n} Arabic interface strings	阿拉伯语界面字符串 {n} 条
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	添加命令：在 icons.rs 中加图标，在 ui_kit/<tab>.rs 中加一个 Entry，在 i18n/ar.tsv 中加一行 — 见 docs/ar-ui-kit.md。

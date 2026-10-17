@@ -2678,3 +2678,29 @@ preview	Title	Esempio
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	I pulsanti delle schede Servizio e Mail mostrano una miniatura di ciò che fanno e una frase nella lingua dell'interfaccia; se attivo, viene aggiunta la frase in arabo quando l'interfaccia non è in arabo.
 	Old computer mode (no animations, fastest start)	Modalità computer vecchio (senza animazioni, avvio più rapido)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Per macchine lente o vecchie: disattiva tutte le animazioni dell’interfaccia, il cursore lampeggiante, la mini barra degli strumenti e le guide di allineamento, e si avvia con un documento vuoto.
+	UI Kit	Kit interfaccia
+	UI\nKit	Kit\ninterfaccia
+	Self-test	Autotest
+	Self-\nTest	Auto-\ntest
+	Checklist	Lista di controllo
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	Kit interfaccia WordCraft AR
+	Filter:	Filtro:
+	Command	Comando
+	Parameters	Parametri
+	ms	ms
+	Answer	Risposta
+	Run the self-test	Esegui l'autotest
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Esegue ogni pulsante della barra multifunzione su un documento di servizio arabo di prova (il suo documento non viene toccato) ed elenca la risposta di ciascuno.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} pulsanti in {ms} ms; {errors} hanno risposto con un errore (una finestra richiede dati, una funzione richiede una selezione); {pages} pagina/e; ciclo di servizio {ok}
+	{shown} of {total} entries	{shown} voci su {total}
+	{shown} of {total} icons	{shown} icone su {total}
+	No Arabic translation yet	Ancora senza traduzione araba
+	No icon named {icon} (a lettered tile is drawn)	Nessuna icona chiamata {icon} (viene disegnata una tessera con lettera)
+	{n} ribbon buttons without visual help	{n} pulsanti della barra senza aiuto visivo
+	{n} explanations without an Arabic translation	{n} spiegazioni senza traduzione araba
+	{n} icons in the set	{n} icone nel set
+	{n} entries in the UI kit	{n} voci nel kit interfaccia
+	{n} commands in the registry	{n} comandi nel registro
+	{n} Arabic interface strings	{n} stringhe dell'interfaccia araba
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Aggiungere un comando: l'icona in icons.rs, una Entry in ui_kit/<tab>.rs, una riga in i18n/ar.tsv — vedi docs/ar-ui-kit.md.

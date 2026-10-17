@@ -2709,3 +2709,29 @@ template	Letter	Thư
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Các nút trên thẻ Công vụ và Gửi thư hiển thị hình thu nhỏ về việc chúng làm và một câu bằng ngôn ngữ giao diện; khi bật, câu tiếng Ả Rập được thêm vào khi giao diện không phải tiếng Ả Rập.
 	Old computer mode (no animations, fastest start)	Chế độ máy tính cũ (không hoạt ảnh, khởi động nhanh nhất)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Dành cho máy chậm hoặc cũ: tắt mọi hoạt ảnh giao diện, con trỏ nhấp nháy, thanh công cụ mini và các đường gióng căn chỉnh, và mở sẵn một tài liệu trống.
+	UI Kit	Bộ giao diện
+	UI\nKit	Bộ\ngiao diện
+	Self-test	Tự kiểm tra
+	Self-\nTest	Tự\nkiểm tra
+	Checklist	Danh sách kiểm tra
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	Bộ giao diện WordCraft AR
+	Filter:	Lọc:
+	Command	Lệnh
+	Parameters	Tham số
+	ms	ms
+	Answer	Kết quả
+	Run the self-test	Chạy tự kiểm tra
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Chạy mọi nút trên dải băng trên một tài liệu công vụ tiếng Ả Rập tạm (tài liệu của bạn không bị thay đổi) và liệt kê kết quả của từng nút.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} nút trong {ms} ms; {errors} trả về lỗi (hộp thoại cần nhập liệu, tính năng cần vùng chọn); {pages} trang; chu trình công vụ {ok}
+	{shown} of {total} entries	{shown} / {total} mục
+	{shown} of {total} icons	{shown} / {total} biểu tượng
+	No Arabic translation yet	Chưa có bản dịch tiếng Ả Rập
+	No icon named {icon} (a lettered tile is drawn)	Không có biểu tượng tên {icon} (vẽ ô chữ cái thay thế)
+	{n} ribbon buttons without visual help	{n} nút dải băng chưa có trợ giúp hình ảnh
+	{n} explanations without an Arabic translation	{n} giải thích chưa có bản dịch tiếng Ả Rập
+	{n} icons in the set	{n} biểu tượng trong bộ
+	{n} entries in the UI kit	{n} mục trong bộ giao diện
+	{n} commands in the registry	{n} lệnh trong sổ đăng ký
+	{n} Arabic interface strings	{n} chuỗi giao diện tiếng Ả Rập
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Thêm lệnh: biểu tượng trong icons.rs, một Entry trong ui_kit/<tab>.rs, một dòng trong i18n/ar.tsv — xem docs/ar-ui-kit.md.

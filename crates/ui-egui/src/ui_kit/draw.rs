@@ -179,11 +179,11 @@ impl<'a> Draw<'a> {
     }
     /// Text set in the thumbnail's own font.
     pub fn label(&self, pos: Pos2, s: &str, size: f32, c: Color32, anchor: Align2) {
-        self.p.text(pos, anchor, s, crate::theme::semibold(size), c);
+        self.p.text(pos, anchor, crate::i18n::artwork(s), crate::theme::semibold(size), c);
     }
     /// A large glyph (a letter, a symbol) in the middle of the thumbnail or at `pos`.
     pub fn glyph(&self, pos: Pos2, s: &str, size: f32, c: Color32) {
-        self.p.text(pos, Align2::CENTER_CENTER, s, crate::theme::semibold(size), c);
+        self.p.text(pos, Align2::CENTER_CENTER, crate::i18n::artwork(s), crate::theme::semibold(size), c);
     }
     /// A selection band over `rect` (behind the text, so draw it first).
     pub fn selection(&self, rect: Rect) {

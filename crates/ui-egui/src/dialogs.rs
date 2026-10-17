@@ -385,6 +385,14 @@ pub enum Dialog {
     About {
         tab: u8,
     },
+    /// WordCraft AR's developer systems: the UI kit gallery, the icon set, the self-test and the
+    /// checklist (`crate::dev_tools`).
+    UiKit {
+        tab: u8,
+        filter: String,
+        #[serde(skip)]
+        report: Option<crate::dev_tools::Report>,
+    },
     /// Confirm before deleting a recovery copy.
     DiscardRecovery {
         id: String,
@@ -817,6 +825,7 @@ impl Dialog {
             Dialog::Icons { .. } => "icons",
             Dialog::PasteSpecial { .. } => "pasteSpecial",
             Dialog::About { .. } => "about",
+            Dialog::UiKit { .. } => "uiKit",
             Dialog::SaveChanges { .. } => "saveChanges",
             Dialog::DiscardRecovery { .. } => "discardRecovery",
             Dialog::RecipientList { .. } => "recipientList",
@@ -1048,6 +1057,8 @@ impl Dialog {
             "pasteSpecial" => Dialog::paste_special(app, &json!({})),
             "renameDocument" => Dialog::RenameDocument { name: app.title_stem(), message: String::new(), focus: true },
             "about" => Dialog::About { tab: 0 },
+            "uiKit" => Dialog::UiKit { tab: 0, filter: String::new(), report: None },
+            "selfTest" => Dialog::UiKit { tab: 2, filter: String::new(), report: None },
             "contributors" => Dialog::About { tab: 1 },
             "models" => Dialog::About { tab: 2 },
             // The current list to edit, or a new one to type.
@@ -1264,6 +1275,7 @@ pub fn show(app: &mut WordApp, ctx: &egui::Context) {
         Dialog::Icons { .. } => "Icons",
         Dialog::PasteSpecial { .. } => "Paste Special",
         Dialog::About { .. } => "About WordCraft",
+        Dialog::UiKit { .. } => "WordCraft AR UI Kit",
         Dialog::SaveChanges { .. } => "WordCraft",
         Dialog::DiscardRecovery { .. } => "Discard recovery copy",
         Dialog::RecipientList { .. } => "Recipient List",
@@ -2374,6 +2386,7 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             }
             ok || cancel
         }
+        Dialog::UiKit { tab, filter, report } => crate::dev_tools::body(app, ui, tab, filter, report),
         Dialog::About { tab } => {
             ui.set_width(660.0);
             ui.horizontal(|ui| {

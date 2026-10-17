@@ -2667,3 +2667,29 @@ preview	Title	Пример
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Кнопки вкладок «Служба» и «Рассылки» показывают миниатюру своего действия и фразу на языке интерфейса; если включено, добавляется арабская фраза, когда интерфейс не арабский.
 	Old computer mode (no animations, fastest start)	Режим старого компьютера (без анимаций, самый быстрый запуск)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Для медленных или старых машин: отключает все анимации интерфейса, мигающий курсор, мини-панель инструментов и направляющие выравнивания и запускается с пустым документом.
+	UI Kit	UI-набор
+	UI\nKit	UI-\nнабор
+	Self-test	Самопроверка
+	Self-\nTest	Само-\nпроверка
+	Checklist	Контрольный список
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	UI-набор WordCraft AR
+	Filter:	Фильтр:
+	Command	Команда
+	Parameters	Параметры
+	ms	мс
+	Answer	Ответ
+	Run the self-test	Запустить самопроверку
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Запускает каждую кнопку ленты на черновом арабском служебном документе (ваш документ не затрагивается) и показывает, что ответила каждая.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} кнопок за {ms} мс; {errors} ответили ошибкой (диалог ждёт ввода, функция требует выделения); {pages} стр.; служебный цикл {ok}
+	{shown} of {total} entries	{shown} из {total} записей
+	{shown} of {total} icons	{shown} из {total} значков
+	No Arabic translation yet	Арабского перевода пока нет
+	No icon named {icon} (a lettered tile is drawn)	Значка {icon} нет (рисуется плитка с буквой)
+	{n} ribbon buttons without visual help	{n} кнопок ленты без визуальной подсказки
+	{n} explanations without an Arabic translation	{n} пояснений без арабского перевода
+	{n} icons in the set	{n} значков в наборе
+	{n} entries in the UI kit	{n} записей в UI-наборе
+	{n} commands in the registry	{n} команд в реестре
+	{n} Arabic interface strings	{n} строк арабского интерфейса
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Добавить команду: значок в icons.rs, один Entry в ui_kit/<tab>.rs, одна строка в i18n/ar.tsv — см. docs/ar-ui-kit.md.

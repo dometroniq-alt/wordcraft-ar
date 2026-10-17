@@ -2277,3 +2277,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Les boutons des onglets Service et Publipostage affichent une vignette de ce qu’ils font et une phrase dans la langue de l’interface ; si activé, la phrase en arabe est ajoutée quand l’interface n’est pas en arabe.
 	Old computer mode (no animations, fastest start)	Mode ancien ordinateur (sans animations, démarrage le plus rapide)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Pour les machines lentes ou anciennes : désactive toutes les animations de l’interface, le curseur clignotant, la mini-barre d’outils et les guides d’alignement, et démarre sur un document vierge.
+	UI Kit	Kit d'interface
+	UI\nKit	Kit\nd'interface
+	Self-test	Autotest
+	Self-\nTest	Auto-\ntest
+	Checklist	Liste de contrôle
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	Kit d'interface WordCraft AR
+	Filter:	Filtre :
+	Command	Commande
+	Parameters	Paramètres
+	ms	ms
+	Answer	Réponse
+	Run the self-test	Lancer l'autotest
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Exécute chaque bouton du ruban sur un document de service arabe de brouillon (votre document n'est pas touché) et liste la réponse de chacun.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} boutons en {ms} ms ; {errors} ont répondu par une erreur (une boîte de dialogue attend une saisie, une fonction attend une sélection) ; {pages} page(s) ; cycle de service {ok}
+	{shown} of {total} entries	{shown} entrées sur {total}
+	{shown} of {total} icons	{shown} icônes sur {total}
+	No Arabic translation yet	Pas encore de traduction arabe
+	No icon named {icon} (a lettered tile is drawn)	Aucune icône nommée {icon} (une tuile lettrée est dessinée)
+	{n} ribbon buttons without visual help	{n} boutons du ruban sans aide visuelle
+	{n} explanations without an Arabic translation	{n} explications sans traduction arabe
+	{n} icons in the set	{n} icônes dans le jeu
+	{n} entries in the UI kit	{n} entrées dans le kit d'interface
+	{n} commands in the registry	{n} commandes dans le registre
+	{n} Arabic interface strings	{n} chaînes de l'interface arabe
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Ajouter une commande : son icône dans icons.rs, une Entry dans ui_kit/<tab>.rs, une ligne dans i18n/ar.tsv — voir docs/ar-ui-kit.md.

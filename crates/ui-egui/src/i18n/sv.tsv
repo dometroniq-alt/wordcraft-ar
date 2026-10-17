@@ -2684,3 +2684,29 @@ preview	Title	Titel
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Knapparna på flikarna Tjänst och Utskick visar en miniatyrbild av vad de gör och en mening på gränssnittsspråket; när det är på läggs den arabiska meningen till om gränssnittet inte är arabiskt.
 	Old computer mode (no animations, fastest start)	Läge för gammal dator (inga animationer, snabbaste start)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	För långsamma eller gamla datorer: stänger av alla animationer i gränssnittet, den blinkande markören, miniverktygsfältet och justeringsguiderna, och startar med ett tomt dokument.
+	UI Kit	UI-kit
+	UI\nKit	UI-\nkit
+	Self-test	Självtest
+	Self-\nTest	Själv-\ntest
+	Checklist	Checklista
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UI-kit
+	Filter:	Filter:
+	Command	Kommando
+	Parameters	Parametrar
+	ms	ms
+	Answer	Svar
+	Run the self-test	Kör självtestet
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Kör varje knapp i menyfliksområdet på ett arabiskt övningsdokument (ditt dokument rörs inte) och listar vad var och en svarade.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} knappar på {ms} ms; {errors} svarade med ett fel (en dialogruta behöver indata, en funktion behöver en markering); {pages} sida/sidor; tjänstecykel {ok}
+	{shown} of {total} entries	{shown} av {total} poster
+	{shown} of {total} icons	{shown} av {total} ikoner
+	No Arabic translation yet	Ingen arabisk översättning ännu
+	No icon named {icon} (a lettered tile is drawn)	Ingen ikon med namnet {icon} (en bokstavsbricka ritas)
+	{n} ribbon buttons without visual help	{n} knappar utan visuell hjälp
+	{n} explanations without an Arabic translation	{n} förklaringar utan arabisk översättning
+	{n} icons in the set	{n} ikoner i uppsättningen
+	{n} entries in the UI kit	{n} poster i UI-kitet
+	{n} commands in the registry	{n} kommandon i registret
+	{n} Arabic interface strings	{n} strängar i det arabiska gränssnittet
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Lägg till ett kommando: dess ikon i icons.rs, en Entry i ui_kit/<tab>.rs, en rad i i18n/ar.tsv — se docs/ar-ui-kit.md.

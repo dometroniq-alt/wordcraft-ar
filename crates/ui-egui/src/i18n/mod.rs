@@ -263,7 +263,7 @@ impl Lang {
         LANGUAGES.iter().map(Lang)
     }
 
-    fn catalog(self) -> &'static Catalog {
+    pub fn catalog(self) -> &'static Catalog {
         self.0.catalog()
     }
 }
@@ -414,6 +414,16 @@ pub fn explain(lang: Lang, s: &str) -> &str {
         return pseudo::mark_quiet(s);
     }
     lang.catalog().plain(s).unwrap_or(s)
+}
+
+/// Text that is part of a drawing (a thumbnail's sample words, a command id in the kit
+/// gallery): never translated, and not interface text for the translation audit.
+pub fn artwork(s: &str) -> &str {
+    #[cfg(test)]
+    if pseudo::on() {
+        return pseudo::mark_quiet(s);
+    }
+    s
 }
 
 /// `s` in `lang`; strings without a translation come back unchanged.

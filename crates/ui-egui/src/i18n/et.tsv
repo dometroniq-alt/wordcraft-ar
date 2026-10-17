@@ -2304,3 +2304,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Vahekaartide Teenistus ja Postitused nupud näitavad pisipilti oma toimest ja lauset kasutajaliidese keeles; kui sees, lisatakse araabiakeelne lause, kui liides ei ole araabia keeles.
 	Old computer mode (no animations, fastest start)	Vana arvuti režiim (ilma animatsioonideta, kiireim käivitus)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Aeglastele või vanadele masinatele: lülitab välja kõik liidese animatsioonid, vilkuva kursori, minitööriistariba ja joondamisjuhikud ning käivitub tühja dokumendiga.
+	UI Kit	UI komplekt
+	UI\nKit	UI\nkomplekt
+	Self-test	Enesetest
+	Self-\nTest	Enese-\ntest
+	Checklist	Kontrollnimekiri
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UI komplekt
+	Filter:	Filter:
+	Command	Käsk
+	Parameters	Parameetrid
+	ms	ms
+	Answer	Vastus
+	Run the self-test	Käivita enesetest
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Käivitab iga lindi nupu araabiakeelsel proovidokumendil (teie dokumenti ei puudutata) ja loetleb, mida iga nupp vastas.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} nuppu {ms} ms jooksul; {errors} vastasid veaga (dialoog vajab sisendit, funktsioon vajab valikut); {pages} lehte; teenistustsükkel {ok}
+	{shown} of {total} entries	{shown} / {total} kirjet
+	{shown} of {total} icons	{shown} / {total} ikooni
+	No Arabic translation yet	Araabiakeelne tõlge puudub
+	No icon named {icon} (a lettered tile is drawn)	Ikooni {icon} pole (joonistatakse täheplaat)
+	{n} ribbon buttons without visual help	{n} lindi nuppu ilma visuaalse abita
+	{n} explanations without an Arabic translation	{n} selgitust ilma araabiakeelse tõlketa
+	{n} icons in the set	{n} ikooni komplektis
+	{n} entries in the UI kit	{n} kirjet UI komplektis
+	{n} commands in the registry	{n} käsku registris
+	{n} Arabic interface strings	{n} araabiakeelse liidese sõnet
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Käsu lisamine: ikoon failis icons.rs, üks Entry failis ui_kit/<tab>.rs, üks rida failis i18n/ar.tsv — vt docs/ar-ui-kit.md.

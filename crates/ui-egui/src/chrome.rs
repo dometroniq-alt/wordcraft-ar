@@ -245,9 +245,13 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                 let max = ui.ctx().input(|i| i.viewport().maximized.unwrap_or(false));
                 ui.ctx().send_viewport_cmd(egui::ViewportCommand::Maximized(!max));
             }
-            let mut qat_end = full.min.x;
+            // Where the controls at each side end, so the title is centred in the room between
+            // them: AutoSave and the Quick Access Toolbar at the start edge, search and the account
+            // at the end edge (the left one in a right-to-left interface).
+            let rtl = crate::rtl::on();
+            let mut left_end = full.min.x;
             let mut right_start = full.max.x;
-            ui.horizontal_centered(|ui| {
+            crate::rtl::horizontal_centered(ui, |ui| {
                 ui.spacing_mut().item_spacing = vec2(2.0, 0.0);
                 // AutoSave switch: greyed out, with the reason as its tooltip, when AutoSave can't
                 // cover the document (#196, #176); clicking it then offers Save As where that helps.
@@ -262,7 +266,8 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                     (None, false) => (t.input, t.border_strong, t.text_dim),
                 };
                 ui.painter().rect(r, 8.0, fill, Stroke::new(1.0, stroke), egui::StrokeKind::Inside);
-                let knob = if on { r.max.x - 8.0 } else { r.min.x + 8.0 };
+                // The knob at the switch's end edge when on (its left end right-to-left).
+                let knob = if on { crate::rtl::end_x(r, 8.0) } else { crate::rtl::start_x(r, 8.0) };
                 ui.painter().circle_filled(pos2(knob, r.center().y), 5.0, knob_fill);
                 let tip = block
                     .as_ref()
@@ -281,8 +286,12 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                 }
                 ui.add_space(8.0);
                 quick_access(ui, app);
-                qat_end = ui.min_rect().max.x;
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                if rtl {
+                    right_start = ui.min_rect().min.x;
+                } else {
+                    left_end = ui.min_rect().max.x;
+                }
+                ui.with_layout(crate::rtl::row_from_end(egui::Align::Center), |ui| {
                     // Account / community.
                     let (r, resp) = ui.allocate_exact_size(vec2(control_h, control_h), Sense::click());
                     ui.painter().circle_filled(r.center(), control_h / 2.0 - 1.0, t.accent);
@@ -298,12 +307,18 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                         ui.painter().rect_filled(r, 11.0, if resp.hovered() { t.accent_text } else { t.accent });
                         icons::paint(
                             ui.painter(),
-                            Rect::from_center_size(pos2(r.min.x + 13.0, r.center().y), vec2(14.0, 14.0)),
+                            Rect::from_center_size(pos2(crate::rtl::start_x(r, 13.0), r.center().y), vec2(14.0, 14.0)),
                             "discord",
                             t.on_accent,
                             t.on_accent,
                         );
-                        ui.painter().text(pos2(r.min.x + 24.0, r.center().y), Align2::LEFT_CENTER, tl!("Discord"), medium(11.5), t.on_accent);
+                        ui.painter().text(
+                            pos2(crate::rtl::start_x(r, 24.0), r.center().y),
+                            crate::rtl::start_center(),
+                            tl!("Discord"),
+                            medium(11.5),
+                            t.on_accent,
+                        );
                         if resp.on_hover_text(tl!("Join the ArtCraft community on Discord")).clicked() {
                             let _ = app.run("ui.discord", json!({}));
                         }
@@ -314,7 +329,7 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                     ui.painter().rect(r, 6.0, if resp.hovered() { t.input } else { t.ribbon }, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
                     icons::paint(
                         ui.painter(),
-                        Rect::from_center_size(pos2(r.min.x + 16.0, r.center().y), vec2(16.0, 16.0)),
+                        Rect::from_center_size(pos2(crate::rtl::start_x(r, 16.0), r.center().y), vec2(16.0, 16.0)),
                         "search",
                         t.text_dim,
                         t.accent,
@@ -324,8 +339,8 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                     let ptrack = TypeRung::Control.tracking();
                     paint_text(
                         ui.painter(),
-                        pos2(r.min.x + 30.0, r.center().y - TypeRung::Control.line_height() / 2.0),
-                        Align2::LEFT_TOP,
+                        pos2(crate::rtl::start_x(r, 30.0), r.center().y - TypeRung::Control.line_height() / 2.0),
+                        crate::rtl::start_top(),
                         ph,
                         &pfont,
                         ptrack,
@@ -341,7 +356,11 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
                     if resp.on_hover_text(tip).clicked() {
                         let _ = app.run("tools.search", json!({}));
                     }
-                    right_start = ui.min_rect().min.x;
+                    if rtl {
+                        left_end = ui.min_rect().max.x;
+                    } else {
+                        right_start = ui.min_rect().min.x;
+                    }
                 });
             });
             // Centred title.
@@ -364,7 +383,7 @@ pub fn title_bar(app: &mut WordApp, ui: &mut Ui) {
             let font = TypeRung::Chrome.semibold();
             let track = TypeRung::Chrome.tracking();
             let cx = full.center().x;
-            let available = 2.0 * (cx - qat_end - 10.0).min(right_start - 10.0 - cx);
+            let available = 2.0 * (cx - left_end - 10.0).min(right_start - 10.0 - cx);
             let mut shown: String = title.chars().take(240).collect();
             if text_width(ui.painter(), &shown, &font, track, t.text) > available {
                 while !shown.is_empty() && text_width(ui.painter(), &format!("{shown}…"), &font, track, t.text) > available {
@@ -409,7 +428,9 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
             if !app.has_document() {
                 return;
             }
-            ui.horizontal_centered(|ui| {
+            // The page and word counts from the start edge, the zoom and view buttons at the end
+            // edge (right-to-left: the counts at the right, the zoom at the left).
+            crate::rtl::horizontal_centered(ui, |ui| {
                 ui.spacing_mut().item_spacing = vec2(14.0, 0.0);
                 let l = app.session.layout();
                 let page = if app.session.selects_whole_story() {
@@ -473,10 +494,12 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                 {
                     let font = TypeRung::Caption.regular();
                     let track = TypeRung::Caption.tracking();
-                    paint_text(ui.painter(), pos2(ui.cursor().min.x, ui.cursor().min.y), Align2::LEFT_TOP, msg, &font, track, t.accent_text);
-                    ui.allocate_space(vec2(text_width(ui.painter(), msg, &font, track, t.accent_text) + 1.0, TypeRung::Caption.line_height()));
+                    let top = ui.cursor().min.y;
+                    let w = text_width(ui.painter(), msg, &font, track, t.accent_text) + 1.0;
+                    let (_, r) = ui.allocate_space(vec2(w, TypeRung::Caption.line_height()));
+                    paint_text(ui.painter(), pos2(r.min.x, top), Align2::LEFT_TOP, msg, &font, track, t.accent_text);
                 }
-                ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                ui.with_layout(crate::rtl::row_from_end(egui::Align::Center), |ui| {
                     ui.spacing_mut().item_spacing = vec2(4.0, 0.0);
                     let reading = app.session.view.read_mode;
                     let z = (if reading { app.session.view.read_zoom } else { app.canvas.scale / crate::canvas::PX_PER_PT } * 100.0).round();
@@ -538,13 +561,14 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     if resp.hovered() {
                         ui.painter().rect_filled(r, 3.0, t.hover);
                     }
-                    icons::paint(ui.painter(), Rect::from_min_size(r.min + vec2(2.0, 2.0), vec2(16.0, 16.0)), "focus", t.icon, t.accent);
+                    let icon = Rect::from_min_size(r.min + vec2(2.0, 2.0), vec2(16.0, 16.0));
+                    icons::paint(ui.painter(), crate::rtl::mirror_x(icon, r), "focus", t.icon, t.accent);
                     let ffont = TypeRung::Caption.regular();
                     let ftrack = TypeRung::Caption.tracking();
                     paint_text(
                         ui.painter(),
-                        pos2(r.min.x + 22.0, r.center().y - TypeRung::Caption.line_height() / 2.0),
-                        Align2::LEFT_TOP,
+                        pos2(crate::rtl::start_x(r, 22.0), r.center().y - TypeRung::Caption.line_height() / 2.0),
+                        crate::rtl::start_top(),
                         focus,
                         &ffont,
                         ftrack,

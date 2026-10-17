@@ -168,13 +168,19 @@ pub fn big_toggle(ui: &mut Ui, app: &mut WordApp, icon: &str, label: &str, id: &
 /// the `dropdown` icon, everywhere; no text glyph).
 pub const DROPDOWN: f32 = 10.0;
 
-/// One centred label line (top at `y`); `marker` draws the drop-down icon after the text, in the
-/// text's colour, and the pair is centred together.
+/// One centred label line (top at `y`); `marker` draws the drop-down icon after the text (before
+/// it in a right-to-left interface), in the text's colour, and the pair is centred together.
 pub fn label_line(ui: &Ui, cx: f32, y: f32, text: &str, font: egui::FontId, color: Color32, marker: bool) {
     let galley = ui.painter().layout_no_wrap(text.to_string(), font, color);
     let extra = if marker { DROPDOWN + 3.0 } else { 0.0 };
     let size = galley.size();
     let x = cx - (size.x + extra) / 2.0;
+    if marker && crate::rtl::on() {
+        let c = pos2(x + DROPDOWN / 2.0, y + size.y / 2.0);
+        icons::paint(ui.painter(), Rect::from_center_size(c, vec2(DROPDOWN, DROPDOWN)), "dropdown", color, color);
+        ui.painter().galley(pos2(x + extra, y), galley, color);
+        return;
+    }
     ui.painter().galley(pos2(x, y), galley, color);
     if marker {
         let c = pos2(x + size.x + 3.0 + DROPDOWN / 2.0, y + size.y / 2.0);
@@ -210,7 +216,8 @@ fn big_button(ui: &mut Ui, app: &mut WordApp, icon: &str, label: &str, id: &str,
     resp
 }
 
-/// A small button: 16 px icon with an optional label; `checked` draws the toggled state.
+/// A small button: 16 px icon with an optional label; `checked` draws the toggled state. The icon
+/// stands at the button's start edge (its right end in a right-to-left interface), the label after it.
 pub fn small(ui: &mut Ui, app: &mut WordApp, icon: &str, label: Option<&str>, tip: &str, id: &str, params: Value, checked: bool) -> Response {
     let (label, tip) = (label.map(|l| tl!(l)), tl!(tip));
     let t = Tokens::get(ui.ctx());
@@ -219,11 +226,12 @@ pub fn small(ui: &mut Ui, app: &mut WordApp, icon: &str, label: Option<&str>, ti
     keytip_badge(ui, r, id, tip);
     let on = enabled(app, id);
     bg(ui, r, &resp, checked, &t);
-    let ic = Rect::from_center_size(pos2(r.min.x + 12.0, r.center().y), vec2(17.0, 17.0));
+    let ic = Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0));
     let (c, a) = if on { (t.icon, t.accent) } else { (t.text_disabled, t.text_disabled) };
     icons::paint(ui.painter(), ic, icon, c, a);
     if let Some(l) = label {
-        ui.painter().text(pos2(r.min.x + 24.0, r.center().y), Align2::LEFT_CENTER, l, regular(11.5), if on { t.text } else { t.text_disabled });
+        let at = pos2(crate::rtl::start_x(r, 24.0), r.center().y);
+        ui.painter().text(at, crate::rtl::start_center(), l, regular(11.5), if on { t.text } else { t.text_disabled });
     }
     let resp = tooltip(app, resp, tip, id, &params);
     command_menu(&resp, app, id);
@@ -315,11 +323,12 @@ pub fn menu_button(
         let (r, resp) = ui.allocate_exact_size(vec2(24.0 + text_w + 10.0, 22.0), Sense::click());
         keytip_badge(ui, r, "menu", tip);
         bg(ui, r, &resp, false, &t);
-        icons::paint(ui.painter(), Rect::from_center_size(pos2(r.min.x + 12.0, r.center().y), vec2(17.0, 17.0)), icon, c, a);
+        // The icon at the start edge, the label after it, the drop-down marker at the end edge.
+        icons::paint(ui.painter(), Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0)), icon, c, a);
         if let Some(l) = label {
-            ui.painter().text(pos2(r.min.x + 24.0, r.center().y), Align2::LEFT_CENTER, l, regular(11.5), text);
+            ui.painter().text(pos2(crate::rtl::start_x(r, 24.0), r.center().y), crate::rtl::start_center(), l, regular(11.5), text);
         }
-        icons::paint(ui.painter(), Rect::from_center_size(pos2(r.max.x - 6.0, r.center().y), vec2(DROPDOWN, DROPDOWN)), "dropdown", c, c);
+        icons::paint(ui.painter(), Rect::from_center_size(pos2(crate::rtl::end_x(r, 6.0), r.center().y), vec2(DROPDOWN, DROPDOWN)), "dropdown", c, c);
         resp
     };
     // WordCraft AR: a menu button about a command gets the command's visual help too.
@@ -341,7 +350,8 @@ thread_local! {
     pub(crate) static TALL_GROUPS: std::cell::RefCell<Vec<String>> = const { std::cell::RefCell::new(Vec::new()) };
 }
 
-/// A ribbon group: content, a centred label below and a divider on the right.
+/// A ribbon group: content, a centred label below and a divider at its end (on the right; on the
+/// left in a right-to-left interface, where the groups run from the right).
 pub fn group(ui: &mut Ui, title: &str, launcher: Option<&str>, app: &mut WordApp, add: impl FnOnce(&mut Ui, &mut WordApp)) {
     // The English title keys the launcher's id; the drawn title is translated.
     group_titled(ui, title, tl!(title), launcher, app, add);
@@ -351,10 +361,11 @@ pub fn group(ui: &mut Ui, title: &str, launcher: Option<&str>, app: &mut WordApp
 pub fn group_titled(ui: &mut Ui, id_title: &str, title: &str, launcher: Option<&str>, app: &mut WordApp, add: impl FnOnce(&mut Ui, &mut WordApp)) {
     let t = Tokens::get(ui.ctx());
     let label_w = ui.ctx().fonts_mut(|f| f.layout_no_wrap(title.to_string(), regular(11.0), t.group_label).size().x);
-    let start = ui.cursor().min;
-    let inner = ui.vertical(|ui| {
+    // The group's start corner: its top-left, or its top-right in a right-to-left row.
+    let start = crate::rtl::cursor_start(ui);
+    let inner = crate::rtl::vertical(ui, |ui| {
         ui.set_min_width(label_w + if launcher.is_some() { 22.0 } else { 10.0 });
-        let content = ui.allocate_ui_with_layout(vec2(ui.available_width(), CONTENT_H), egui::Layout::left_to_right(egui::Align::Min), |ui| {
+        let content = ui.allocate_ui_with_layout(vec2(ui.available_width(), CONTENT_H), crate::rtl::row(egui::Align::Min), |ui| {
             ui.spacing_mut().item_spacing = vec2(1.0, 1.0);
             add(ui, app);
         });
@@ -366,11 +377,17 @@ pub fn group_titled(ui: &mut Ui, id_title: &str, title: &str, launcher: Option<&
         let _ = content;
     });
     let r = inner.response.rect;
-    let r = Rect::from_min_max(start, pos2(r.max.x, start.y + CONTENT_H + LABEL_H));
+    let bottom = start.y + CONTENT_H + LABEL_H;
+    let r = if crate::rtl::on() {
+        Rect::from_min_max(pos2(r.min.x, start.y), pos2(start.x, bottom))
+    } else {
+        Rect::from_min_max(start, pos2(r.max.x, bottom))
+    };
     let title_y = r.max.y - LABEL_H / 2.0;
     ui.painter().text(pos2(r.center().x, title_y), Align2::CENTER_CENTER, title, regular(11.0), t.group_label);
     if let Some(cmd) = launcher {
-        let lr = Rect::from_center_size(pos2(r.max.x - 6.0, title_y), vec2(11.0, 11.0));
+        // The launcher in the group's end corner (bottom-right; bottom-left right-to-left).
+        let lr = Rect::from_center_size(pos2(crate::rtl::end_x(r, 6.0), title_y), vec2(11.0, 11.0));
         let resp = ui.interact(lr, ui.id().with(("launch", id_title)), Sense::click());
         if resp.hovered() {
             ui.painter().rect_filled(lr.expand(2.0), 2.0, t.hover);
@@ -381,7 +398,7 @@ pub fn group_titled(ui: &mut Ui, id_title: &str, title: &str, launcher: Option<&
         }
     }
     ui.add_space(5.0);
-    let x = ui.cursor().min.x;
+    let x = crate::rtl::cursor_x(ui);
     ui.painter().line_segment([pos2(x, start.y + 4.0), pos2(x, start.y + CONTENT_H + LABEL_H - 4.0)], Stroke::new(1.0, t.border));
     ui.add_space(6.0);
 }
@@ -424,9 +441,9 @@ pub fn customize_menu_items(ui: &mut Ui, app: &mut WordApp) {
     }
 }
 
-/// A row of small buttons (used inside a vertical stack).
+/// A row of small buttons (used inside a vertical stack); from the right in a right-to-left interface.
 pub fn row(ui: &mut Ui, add: impl FnOnce(&mut Ui)) {
-    ui.horizontal(|ui| {
+    crate::rtl::horizontal(ui, |ui| {
         ui.spacing_mut().item_spacing = vec2(1.0, 0.0);
         add(ui);
     });
@@ -860,19 +877,20 @@ fn icon_text_button_with(ui: &mut Ui, icon: &str, text: &str, font: egui::FontId
     let st = drawn_state(ui, &resp, true);
     let r = r.expand(st.expansion);
     ui.painter().rect(r, ui.visuals().widgets.inactive.corner_radius, st.fill, st.stroke, egui::StrokeKind::Inside);
+    // The icon at the start edge, the text after it, the marker after the text (mirrored right-to-left).
     icons::paint(
         ui.painter(),
-        Rect::from_center_size(pos2(r.min.x + pad.x + icon_w / 2.0, r.center().y), vec2(icon_w, icon_w)),
+        Rect::from_center_size(pos2(crate::rtl::start_x(r, pad.x + icon_w / 2.0), r.center().y), vec2(icon_w, icon_w)),
         icon,
         t.icon,
         t.accent,
     );
-    let text_x = r.min.x + pad.x + icon_w + 4.0;
     let text_w = galley.size().x;
+    let text_x = if crate::rtl::on() { r.max.x - pad.x - icon_w - 4.0 - text_w } else { r.min.x + pad.x + icon_w + 4.0 };
     ui.painter().galley(pos2(text_x, r.center().y - galley.size().y / 2.0), galley, st.text);
     if marker {
-        let c = pos2(text_x + text_w + 4.0 + DROPDOWN / 2.0, r.center().y);
-        icons::paint(ui.painter(), Rect::from_center_size(c, vec2(DROPDOWN, DROPDOWN)), "dropdown", st.text, st.text);
+        let cx = if crate::rtl::on() { text_x - 4.0 - DROPDOWN / 2.0 } else { text_x + text_w + 4.0 + DROPDOWN / 2.0 };
+        icons::paint(ui.painter(), Rect::from_center_size(pos2(cx, r.center().y), vec2(DROPDOWN, DROPDOWN)), "dropdown", st.text, st.text);
     }
     resp
 }

@@ -71,6 +71,338 @@ impl Pen<'_> {
     }
 }
 
+/// Every icon name [`paint`] draws (in source order). The kit gallery and the tests walk it;
+/// `icons::tests::names_match_the_source` keeps it in step with the match arms.
+pub const NAMES: &[&str] = &[
+    "paste",
+    "cut",
+    "copy",
+    "painter",
+    "bold",
+    "italic",
+    "underline",
+    "strike",
+    "charborder",
+    "enclose",
+    "subscript",
+    "superscript",
+    "grow",
+    "shrink",
+    "case",
+    "clear",
+    "phonetic",
+    "highlight",
+    "fontcolor",
+    "effects",
+    "fontdialog",
+    "bullets",
+    "numbering",
+    "multilevel",
+    "outdent",
+    "indent",
+    "sort",
+    "pilcrow",
+    "alignLeft",
+    "alignCenter",
+    "alignRight",
+    "justify",
+    "textLtr",
+    "textRtl",
+    "lineSpacing",
+    "shading",
+    "borders",
+    "find",
+    "replace",
+    "select",
+    "dictate",
+    "editor",
+    "spelling",
+    "styles",
+    "stylesPane",
+    "coverPage",
+    "blankPage",
+    "pageBreak",
+    "drawTable",
+    "table",
+    "picture",
+    "onlinePicture",
+    "shapes",
+    "shapeEffects",
+    "icons",
+    "models3d",
+    "smartArt",
+    "addShape",
+    "promote",
+    "demote",
+    "textPane",
+    "smartArtColors",
+    "resetGraphic",
+    "chart",
+    "changeChartType",
+    "chartData",
+    "chartTitle",
+    "legend",
+    "dataLabels",
+    "screenshot",
+    "video",
+    "link",
+    "bookmark",
+    "crossRef",
+    "comment",
+    "newComment",
+    "header",
+    "footer",
+    "pageNumber",
+    "textBox",
+    "quickParts",
+    "wordArt",
+    "textFill",
+    "textOutline",
+    "transform",
+    "dropCap",
+    "signature",
+    "dateTime",
+    "object",
+    "equation",
+    "symbol",
+    "pen",
+    "pencil",
+    "eraser",
+    "thickness",
+    "lasso",
+    "inkToShape",
+    "inkToMath",
+    "canvas",
+    "replay",
+    "addPen",
+    "replayRewind",
+    "replayPlay",
+    "replayPause",
+    "replayForward",
+    "themes",
+    "colors",
+    "fonts",
+    "paraSpacing",
+    "effectsDesign",
+    "setDefault",
+    "watermark",
+    "pageColor",
+    "pageBorders",
+    "margins",
+    "orientation",
+    "size",
+    "columns",
+    "breaks",
+    "lineNumbers",
+    "hyphenation",
+    "position",
+    "wrapText",
+    "bringForward",
+    "sendBackward",
+    "selectionPane",
+    "align",
+    "group",
+    "rotate",
+    "indentLeft",
+    "indentRight",
+    "spaceBefore",
+    "spaceAfter",
+    "toc",
+    "addText",
+    "updateTable",
+    "update",
+    "footnote",
+    "endnote",
+    "nextFootnote",
+    "showNotes",
+    "researcher",
+    "docPrefs",
+    "unlinkCitations",
+    "addNote",
+    "citation",
+    "sources",
+    "bibliography",
+    "caption",
+    "tableOfFigures",
+    "markEntry",
+    "index",
+    "markCitation",
+    "tableOfAuthorities",
+    "envelope",
+    "labels",
+    "mailMerge",
+    "recipients",
+    "editRecipients",
+    "mergeField",
+    "addressBlock",
+    "greetingLine",
+    "rules",
+    "matchFields",
+    "highlightFields",
+    "preview",
+    "next",
+    "previous",
+    "first",
+    "last",
+    "finish",
+    "checkErrors",
+    "thesaurus",
+    "wordCount",
+    "readAloud",
+    "accessibility",
+    "altText",
+    "translate",
+    "language",
+    "deleteComment",
+    "prevComment",
+    "nextComment",
+    "showComments",
+    "resolve",
+    "trackChanges",
+    "markup",
+    "reviewingPane",
+    "accept",
+    "reject",
+    "prevChange",
+    "nextChange",
+    "compare",
+    "combine",
+    "protect",
+    "restrict",
+    "blockAuthors",
+    "hideInk",
+    "readMode",
+    "printLayout",
+    "webLayout",
+    "outline",
+    "draft",
+    "focus",
+    "immersive",
+    "vertical",
+    "sideToSide",
+    "ruler",
+    "gridlines",
+    "navPane",
+    "zoom",
+    "zoomIn",
+    "zoomOut",
+    "zoom100",
+    "onePage",
+    "multiplePages",
+    "pageWidth",
+    "darkMode",
+    "interfaceTheme",
+    "newWindow",
+    "arrangeAll",
+    "split",
+    "fullScreen",
+    "sideBySide",
+    "syncScroll",
+    "switchWindows",
+    "macros",
+    "documentTemplate",
+    "properties",
+    "info",
+    "insertAbove",
+    "insertBelow",
+    "insertLeft",
+    "insertRight",
+    "deleteTable",
+    "merge",
+    "splitCells",
+    "splitTable",
+    "autofit",
+    "distributeRows",
+    "distributeCols",
+    "rowHeight",
+    "colWidth",
+    "cellAlign",
+    "textDirection",
+    "cellMargins",
+    "repeatHeader",
+    "toText",
+    "formula",
+    "selectTable",
+    "draw",
+    "borderPainter",
+    "save",
+    "undo",
+    "redo",
+    "search",
+    "share",
+    "user",
+    "close",
+    "dropdown",
+    "more",
+    "launcher",
+    "pin",
+    "plus",
+    "minus",
+    "check",
+    "chevronLeft",
+    "chevronRight",
+    "chevronUp",
+    "chevronDown",
+    "mediaPlay",
+    "mediaPause",
+    "mediaStop",
+    "mediaPrev",
+    "mediaNext",
+    "pastCitation",
+    "chevronDoubleRight",
+    "addins",
+    "discord",
+    "open",
+    "print",
+    "alignText",
+    "crop",
+    "textBoxLink",
+    "textBoxUnlink",
+    "folder",
+    "file",
+    "homeFolder",
+    "outlinePromote",
+    "outlineDemote",
+    "outlineTop",
+    "outlineBody",
+    "outlineUp",
+    "outlineDown",
+    "outlineExpand",
+    "outlineCollapse",
+    "closeOutline",
+    "help",
+    "ccRichText",
+    "ccPlainText",
+    "ccPicture",
+    "ccGallery",
+    "ccCheckBox",
+    "ccComboBox",
+    "ccDropDown",
+    "ccDate",
+    "ccRepeat",
+    "designMode",
+    "serviceRenumber",
+    "serviceList",
+    "finalDot",
+    "serviceSelection",
+    "classification",
+    "servicePages",
+    "kashidaOff",
+    "kashidaLow",
+    "kashidaMedium",
+    "kashidaHigh",
+    "distribute",
+    "serviceEngine",
+    "serviceEnginePdf",
+    "uiKit",
+    "selfTest",
+];
+
+/// Whether `name` is an icon of the set (false: [`paint`] draws a lettered tile).
+pub fn known(name: &str) -> bool {
+    NAMES.contains(&name)
+}
+
 /// Paint icon `name` into `r`. `c` is the line colour; the accent comes from the theme.
 pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
     let pen = Pen { p, r, c, a: accent, w: 1.25 };
@@ -985,9 +1317,13 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.page(5.0, 1.0, 15.0, 9.0);
             pen.page(5.0, 11.0, 15.0, 19.0);
         }
+        // Two pages side by side, with the arrow that pages them sideways (distinct from
+        // multiplePages, which is the same pair without the arrow).
         "sideToSide" => {
-            pen.page(1.5, 4.0, 9.5, 16.0);
-            pen.page(10.5, 4.0, 18.5, 16.0);
+            pen.page(1.5, 3.0, 9.5, 14.0);
+            pen.page(10.5, 3.0, 18.5, 14.0);
+            pen.line_c(&[(4.0, 17.5), (16.0, 17.5)], a);
+            pen.fill(&[(16.0, 15.5), (18.5, 17.5), (16.0, 19.5)], a);
         }
         "ruler" => {
             pen.rect(2.0, 7.0, 18.0, 13.0, c);
@@ -1523,6 +1859,20 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.frect(5.5, 10.0, 14.5, 14.5, a);
             pen.text(10.0, 12.2, 4.5, "PDF", Color32::WHITE, true);
         }
+        // WordCraft AR developer systems: a grid of tiles (the kit gallery), a tick over a page
+        // (the self-test).
+        "uiKit" => {
+            for (x, y) in [(3.0, 3.0), (11.0, 3.0), (3.0, 11.0)] {
+                pen.rect(x, y, x + 6.0, y + 6.0, c);
+            }
+            pen.frect(11.0, 11.0, 17.0, 17.0, a);
+        }
+        "selfTest" => {
+            pen.page(4.0, 2.0, 16.0, 18.0);
+            pen.lines(6.5, 12.0, &[6.0, 9.0]);
+            pen.fcircle(13.5, 14.0, 4.5, a);
+            pen.line_c(&[(11.3, 14.0), (13.0, 15.8), (15.8, 12.3)], Color32::WHITE);
+        }
         _ => {
             // Fallback: a rounded tile with the first letter.
             p.rect_stroke(r.shrink(r.width() * 0.12), 3.0, Stroke::new(1.0, c), egui::StrokeKind::Middle);
@@ -1562,5 +1912,50 @@ pub fn library(p: &Painter, r: Rect, icon: &wordcraft_render::icon_lib::Icon, c:
             }
             p.add(Shape::line(pts, stroke));
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// `NAMES` lists exactly the names the match in `paint` draws, in order.
+    #[test]
+    fn names_match_the_source() {
+        let src = include_str!("icons.rs");
+        let body = src.split_once("    match name {").map_or("", |(_, rest)| rest);
+        let mut found = Vec::new();
+        for line in body.lines() {
+            let Some(arm) = line.strip_prefix("        \"") else { continue };
+            let Some((pattern, _)) = arm.split_once(" =>") else { continue };
+            for n in pattern.split(" | ") {
+                let n = n.trim_matches('"');
+                if !n.is_empty() && n.chars().all(|c| c.is_ascii_alphanumeric() || c == '_') && !found.contains(&n) {
+                    found.push(n);
+                }
+            }
+        }
+        assert_eq!(found, NAMES.to_vec(), "icons::NAMES is out of step with the match arms in paint()");
+        assert!(known("paste") && !known("no_such_icon"));
+    }
+
+    /// Every icon draws at the ribbon's two sizes without a panic and puts something on the
+    /// painter (an empty icon would be a blank button).
+    #[test]
+    fn every_icon_draws_something_at_both_sizes() {
+        let ctx = egui::Context::default();
+        ctx.set_fonts(crate::theme::font_definitions(false, false));
+        let mut out = ctx.run_ui(Default::default(), |ui| {
+            for name in NAMES {
+                for size in [17.0, 32.0] {
+                    let painter = ui.painter().clone();
+                    let before = ui.ctx().graphics(|g| g.get(painter.layer_id()).map_or(0, |l| l.next_idx().0));
+                    paint(&painter, Rect::from_min_size(Pos2::ZERO, vec2(size, size)), name, Color32::BLACK, Color32::BLUE);
+                    let after = ui.ctx().graphics(|g| g.get(painter.layer_id()).map_or(0, |l| l.next_idx().0));
+                    assert!(after > before, "{name} at {size}: draws nothing");
+                }
+            }
+        });
+        out.textures_delta.clear();
     }
 }

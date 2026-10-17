@@ -2270,3 +2270,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	「公務」タブと「差し込み文書」タブのボタンには、動作のサムネイルと表示言語の説明文が表示されます。オンにすると、表示言語がアラビア語でない場合にアラビア語の説明文が追加されます。
 	Old computer mode (no animations, fastest start)	古いパソコン向けモード（アニメーションなし・最速起動）
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	遅いまたは古いマシン向け：インターフェースのアニメーション、点滅するカーソル、ミニツールバー、配置ガイドをすべてオフにし、空白の文書で起動します。
+	UI Kit	UIキット
+	UI\nKit	UI\nキット
+	Self-test	セルフテスト
+	Self-\nTest	セルフ\nテスト
+	Checklist	チェックリスト
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UIキット
+	Filter:	フィルター:
+	Command	コマンド
+	Parameters	パラメーター
+	ms	ミリ秒
+	Answer	応答
+	Run the self-test	セルフテストを実行
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	リボンの各ボタンをアラビア語のテスト用公文書で実行し（お使いの文書は変更されません）、それぞれの応答を一覧表示します。
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} 個のボタンを {ms} ミリ秒で実行。{errors} 個がエラーを返しました（入力が必要なダイアログ、選択が必要な機能）。{pages} ページ。公文書サイクル {ok}
+	{shown} of {total} entries	{total} 件中 {shown} 件
+	{shown} of {total} icons	{total} 個中 {shown} 個のアイコン
+	No Arabic translation yet	アラビア語訳はまだありません
+	No icon named {icon} (a lettered tile is drawn)	{icon} という名前のアイコンはありません（文字タイルを描画）
+	{n} ribbon buttons without visual help	視覚ヘルプのないリボンボタン: {n}
+	{n} explanations without an Arabic translation	アラビア語訳のない説明: {n}
+	{n} icons in the set	アイコンセット: {n} 個
+	{n} entries in the UI kit	UIキット: {n} 件
+	{n} commands in the registry	コマンドレジストリ: {n} 件
+	{n} Arabic interface strings	アラビア語インターフェイス文字列: {n} 件
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	コマンドの追加: icons.rs にアイコン、ui_kit/<tab>.rs に Entry を 1 つ、i18n/ar.tsv に 1 行 — docs/ar-ui-kit.md を参照。

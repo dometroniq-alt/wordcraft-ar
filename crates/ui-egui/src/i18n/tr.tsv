@@ -2666,3 +2666,29 @@ preview	Title	Örnek
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Hizmet ve Postalar sekmelerindeki düğmeler, yaptıkları işin küçük bir görselini ve arayüz dilinde bir cümle gösterir; açıkken, arayüz Arapça değilse Arapça cümle de eklenir.
 	Old computer mode (no animations, fastest start)	Eski bilgisayar modu (animasyonsuz, en hızlı başlangıç)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Yavaş veya eski makineler için: tüm arayüz animasyonlarını, yanıp sönen imleci, mini araç çubuğunu ve hizalama kılavuzlarını kapatır ve boş bir belgeyle başlar.
+	UI Kit	Arayüz kiti
+	UI\nKit	Arayüz\nkiti
+	Self-test	Kendi kendine test
+	Self-\nTest	Kendi kendine\ntest
+	Checklist	Kontrol listesi
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR arayüz kiti
+	Filter:	Filtre:
+	Command	Komut
+	Parameters	Parametreler
+	ms	ms
+	Answer	Yanıt
+	Run the self-test	Kendi kendine testi çalıştır
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Şeritteki her düğmeyi geçici bir Arapça hizmet belgesinde çalıştırır (belgenize dokunulmaz) ve her birinin yanıtını listeler.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} düğme {ms} ms içinde çalıştı; {errors} tanesi hata verdi (giriş isteyen bir iletişim kutusu, seçim isteyen bir özellik); {pages} sayfa; hizmet döngüsü {ok}
+	{shown} of {total} entries	{total} girdiden {shown} tanesi
+	{shown} of {total} icons	{total} simgeden {shown} tanesi
+	No Arabic translation yet	Henüz Arapça çevirisi yok
+	No icon named {icon} (a lettered tile is drawn)	{icon} adlı simge yok (harfli bir kutu çizilir)
+	{n} ribbon buttons without visual help	Görsel yardımı olmayan {n} şerit düğmesi
+	{n} explanations without an Arabic translation	Arapça çevirisi olmayan {n} açıklama
+	{n} icons in the set	Kümede {n} simge
+	{n} entries in the UI kit	Arayüz kitinde {n} girdi
+	{n} commands in the registry	Kayıt defterinde {n} komut
+	{n} Arabic interface strings	{n} Arapça arayüz dizesi
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Komut ekleme: simgesi icons.rs'de, bir Entry ui_kit/<tab>.rs'de, bir satır i18n/ar.tsv'de — bkz. docs/ar-ui-kit.md.

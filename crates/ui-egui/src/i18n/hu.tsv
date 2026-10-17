@@ -2665,3 +2665,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	A Szolgálat és a Levelezés lap gombjai bélyegképet mutatnak arról, amit tesznek, és egy mondatot a felület nyelvén; bekapcsolva az arab mondat is megjelenik, ha a felület nem arab.
 	Old computer mode (no animations, fastest start)	Régi számítógép mód (animációk nélkül, leggyorsabb indulás)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Lassú vagy régi gépekhez: kikapcsol minden felületi animációt, a villogó kurzort, a mini eszköztárat és az igazítási segédvonalakat, és üres dokumentummal indul.
+	UI Kit	UI-készlet
+	UI\nKit	UI-\nkészlet
+	Self-test	Önteszt
+	Self-\nTest	Ön-\nteszt
+	Checklist	Ellenőrzőlista
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UI-készlet
+	Filter:	Szűrő:
+	Command	Parancs
+	Parameters	Paraméterek
+	ms	ms
+	Answer	Válasz
+	Run the self-test	Önteszt futtatása
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Minden menüszalag-gombot lefuttat egy ideiglenes arab szolgálati dokumentumon (a dokumentumához nem nyúl), és felsorolja, mit válaszolt mindegyik.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} gomb {ms} ms alatt; {errors} hibával válaszolt (egy párbeszédablak bevitelt, egy funkció kijelölést vár); {pages} oldal; szolgálati ciklus {ok}
+	{shown} of {total} entries	{shown} / {total} bejegyzés
+	{shown} of {total} icons	{shown} / {total} ikon
+	No Arabic translation yet	Még nincs arab fordítás
+	No icon named {icon} (a lettered tile is drawn)	Nincs {icon} nevű ikon (betűs csempe rajzolódik)
+	{n} ribbon buttons without visual help	{n} menüszalag-gomb vizuális súgó nélkül
+	{n} explanations without an Arabic translation	{n} magyarázat arab fordítás nélkül
+	{n} icons in the set	{n} ikon a készletben
+	{n} entries in the UI kit	{n} bejegyzés az UI-készletben
+	{n} commands in the registry	{n} parancs a nyilvántartásban
+	{n} Arabic interface strings	{n} arab felületi szöveg
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Parancs hozzáadása: ikon az icons.rs-ben, egy Entry a ui_kit/<tab>.rs-ben, egy sor az i18n/ar.tsv-ben — lásd docs/ar-ui-kit.md.

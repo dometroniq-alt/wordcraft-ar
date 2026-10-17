@@ -41,7 +41,6 @@ mod tests {
 
     #[test]
     fn every_explained_command_has_a_thumbnail_and_is_registered() {
-        let reg = wordcraft_engine::cmd::registry();
         let ctx = egui::Context::default();
         ctx.set_fonts(crate::theme::font_definitions(false, false));
         let mut out = ctx.run_ui(Default::default(), |ui| {
@@ -49,7 +48,7 @@ mod tests {
             for e in ui_kit::entries() {
                 let (key, text) = (e.key, e.explain);
                 let id = key.split(':').next().unwrap_or("");
-                assert!(reg.get(id).is_some() || id.starts_with("ui."), "{key}: unknown command");
+                assert!(ui_kit::is_button_id(id), "{key}: unknown command");
                 assert!(!text.trim().is_empty() && text.ends_with('.'), "{key}: one full sentence");
                 let r = Rect::from_min_size(Pos2::ZERO, SIZE);
                 assert!(thumbnail(ui.painter(), r, key, &t), "{key}: no thumbnail");

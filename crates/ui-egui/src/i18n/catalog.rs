@@ -135,6 +135,13 @@ impl Catalog {
         (catalog, errors)
     }
 
+    /// How many plain entries the catalog holds.
+    pub fn len(&self) -> usize {
+        self.plain.len()
+    }
+    pub fn is_empty(&self) -> bool {
+        self.plain.is_empty()
+    }
     pub fn plain(&self, s: &str) -> Option<&str> {
         self.plain.get(s).map(String::as_str)
     }

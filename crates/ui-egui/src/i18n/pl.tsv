@@ -2659,3 +2659,29 @@ preview	Title	Tytuł
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Przyciski na kartach Służba i Korespondencja pokazują miniaturę tego, co robią, oraz zdanie w języku interfejsu; po włączeniu dodawane jest zdanie po arabsku, gdy interfejs nie jest arabski.
 	Old computer mode (no animations, fastest start)	Tryb starego komputera (bez animacji, najszybszy start)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Dla wolnych lub starych maszyn: wyłącza wszystkie animacje interfejsu, migający kursor, minipasek narzędzi i prowadnice wyrównania oraz uruchamia się z pustym dokumentem.
+	UI Kit	Zestaw UI
+	UI\nKit	Zestaw\nUI
+	Self-test	Autotest
+	Self-\nTest	Auto-\ntest
+	Checklist	Lista kontrolna
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	Zestaw UI WordCraft AR
+	Filter:	Filtr:
+	Command	Polecenie
+	Parameters	Parametry
+	ms	ms
+	Answer	Odpowiedź
+	Run the self-test	Uruchom autotest
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Uruchamia każdy przycisk wstążki na roboczym arabskim dokumencie służbowym (twój dokument pozostaje nietknięty) i wypisuje odpowiedź każdego z nich.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} przycisków w {ms} ms; {errors} odpowiedziało błędem (okno dialogowe wymaga danych, funkcja wymaga zaznaczenia); {pages} stron; cykl służbowy {ok}
+	{shown} of {total} entries	{shown} z {total} wpisów
+	{shown} of {total} icons	{shown} z {total} ikon
+	No Arabic translation yet	Brak jeszcze tłumaczenia na arabski
+	No icon named {icon} (a lettered tile is drawn)	Brak ikony o nazwie {icon} (rysowany jest kafelek z literą)
+	{n} ribbon buttons without visual help	{n} przycisków wstążki bez pomocy wizualnej
+	{n} explanations without an Arabic translation	{n} objaśnień bez tłumaczenia na arabski
+	{n} icons in the set	{n} ikon w zestawie
+	{n} entries in the UI kit	{n} wpisów w zestawie UI
+	{n} commands in the registry	{n} poleceń w rejestrze
+	{n} Arabic interface strings	{n} ciągów arabskiego interfejsu
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Dodanie polecenia: ikona w icons.rs, jeden Entry w ui_kit/<tab>.rs, jedna linia w i18n/ar.tsv — zobacz docs/ar-ui-kit.md.

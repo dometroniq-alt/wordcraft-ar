@@ -2525,3 +2525,29 @@ preview	Title	제목
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	공무 탭과 편지 탭의 단추는 동작의 미리 보기 그림과 인터페이스 언어로 된 한 문장을 보여 줍니다. 켜면 인터페이스가 아랍어가 아닐 때 아랍어 문장이 추가됩니다.
 	Old computer mode (no animations, fastest start)	오래된 컴퓨터 모드(애니메이션 없음, 가장 빠른 시작)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	느리거나 오래된 컴퓨터용: 인터페이스 애니메이션, 깜박이는 커서, 미니 도구 모음, 맞춤 안내선을 모두 끄고 빈 문서로 시작합니다.
+	UI Kit	UI 키트
+	UI\nKit	UI\n키트
+	Self-test	자체 테스트
+	Self-\nTest	자체\n테스트
+	Checklist	점검 목록
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UI 키트
+	Filter:	필터:
+	Command	명령
+	Parameters	매개 변수
+	ms	ms
+	Answer	응답
+	Run the self-test	자체 테스트 실행
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	리본의 모든 단추를 임시 아랍어 공문서에서 실행하고(현재 문서는 건드리지 않음) 각 단추의 응답을 나열합니다.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total}개 단추를 {ms}ms에 실행; {errors}개가 오류로 응답(입력이 필요한 대화 상자, 선택이 필요한 기능); {pages}쪽; 공문서 주기 {ok}
+	{shown} of {total} entries	{total}개 중 {shown}개 항목
+	{shown} of {total} icons	{total}개 중 {shown}개 아이콘
+	No Arabic translation yet	아직 아랍어 번역이 없습니다
+	No icon named {icon} (a lettered tile is drawn)	{icon} 아이콘이 없습니다(글자 타일을 그립니다)
+	{n} ribbon buttons without visual help	시각 도움말이 없는 리본 단추 {n}개
+	{n} explanations without an Arabic translation	아랍어 번역이 없는 설명 {n}개
+	{n} icons in the set	아이콘 세트 {n}개
+	{n} entries in the UI kit	UI 키트 항목 {n}개
+	{n} commands in the registry	레지스트리 명령 {n}개
+	{n} Arabic interface strings	아랍어 인터페이스 문자열 {n}개
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	명령 추가: icons.rs에 아이콘, ui_kit/<tab>.rs에 Entry 하나, i18n/ar.tsv에 한 줄 — docs/ar-ui-kit.md 참조.

@@ -2269,3 +2269,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Die Schaltflächen der Registerkarten Dienst und Sendungen zeigen ein Vorschaubild ihrer Wirkung und einen Satz in der Sprache der Oberfläche; wenn eingeschaltet, kommt der arabische Satz hinzu, sobald die Oberfläche nicht arabisch ist.
 	Old computer mode (no animations, fastest start)	Modus für alte Computer (keine Animationen, schnellster Start)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Für langsame oder alte Rechner: schaltet alle Animationen der Oberfläche, den blinkenden Cursor, die Minisymbolleiste und die Ausrichtungshilfen aus und startet mit einem leeren Dokument.
+	UI Kit	UI-Kit
+	UI\nKit	UI-\nKit
+	Self-test	Selbsttest
+	Self-\nTest	Selbst-\ntest
+	Checklist	Checkliste
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	WordCraft AR UI-Kit
+	Filter:	Filter:
+	Command	Befehl
+	Parameters	Parameter
+	ms	ms
+	Answer	Antwort
+	Run the self-test	Selbsttest ausführen
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Führt jede Schaltfläche des Menübands auf einem arabischen Übungsdokument aus (Ihr Dokument bleibt unberührt) und listet auf, was jede geantwortet hat.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} Schaltflächen in {ms} ms; {errors} antworteten mit einem Fehler (ein Dialog braucht Eingaben, eine Funktion eine Auswahl); {pages} Seite(n); Dienstzyklus {ok}
+	{shown} of {total} entries	{shown} von {total} Einträgen
+	{shown} of {total} icons	{shown} von {total} Symbolen
+	No Arabic translation yet	Noch keine arabische Übersetzung
+	No icon named {icon} (a lettered tile is drawn)	Kein Symbol namens {icon} (eine Buchstabenkachel wird gezeichnet)
+	{n} ribbon buttons without visual help	{n} Menüband-Schaltflächen ohne visuelle Hilfe
+	{n} explanations without an Arabic translation	{n} Erklärungen ohne arabische Übersetzung
+	{n} icons in the set	{n} Symbole im Satz
+	{n} entries in the UI kit	{n} Einträge im UI-Kit
+	{n} commands in the registry	{n} Befehle in der Registry
+	{n} Arabic interface strings	{n} Zeichenfolgen der arabischen Oberfläche
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Befehl hinzufügen: Symbol in icons.rs, ein Entry in ui_kit/<tab>.rs, eine Zeile in i18n/ar.tsv — siehe docs/ar-ui-kit.md.

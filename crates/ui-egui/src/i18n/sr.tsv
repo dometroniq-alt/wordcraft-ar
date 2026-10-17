@@ -2284,3 +2284,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Дугмад на картицама Служба и Писма приказују сличицу онога што раде и реченицу на језику интерфејса; када је укључено, додаје се арапска реченица ако интерфејс није арапски.
 	Old computer mode (no animations, fastest start)	Режим за стари рачунар (без анимација, најбрже покретање)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	За споре или старе рачунаре: искључује све анимације интерфејса, трепћући курсор, мини траку са алаткама и водиље за поравнање и покреће се са празним документом.
+	UI Kit	UI комплет
+	UI\nKit	UI\nкомплет
+	Self-test	Самопровера
+	Self-\nTest	Само-\nпровера
+	Checklist	Контролна листа
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	UI комплет WordCraft AR
+	Filter:	Филтер:
+	Command	Команда
+	Parameters	Параметри
+	ms	мс
+	Answer	Одговор
+	Run the self-test	Покрени самопроверу
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Покреће свако дугме траке на пробном арапском службеном документу (ваш документ се не дира) и наводи шта је свако одговорило.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} дугмади за {ms} мс; {errors} одговорило грешком (дијалог тражи унос, функција тражи избор); {pages} страна; службени циклус {ok}
+	{shown} of {total} entries	{shown} од {total} ставки
+	{shown} of {total} icons	{shown} од {total} икона
+	No Arabic translation yet	Још нема арапског превода
+	No icon named {icon} (a lettered tile is drawn)	Нема иконе {icon} (црта се плочица са словом)
+	{n} ribbon buttons without visual help	{n} дугмади траке без визуелне помоћи
+	{n} explanations without an Arabic translation	{n} објашњења без арапског превода
+	{n} icons in the set	{n} икона у скупу
+	{n} entries in the UI kit	{n} ставки у UI комплету
+	{n} commands in the registry	{n} команди у регистру
+	{n} Arabic interface strings	{n} низова арапског интерфејса
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Додавање команде: икона у icons.rs, један Entry у ui_kit/<tab>.rs, један ред у i18n/ar.tsv — види docs/ar-ui-kit.md.

@@ -2692,3 +2692,229 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	أزرار تبويبي الخدمة والمراسلات تعرض صورة مصغّرة لما تفعله وجملة بلغة الواجهة؛ عند التفعيل تُضاف الجملة العربية حين لا تكون الواجهة عربية.
 	Old computer mode (no animations, fastest start)	وضع الحاسوب القديم (بلا حركات، أسرع بدء)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	للأجهزة البطيئة أو القديمة: يعطّل كل حركات الواجهة، وميض المؤشر، شريط الأدوات المصغّر وأدلّة المحاذاة، ويبدأ على مستند فارغ.
+	Puts the text you cut or copied in at the caret.	يضع النص الذي قصصته أو نسخته عند موضع المؤشر.
+	Removes the selected text and keeps it on the clipboard for pasting.	يزيل النص المحدد ويحتفظ به في الحافظة للصقه لاحقًا.
+	Keeps a copy of the selected text on the clipboard; the text stays where it is.	يحتفظ بنسخة من النص المحدد في الحافظة؛ ويبقى النص في مكانه.
+	Copies the look of the selected text (font, size, colour) and paints it onto the text you click.	ينسخ مظهر النص المحدد (الخط والحجم واللون) ويطبّقه على النص الذي تنقر عليه.
+	Makes the selected text bold: thicker, darker strokes.	يجعل النص المحدد غامقًا: خطوطًا أسمك وأشد سوادًا.
+	Slants the selected text to the right, as in italic type.	يميل النص المحدد إلى اليمين كما في الخط المائل.
+	Draws a line under the selected text.	يرسم خطًا تحت النص المحدد.
+	Draws a line through the middle of the selected text.	يرسم خطًا يتوسط النص المحدد.
+	Makes the selected text small and lowers it below the line, as in H₂O.	يصغّر النص المحدد ويخفضه تحت السطر، كما في H₂O.
+	Makes the selected text small and raises it above the line, as in x².	يصغّر النص المحدد ويرفعه فوق السطر، كما في x².
+	Gives the selected text a decorative look, such as an outline or a shadow.	يمنح النص المحدد مظهرًا زخرفيًا، مثل حد خارجي أو ظل.
+	Paints a colour behind the selected text, like a highlighter pen.	يلوّن خلفية النص المحدد كما يفعل قلم التمييز.
+	Changes the colour of the selected text itself.	يغيّر لون النص المحدد نفسه.
+	Starts a list with a dot (•) in front of every paragraph.	يبدأ قائمة بنقطة (•) أمام كل فقرة.
+	Starts a numbered list: 1. 2. 3. in front of every paragraph, renumbered as you add items.	يبدأ قائمة مرقّمة: 1. 2. 3. أمام كل فقرة، ويعيد ترقيمها كلما أضفت عناصر.
+	Starts a list with levels: 1. for main items and a. b. for the items under them, stepped in.	يبدأ قائمة ذات مستويات: 1. للعناصر الرئيسية و أ. ب. للعناصر التابعة لها، مع تدرّج في المسافة البادئة.
+	Moves the paragraph one step back out towards the margin.	يرجع الفقرة خطوة واحدة إلى الخارج باتجاه الهامش.
+	Moves the paragraph one step in, away from the margin.	يدفع الفقرة خطوة واحدة إلى الداخل بعيدًا عن الهامش.
+	Puts the selected paragraphs in alphabetical or numerical order.	يرتّب الفقرات المحددة ترتيبًا أبجديًا أو رقميًا.
+	Shows the hidden marks: ¶ at the end of every paragraph and a dot for every space.	يُظهر العلامات المخفية: ¶ في نهاية كل فقرة ونقطة مكان كل مسافة.
+	Lines the paragraph up along the left margin; the right edge stays ragged.	يصفّ الفقرة على الهامش الأيسر؛ وتبقى حافتها اليمنى غير منتظمة.
+	Centres every line of the paragraph between the margins.	يوسّط كل سطر من الفقرة بين الهامشين.
+	Lines the paragraph up along the right margin; the left edge stays ragged.	يصفّ الفقرة على الهامش الأيمن؛ وتبقى حافتها اليسرى غير منتظمة.
+	Stretches every line to reach both margins, so the paragraph has straight edges.	يمدّ كل سطر ليصل إلى الهامشين معًا، فتصبح حافتا الفقرة مستقيمتين.
+	Sets how far apart the lines of the paragraph are, and the gap before and after it.	يحدد المسافة بين أسطر الفقرة، والفراغ قبلها وبعدها.
+	Fills the background of the whole paragraph with a colour.	يملأ خلفية الفقرة كاملةً بلون.
+	Draws lines around the paragraph: a box, or only the top or bottom edge.	يرسم خطوطًا حول الفقرة: إطارًا كاملًا، أو الحد العلوي أو السفلي فقط.
+	Finds every place a word or phrase occurs and marks each one.	يعثر على كل موضع تظهر فيه كلمة أو عبارة ويعلّم كل واحد منها.
+	Finds a word or phrase and swaps every occurrence for other text.	يعثر على كلمة أو عبارة ويستبدل بكل موضع لها نصًا آخر.
+	Selects the whole document at once.	يحدد المستند بأكمله دفعة واحدة.
+	Checks the spelling and grammar and stops at each mistake with suggestions.	يدقق الإملاء والنحو ويتوقف عند كل خطأ مع اقتراحات للتصحيح.
+	Adds a first page with a big title, a subtitle and the author's name.	يضيف صفحة أولى تحمل عنوانًا كبيرًا وعنوانًا فرعيًا واسم المؤلف.
+	Adds an empty page right after the page the caret is on.	يضيف صفحة فارغة مباشرة بعد الصفحة التي يقف فيها المؤشر.
+	Ends the page at the caret; the text after it starts on a new page.	ينهي الصفحة عند المؤشر؛ فيبدأ النص الذي بعده في صفحة جديدة.
+	Inserts a grid of rows and columns to hold text in cells.	يدرج شبكة من الصفوف والأعمدة لوضع النص في خلايا.
+	Inserts an image file from your computer into the page.	يدرج ملف صورة من حاسوبك في الصفحة.
+	Draws a shape (a rectangle, a circle, an arrow, a star) you can move, size and colour.	يرسم شكلًا (مستطيلًا أو دائرة أو سهمًا أو نجمة) يمكنك تحريكه وتغيير حجمه ولونه.
+	Inserts a simple symbol picture (a star, a heart, a tool) from the icon library.	يدرج صورة رمزية بسيطة (نجمة أو قلبًا أو أداة) من مكتبة الأيقونات.
+	Inserts a diagram of boxes and arrows: a list, a process, a cycle or a hierarchy.	يدرج رسمًا تخطيطيًا من مربعات وأسهم: قائمة أو عملية أو دورة أو تسلسلًا هرميًا.
+	Inserts a chart (bars, lines, a pie) drawn from numbers you type.	يدرج مخططًا (أعمدة أو خطوطًا أو دائرة) مرسومًا من أرقام تكتبها.
+	Turns the selected text into a link that opens a web page, a file or a place in this document.	يحوّل النص المحدد إلى ارتباط يفتح صفحة ويب أو ملفًا أو موضعًا في هذا المستند.
+	Marks the selected place in the document with a name, so you can jump or refer to it later.	يعلّم الموضع المحدد في المستند باسم، لتنتقل إليه أو تحيل إليه لاحقًا.
+	Inserts a pointer to a heading, table or figure (see page 3) that updates when it moves.	يدرج إحالة إلى عنوان أو جدول أو شكل (انظر الصفحة 3) تتحدّث تلقائيًا عند انتقاله.
+	Attaches a note to the selected text; it shows in the margin, not in the text.	يلحق ملاحظة بالنص المحدد؛ تظهر في الهامش لا داخل النص.
+	Adds text that repeats at the top of every page, such as a title or a stamp.	يضيف نصًا يتكرر في أعلى كل صفحة، مثل عنوان أو ختم.
+	Adds text that repeats at the bottom of every page, such as a note or a date.	يضيف نصًا يتكرر في أسفل كل صفحة، مثل ملاحظة أو تاريخ.
+	Numbers every page automatically, at the top or the bottom.	يرقّم كل الصفحات تلقائيًا، في الأعلى أو في الأسفل.
+	Inserts a framed box of text you can place anywhere on the page.	يدرج مربعًا مؤطرًا من النص يمكنك وضعه في أي مكان من الصفحة.
+	Saves a piece of text to reuse, and inserts a saved piece with one click.	يحفظ مقطعًا من النص لإعادة استعماله، ويدرج مقطعًا محفوظًا بنقرة واحدة.
+	Inserts decorative text with a colour fill, an outline and a shadow.	يدرج نصًا زخرفيًا بتعبئة ملوّنة وحد خارجي وظل.
+	Makes the first letter of the paragraph large, dropped over several lines.	يكبّر الحرف الأول من الفقرة ويُنزله على امتداد عدة أسطر.
+	Inserts a line to sign on, with the signer's name and title beneath it.	يدرج سطرًا للتوقيع عليه، وتحته اسم الموقّع ومنصبه.
+	Inserts today's date or the current time, in the format you choose.	يدرج تاريخ اليوم أو الوقت الحالي بالتنسيق الذي تختاره.
+	Inserts the contents of another file into the document at the caret.	يدرج محتويات ملف آخر في المستند عند موضع المؤشر.
+	Inserts a mathematical formula, built with fractions, roots and symbols.	يدرج معادلة رياضية مبنية من كسور وجذور ورموز.
+	Inserts a character the keyboard lacks, such as © or ±.	يدرج حرفًا لا توفره لوحة المفاتيح، مثل © أو ±.
+	Puts the pen down and returns to the normal pointer for selecting text and objects.	يضع القلم جانبًا ويعيد المؤشر العادي لتحديد النص والكائنات.
+	Draws a free loop around ink strokes to select everything inside it.	يرسم حلقة حرة حول خطوط الحبر لتحديد كل ما بداخلها.
+	Rubs out the ink strokes you drag over.	يمحو خطوط الحبر التي تسحب المؤشر فوقها.
+	Draws on the page with a crisp ink line in the chosen colour and thickness.	يرسم على الصفحة بخط حبر واضح باللون والسماكة اللذين تختارهما.
+	Draws on the page with a soft, grainy line, like a pencil.	يرسم على الصفحة بخط ناعم محبّب يشبه قلم الرصاص.
+	Draws a wide see-through stroke over the text, like a highlighter pen.	يرسم خطًا عريضًا شفافًا فوق النص كما يفعل قلم التمييز.
+	Adds another pen with its own colour and thickness to the row of pens.	يضيف قلمًا آخر بلونه وسماكته الخاصين إلى صف الأقلام.
+	Turns a shape you draw by hand into a clean shape with straight edges.	يحوّل الشكل الذي ترسمه بيدك إلى شكل نظيف ذي حواف مستقيمة.
+	Inserts a drawing area on the page that keeps its shapes and ink together as one object.	يدرج منطقة رسم في الصفحة تُبقي أشكالها وحبرها معًا ككائن واحد.
+	Plays your ink strokes back in the order you drew them.	يعيد عرض خطوط الحبر بالترتيب الذي رسمتها به.
+	Applies a matched set of colours, fonts and effects to the whole document at once.	يطبّق مجموعة متناسقة من الألوان والخطوط والتأثيرات على المستند كله دفعة واحدة.
+	Changes the set of colours used by headings, shapes and charts throughout the document.	يغيّر مجموعة الألوان التي تستعملها العناوين والأشكال والمخططات في المستند كله.
+	Changes the pair of fonts used for headings and for body text throughout the document.	يغيّر زوج الخطوط المستعمل للعناوين وللنص الأساسي في المستند كله.
+	Sets, for the whole document, how much space lies between paragraphs and between lines.	يحدد للمستند كله مقدار الفراغ بين الفقرات وبين الأسطر.
+	Changes how shapes and pictures look: flat, with soft shadows, or with strong edges.	يغيّر مظهر الأشكال والصور: مسطّحة، أو بظلال ناعمة، أو بحواف حادة.
+	Makes the current theme, fonts and spacing the starting point for every new document.	يجعل السمة والخطوط والتباعد الحالية نقطة البداية لكل مستند جديد.
+	Prints a faint word (such as DRAFT) diagonally behind the text of every page.	يطبع كلمة باهتة (مثل مسوّدة) بشكل مائل خلف نص كل صفحة.
+	Colours the background of every page instead of plain white.	يلوّن خلفية كل صفحة بدلًا من الأبيض العادي.
+	Draws a frame around the edge of every page.	يرسم إطارًا حول حافة كل صفحة.
+	Types what you say into the microphone, at the caret, as you speak.	يكتب ما تقوله في الميكروفون عند موضع المؤشر أثناء حديثك.
+	Turns a formula you write by hand into a typed, editable equation.	يحوّل المعادلة التي تكتبها بيدك إلى معادلة مطبوعة قابلة للتحرير.
+	Sets how much blank space is left around the text on every page.	يحدّد مقدار الفراغ المتروك حول النص في كل صفحة.
+	Turns the page sideways (wider than tall) or upright again.	يجعل الصفحة أفقية (أعرض من طولها) أو يعيدها عمودية.
+	Picks the paper size the pages are laid out for (A4, Letter…).	يختار حجم الورق الذي تُنسَّق الصفحات على مقاسه (A4، Letter…).
+	Splits the text into two or more columns side by side, like a newspaper.	يقسم النص إلى عمودين أو أكثر جنبًا إلى جنب كما في الصحف.
+	Starts a new page, column or section at the caret instead of pressing Enter many times.	يبدأ صفحة أو عمودًا أو مقطعًا جديدًا عند المؤشر بدل الضغط على Enter مرات كثيرة.
+	Prints a small number in the margin beside every line of text.	يطبع رقمًا صغيرًا في الهامش بجانب كل سطر من النص.
+	Breaks long words at a line end with a hyphen so the lines fill out evenly.	يقطع الكلمات الطويلة في نهاية السطر بواصلة لتمتلئ الأسطر بانتظام.
+	Turns the text to run top to bottom in the selected cells, text box or section.	يجعل النص يجري من الأعلى إلى الأسفل في الخلايا المحددة أو مربع النص أو المقطع.
+	Moves the selected picture or shape to a set spot on the page, such as a corner or the middle.	ينقل الصورة أو الشكل المحدد إلى موضع ثابت في الصفحة، كإحدى الزوايا أو الوسط.
+	Chooses how the text flows around the selected picture: around it, above and below, or behind it.	يختار كيفية التفاف النص حول الصورة المحددة: حولها، أو فوقها وتحتها، أو خلفها.
+	Moves the selected shape one step up so it shows on top of the shapes it overlaps.	يرفع الشكل المحدد خطوة واحدة ليظهر فوق الأشكال التي يتداخل معها.
+	Moves the selected shape one step down so the shapes it overlaps show on top of it.	يخفض الشكل المحدد خطوة واحدة لتظهر الأشكال التي يتداخل معها فوقه.
+	Opens a list of every picture, shape and text box on the page so you can select or hide each one.	يفتح قائمة بكل صورة وشكل ومربع نص في الصفحة لتحدّد أيًّا منها أو تخفيه.
+	Lines up the selected shapes with each other or with the edges of the page.	يصفّ الأشكال المحددة على استقامة واحدة مع بعضها أو مع حواف الصفحة.
+	Joins the selected shapes into one object that moves and resizes together.	يضم الأشكال المحددة في كائن واحد يُنقَل ويُغيَّر حجمه معًا.
+	Turns the selected picture or shape a quarter turn, or flips it over.	يدير الصورة أو الشكل المحدد ربع دورة، أو يقلبه.
+	Builds a table of contents from the document's headings, with the page number of each.	ينشئ جدول محتويات من عناوين المستند مع رقم صفحة كل عنوان.
+	Marks the selected paragraph as a heading of a chosen level so it appears in the table of contents.	يجعل الفقرة المحددة عنوانًا بالمستوى الذي تختاره ليظهر في جدول المحتويات.
+	Rebuilds the table of contents so new headings and changed page numbers are current.	يعيد بناء جدول المحتويات لتظهر فيه العناوين الجديدة وأرقام الصفحات المحدَّثة.
+	Puts a small number after the word and a note explaining it at the bottom of the page.	يضع رقمًا صغيرًا بعد الكلمة وحاشية سفلية تشرحها في أسفل الصفحة.
+	Puts a small number after the word and collects the note on a last page at the end of the document.	يضع رقمًا صغيرًا بعد الكلمة ويجمع التعليق الختامي في صفحة أخيرة في نهاية المستند.
+	Jumps the caret to the next footnote mark in the text.	ينقل المؤشر إلى علامة الحاشية السفلية التالية في النص.
+	Shows the footnotes and endnotes of the document in a list so you can read and edit them.	يعرض الحواشي السفلية والتعليقات الختامية للمستند في قائمة لتقرأها وتحرّرها.
+	Would search the web for sources to quote; WordCraft works offline, so it only says so.	كان ليبحث في الإنترنت عن مصادر للاقتباس؛ لكن WordCraft يعمل دون اتصال، فيكتفي بإخبارك بذلك.
+	Inserts a short reference such as (Ali, 2024) at the caret, naming the source you quote.	يدرج إشارة مرجعية قصيرة مثل (علي، 2024) عند المؤشر تسمّي المصدر الذي تقتبس منه.
+	Keeps the list of books and articles you cite: add, edit or remove a source.	يحفظ قائمة الكتب والمقالات التي تقتبس منها: أضف مصدرًا أو حرّره أو احذفه.
+	Chooses the format of the citations and the bibliography (APA, MLA, Chicago…).	يختار نمط الاقتباسات المرجعية وقائمة المراجع (APA، MLA، Chicago…).
+	Adds a References list at the end that names every source you cited.	يضيف قائمة مراجع في النهاية تذكر كل مصدر اقتبست منه.
+	Writes a numbered label such as Figure 1 under the selected picture or table.	يكتب تسمية توضيحية مرقّمة مثل «شكل ١» تحت الصورة أو الجدول المحدد.
+	Builds a list of all the captions (figures, tables) with their page numbers.	ينشئ قائمة بكل التسميات التوضيحية (الأشكال والجداول) مع أرقام صفحاتها.
+	Rebuilds the table of figures so new captions and changed page numbers are current.	يعيد بناء جدول الأشكال لتظهر فيه التسميات الجديدة وأرقام الصفحات المحدَّثة.
+	Tags the selected word so it is listed in the index with its page number.	يضع علامة على الكلمة المحددة لتُدرَج في الفهرس مع رقم صفحتها.
+	Builds an alphabetical index at the end: every tagged word with the pages it appears on.	ينشئ فهرسًا أبجديًا في النهاية: كل كلمة موسومة مع الصفحات التي ترد فيها.
+	Rebuilds the index so newly tagged words and changed page numbers are current.	يعيد بناء الفهرس لتظهر فيه الكلمات الموسومة حديثًا وأرقام الصفحات المحدَّثة.
+	Tags the selected legal citation (a case, a statute) for the table of authorities.	يضع علامة على الاقتباس القانوني المحدد (قضية أو نص قانوني) لإدراجه في جدول المراجع القانونية.
+	Builds a list of the cases, statutes and other legal sources cited, grouped by kind, with their pages.	ينشئ قائمة بالقضايا والنصوص القانونية والمصادر القانونية الأخرى المقتبسة، مصنّفة حسب نوعها، مع صفحاتها.
+	Suggests words with the same meaning as the selected word so you can swap it.	يقترح كلمات بمعنى الكلمة المحددة نفسه لتستبدلها بها.
+	Counts the pages, words, characters, paragraphs and lines of the document or the selection.	يحصي صفحات المستند أو التحديد وكلماته وأحرفه وفقراته وأسطره.
+	Reads the text out loud from the caret, marking each word as it is spoken.	يقرأ النص بصوت عالٍ ابتداءً من المؤشر، مع تمييز كل كلمة عند نطقها.
+	Checks the document for things a screen reader cannot handle, such as pictures without a description, and lists them.	يفحص المستند بحثًا عمّا لا يستطيع قارئ الشاشة التعامل معه، كالصور بلا وصف، ويعرضه في قائمة.
+	Sets the language of the selected text so its spelling is checked with the right dictionary.	يحدّد لغة النص المحدد ليُدقَّق إملاؤه بالقاموس الصحيح.
+	Removes the selected comment balloon from the margin.	يحذف فقاعة التعليق المحددة من الهامش.
+	Jumps to the comment before this one in the document.	ينتقل إلى التعليق السابق لهذا التعليق في المستند.
+	Jumps to the next comment in the document.	ينتقل إلى التعليق التالي في المستند.
+	Shows every comment of the document in a pane beside the page.	يعرض كل تعليقات المستند في جزء بجانب الصفحة.
+	Records every change you make: added text is underlined, deleted text is struck through, so others can see what changed.	يسجّل كل تغيير تجريه: النص المضاف يُسطَّر تحته، والنص المحذوف يُشطَب، ليرى الآخرون ما تغيّر.
+	Chooses how much of the tracked changes and comments is shown on the page: all, simple or none.	يختار مقدار ما يُعرَض في الصفحة من التغييرات المتعقَّبة والتعليقات: الكل، أو المبسّط، أو لا شيء.
+	Opens a list of every tracked change and comment, with who made it and when.	يفتح قائمة بكل تغيير متعقَّب وتعليق، مع اسم من أجراه ووقته.
+	Keeps the selected change: the added text stays, the deleted text goes, and the marks disappear.	يُبقي التغيير المحدد: يبقى النص المضاف، ويُزال النص المحذوف، وتختفي العلامات.
+	Undoes the selected change: the added text goes, the deleted text comes back, and the marks disappear.	يتراجع عن التغيير المحدد: يُزال النص المضاف، ويعود النص المحذوف، وتختفي العلامات.
+	Jumps to the tracked change before this one in the document.	ينتقل إلى التغيير المتعقَّب السابق لهذا التغيير في المستند.
+	Jumps to the next tracked change in the document.	ينتقل إلى التغيير المتعقَّب التالي في المستند.
+	Lays two versions of a document side by side and marks every difference between them.	يعرض نسختين من المستند جنبًا إلى جنب ويميّز كل اختلاف بينهما.
+	Limits what others may do in the document: read only, comments only or tracked changes only.	يقيّد ما يجوز للآخرين فعله في المستند: القراءة فقط، أو التعليقات فقط، أو التغييرات المتعقَّبة فقط.
+	Hides the pen and highlighter strokes drawn over the document without deleting them.	يخفي خطوط القلم وقلم التمييز المرسومة فوق المستند دون حذفها.
+	Translates the selected text, or the whole document, into another language.	يترجم النص المحدد، أو المستند كله، إلى لغة أخرى.
+	Locks the selected part of the document so other authors cannot change it while you work on it.	يقفل الجزء المحدد من المستند كي لا يغيّره المؤلفون الآخرون أثناء عملك عليه.
+	Shows the document as two facing pages for reading, with the ribbon hidden.	يعرض المستند على هيئة صفحتين متقابلتين للقراءة، مع إخفاء الشريط.
+	Shows every page as it will print, with its margins, on a grey background.	يعرض كل صفحة كما ستُطبع، بهوامشها، على خلفية رمادية.
+	Spreads the text across the whole window, like a web page, without page edges.	يبسط النص على عرض النافذة كلها، مثل صفحة ويب، من غير حواف للصفحات.
+	Shows only the headings, stepped in by level, so you can reorder the document.	يعرض العناوين وحدها، مزاحة بحسب مستواها، لتعيد ترتيب المستند.
+	Shows the text alone, without page edges, pictures or headers, for fast typing.	يعرض النص وحده، من غير حواف صفحات ولا صور ولا ترويسات، للكتابة السريعة.
+	Hides everything except the page, on a dark background, so you can concentrate.	يخفي كل شيء ما عدا الصفحة، على خلفية داكنة، لتتمكن من التركيز.
+	Shows the text in large, widely spaced lines that are easier to read.	يعرض النص بسطور كبيرة متباعدة تكون أسهل في القراءة.
+	Scrolls through the pages up and down, one below the other.	يتنقل بين الصفحات صعودًا ونزولًا، واحدة تحت الأخرى.
+	Lays the pages out in a row and flips through them sideways, like a book.	يصف الصفحات في صف واحد ويقلّبها جانبيًا، مثل الكتاب.
+	Opens a box where you choose how large the page appears on screen.	يفتح مربعًا تختار فيه حجم ظهور الصفحة على الشاشة.
+	Shows the page at its real printed size on screen.	يعرض الصفحة على الشاشة بحجمها الحقيقي عند الطباعة.
+	Makes the page appear larger on screen, a step at a time.	يكبّر ظهور الصفحة على الشاشة، درجة في كل مرة.
+	Makes the page appear smaller on screen, a step at a time.	يصغّر ظهور الصفحة على الشاشة، درجة في كل مرة.
+	Shrinks the view so one whole page fits in the window.	يصغّر العرض حتى تظهر صفحة كاملة واحدة داخل النافذة.
+	Shrinks the view so several pages fit in the window side by side.	يصغّر العرض حتى تظهر عدة صفحات داخل النافذة جنبًا إلى جنب.
+	Enlarges the view so the page is exactly as wide as the window.	يكبّر العرض حتى يصير عرض الصفحة مساويًا لعرض النافذة تمامًا.
+	Switches the page between white with dark text and dark with light text.	يبدّل الصفحة بين بيضاء بنص داكن وداكنة بنص فاتح.
+	Opens the same document in a second window; what you change shows in both.	يفتح المستند نفسه في نافذة ثانية؛ وما تغيّره يظهر في النافذتين.
+	Places all the open windows side by side so you can see every one.	يرتّب كل النوافذ المفتوحة جنبًا إلى جنب لترى كل واحدة منها.
+	Divides the window into two parts that scroll separately through the same document.	يقسم النافذة إلى جزأين يتنقل كل منهما في المستند نفسه على حدة.
+	Makes the window fill the whole screen, hiding the title bar and the ribbon.	يجعل النافذة تملأ الشاشة كلها، مع إخفاء شريط العنوان والشريط.
+	Lists the recorded macros so you can run, edit or delete one.	يعرض قائمة وحدات الماكرو المسجلة لتشغّل إحداها أو تحررها أو تحذفها.
+	Fills the selected cells with a background colour.	يملأ الخلايا المحددة بلون خلفية.
+	Chooses which edges of the selected cells get lines, and how thick they are.	يختار أي حواف الخلايا المحددة تأخذ خطوطًا، وكم يكون سمكها.
+	Paints a line onto any cell edge you click or drag along.	يرسم خطًا على أي حافة خلية تنقر عليها أو تسحب على امتدادها.
+	Selects the whole cell the caret is in, or its row, column or table.	يحدد الخلية التي فيها المؤشر كاملة، أو صفها أو عمودها أو جدولها.
+	Shows faint dotted lines around cells that have no borders, on screen only.	يعرض خطوطًا منقطة خفيفة حول الخلايا التي لا حدود لها، على الشاشة فقط.
+	Opens a box to set the table's width, alignment, row heights and cell widths.	يفتح مربعًا لضبط عرض الجدول ومحاذاته وارتفاع الصفوف وعرض الخلايا.
+	Lets you draw a table with the mouse: a box for the table, then lines for the cells.	يتيح لك رسم جدول بالفأرة: مستطيل للجدول، ثم خطوط للخلايا.
+	Rubs out a cell border so the two cells on either side become one.	يمحو حدًا بين خليتين فتصير الخليتان على جانبيه خلية واحدة.
+	Removes the cells, row, column or whole table the caret is in.	يحذف الخلايا أو الصف أو العمود أو الجدول كله الذي فيه المؤشر.
+	Adds a new empty row above the row the caret is in.	يضيف صفًا فارغًا جديدًا فوق الصف الذي فيه المؤشر.
+	Adds a new empty row below the row the caret is in.	يضيف صفًا فارغًا جديدًا تحت الصف الذي فيه المؤشر.
+	Adds a new empty column to the left of the column the caret is in.	يضيف عمودًا فارغًا جديدًا إلى يسار العمود الذي فيه المؤشر.
+	Adds a new empty column to the right of the column the caret is in.	يضيف عمودًا فارغًا جديدًا إلى يمين العمود الذي فيه المؤشر.
+	Joins the selected cells into one larger cell.	يدمج الخلايا المحددة في خلية واحدة أكبر.
+	Divides the cell at the caret into several smaller cells.	يقسم الخلية التي عندها المؤشر إلى عدة خلايا أصغر.
+	Cuts the table in two at the caret's row, with a paragraph between the halves.	يقطع الجدول إلى جدولين عند صف المؤشر، مع فقرة بين النصفين.
+	Sizes the columns to fit their contents, the window, or fixed widths.	يضبط عرض الأعمدة ليلائم محتواها، أو النافذة، أو عرضًا ثابتًا.
+	Makes all the selected rows the same height.	يجعل كل الصفوف المحددة بالارتفاع نفسه.
+	Makes all the selected columns the same width.	يجعل كل الأعمدة المحددة بالعرض نفسه.
+	Puts the rows in order by one column, A to Z or smallest to largest.	يرتّب الصفوف بحسب عمود واحد، من الألف إلى الياء أو من الأصغر إلى الأكبر.
+	Repeats the header row at the top of every page the table runs onto.	يكرر صف الرأس في أعلى كل صفحة يمتد إليها الجدول.
+	Turns the table back into ordinary paragraphs, one line per row.	يحوّل الجدول من جديد إلى فقرات عادية، سطر لكل صف.
+	Puts a calculation in the cell, such as the sum of the numbers above it.	يضع في الخلية عملية حسابية، مثل مجموع الأرقام التي فوقها.
+	Shows which version of WordCraft AR this is and where to get help.	يعرض إصدار WordCraft AR الذي تستعمله وأين تجد المساعدة.
+	Opens the community chat in your browser, where you can ask questions and report problems.	يفتح دردشة المجتمع في متصفحك، حيث تطرح الأسئلة وتبلّغ عن المشكلات.
+	Opens a searchable list of every command, so you can find one by name and run it.	يفتح قائمة بكل الأوامر يمكن البحث فيها، لتجد الأمر باسمه وتشغّله.
+	Inserts a box where the reader can type formatted text, with bold, lists or pictures.	يدرج مربعًا يكتب فيه القارئ نصًا منسقًا، بخط غامق أو قوائم أو صور.
+	Inserts a box where the reader can type plain text only, all in one style.	يدرج مربعًا يكتب فيه القارئ نصًا عاديًا فقط، بنمط واحد كله.
+	Inserts a box where the reader can place a picture.	يدرج مربعًا يضع فيه القارئ صورة.
+	Inserts a box where the reader picks a ready-made block of text from a gallery.	يدرج مربعًا يختار فيه القارئ كتلة نص جاهزة من معرض.
+	Inserts a small box the reader can tick or untick.	يدرج خانة صغيرة يستطيع القارئ تعليمها أو إلغاء تعليمها.
+	Inserts a list the reader can choose from or type their own entry into.	يدرج قائمة يختار منها القارئ أو يكتب فيها مدخله الخاص.
+	Inserts a list the reader must choose one entry from, without typing.	يدرج قائمة يجب أن يختار القارئ منها مدخلًا واحدًا، من غير كتابة.
+	Inserts a box where the reader picks a date from a small calendar.	يدرج مربعًا يختار فيه القارئ تاريخًا من تقويم صغير.
+	Inserts a section the reader can copy as many times as needed, like extra rows.	يدرج مقطعًا يستطيع القارئ نسخه بقدر ما يحتاج، مثل صفوف إضافية.
+	Shows the edges and titles of every form box so you can edit the boxes themselves.	يظهر حواف كل مربعات النموذج وعناوينها لتحرر المربعات نفسها.
+	Opens a box to set a form box's title, tag, list entries and locks.	يفتح مربعًا لضبط عنوان مربع النموذج ووسمه ومدخلات قائمته وأقفاله.
+	Inserts a citation from your Zotero library at the caret, or edits the one under it.	يدرج اقتباسًا مرجعيًا من مكتبة Zotero عند المؤشر، أو يحرر الاقتباس الذي تحته.
+	Inserts one of your Zotero notes as text at the caret.	يدرج إحدى ملاحظاتك في Zotero نصًا عند المؤشر.
+	Moves the caret to just after the citation it is in, so you can keep typing.	ينقل المؤشر إلى ما بعد الاقتباس المرجعي الذي هو فيه مباشرة، لتواصل الكتابة.
+	Inserts the list of every cited source at the caret, or updates the existing list.	يدرج قائمة بكل المراجع المقتبس منها عند المؤشر، أو يحدّث القائمة الموجودة.
+	Updates every citation and the bibliography after changes in your Zotero library.	يحدّث كل الاقتباسات المرجعية وقائمة المراجع بعد التغييرات في مكتبة Zotero.
+	Opens Zotero's settings for this document: the citation style and its language.	يفتح إعدادات Zotero لهذا المستند: نمط الاقتباس المرجعي ولغته.
+	Turns the citations and bibliography into plain text that Zotero no longer updates.	يحوّل الاقتباسات المرجعية وقائمة المراجع إلى نص عادي لا يحدّثه Zotero بعد ذلك.
+	UI Kit	طقم الواجهة
+	UI\nKit	طقم\nالواجهة
+	Self-test	الفحص الذاتي
+	Self-\nTest	الفحص\nالذاتي
+	Checklist	قائمة التحقق
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	طقم واجهة WordCraft AR
+	Filter:	تصفية:
+	Command	الأمر
+	Parameters	المعاملات
+	ms	م.ث
+	Answer	النتيجة
+	Run the self-test	شغّل الفحص الذاتي
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	يشغّل كل زر في الشريط على مستند خدمة عربي تجريبي (مستندك لا يُمَسّ) ويعرض ما أجاب به كل زر.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	شُغِّل {total} زرًا في {ms} م.ث؛ {errors} أجاب بخطأ (مربع حوار يحتاج إدخالًا، أو ميزة تحتاج تحديدًا)؛ {pages} صفحة؛ دورة الخدمة {ok}
+	{shown} of {total} entries	{shown} من {total} مدخلًا
+	{shown} of {total} icons	{shown} من {total} أيقونة
+	No Arabic translation yet	لا توجد ترجمة عربية بعد
+	No icon named {icon} (a lettered tile is drawn)	لا توجد أيقونة باسم {icon} (تُرسم بلاطة بحرف)
+	{n} ribbon buttons without visual help	{n} زرًا في الشريط بلا مساعدة مرئية
+	{n} explanations without an Arabic translation	{n} شرحًا بلا ترجمة عربية
+	{n} icons in the set	{n} أيقونة في الطقم
+	{n} entries in the UI kit	{n} مدخلًا في طقم الواجهة
+	{n} commands in the registry	{n} أمرًا في السجل
+	{n} Arabic interface strings	{n} نصًّا في الواجهة العربية
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	لإضافة أمر: أيقونته في icons.rs، ومدخل واحد في ui_kit/<tab>.rs، وسطر واحد في i18n/ar.tsv — انظر docs/ar-ui-kit.md.

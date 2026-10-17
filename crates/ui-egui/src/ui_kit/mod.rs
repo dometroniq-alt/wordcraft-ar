@@ -123,6 +123,16 @@ pub fn icon_for(id: &str) -> &str {
     ICONS.iter().find(|(c, _)| *c == id).map_or_else(|| id.rsplit('.').next().unwrap_or(id), |(_, icon)| *icon)
 }
 
+/// Whether `id` names something a ribbon button can run: a registered command, an interface
+/// command (`ui.*`), or a Word feature the parity catalog lists that has a button but no command
+/// yet (Dictate, Translate…).
+#[cfg(test)]
+pub fn is_button_id(id: &str) -> bool {
+    id.starts_with("ui.")
+        || wordcraft_engine::cmd::registry().get(id).is_some()
+        || wordcraft_engine::catalog::entries().iter().any(|(_, _, _, cmd)| *cmd == id)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -130,11 +140,10 @@ mod tests {
     #[test]
     fn keys_are_unique_and_explanations_are_sentences() {
         let mut seen = std::collections::HashSet::new();
-        let reg = wordcraft_engine::cmd::registry();
         for e in entries() {
             assert!(seen.insert(e.key), "{}: listed twice", e.key);
             let id = e.key.split(':').next().unwrap_or("");
-            assert!(reg.get(id).is_some() || id.starts_with("ui."), "{}: unknown command", e.key);
+            assert!(is_button_id(id), "{}: unknown command", e.key);
             assert!(e.explain.ends_with('.') && e.explain.split_whitespace().count() >= 4, "{}: one full sentence", e.key);
         }
     }

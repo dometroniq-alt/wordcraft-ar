@@ -2280,3 +2280,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Dugmad na karticama Služba i Pisma prikazuju sličicu onoga što rade i rečenicu na jeziku interfejsa; kada je uključeno, dodaje se arapska rečenica ako interfejs nije arapski.
 	Old computer mode (no animations, fastest start)	Režim za stari računar (bez animacija, najbrže pokretanje)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	Za spore ili stare računare: isključuje sve animacije interfejsa, trepćući kursor, mini traku sa alatkama i vođice za poravnanje i pokreće se sa praznim dokumentom.
+	UI Kit	UI komplet
+	UI\nKit	UI\nkomplet
+	Self-test	Samoprovera
+	Self-\nTest	Samo-\nprovera
+	Checklist	Kontrolna lista
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	UI komplet WordCraft AR
+	Filter:	Filter:
+	Command	Komanda
+	Parameters	Parametri
+	ms	ms
+	Answer	Odgovor
+	Run the self-test	Pokreni samoproveru
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Pokreće svako dugme trake na probnom arapskom službenom dokumentu (vaš dokument se ne dira) i navodi šta je svako odgovorilo.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} dugmadi za {ms} ms; {errors} odgovorilo greškom (dijalog traži unos, funkcija traži izbor); {pages} strana; službeni ciklus {ok}
+	{shown} of {total} entries	{shown} od {total} stavki
+	{shown} of {total} icons	{shown} od {total} ikona
+	No Arabic translation yet	Još nema arapskog prevoda
+	No icon named {icon} (a lettered tile is drawn)	Nema ikone {icon} (crta se pločica sa slovom)
+	{n} ribbon buttons without visual help	{n} dugmadi trake bez vizuelne pomoći
+	{n} explanations without an Arabic translation	{n} objašnjenja bez arapskog prevoda
+	{n} icons in the set	{n} ikona u skupu
+	{n} entries in the UI kit	{n} stavki u UI kompletu
+	{n} commands in the registry	{n} komandi u registru
+	{n} Arabic interface strings	{n} nizova arapskog interfejsa
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Dodavanje komande: ikona u icons.rs, jedan Entry u ui_kit/<tab>.rs, jedan red u i18n/ar.tsv — vidi docs/ar-ui-kit.md.

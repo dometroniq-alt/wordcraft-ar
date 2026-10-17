@@ -2658,3 +2658,29 @@
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Бутоните в разделите „Служба“ и „Кореспонденция“ показват миниатюра на действието си и изречение на езика на интерфейса; при включване се добавя и арабското изречение, когато интерфейсът не е арабски.
 	Old computer mode (no animations, fastest start)	Режим за стар компютър (без анимации, най-бърз старт)
 	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	За бавни или стари машини: изключва всички анимации на интерфейса, мигащия курсор, мини лентата с инструменти и помощните линии за подравняване и започва с празен документ.
+	UI Kit	UI комплект
+	UI\nKit	UI\nкомплект
+	Self-test	Самопроверка
+	Self-\nTest	Само-\nпроверка
+	Checklist	Контролен списък
+	WordCraft AR	WordCraft AR
+	WordCraft AR UI Kit	UI комплект на WordCraft AR
+	Filter:	Филтър:
+	Command	Команда
+	Parameters	Параметри
+	ms	мс
+	Answer	Отговор
+	Run the self-test	Стартирай самопроверката
+	Runs every ribbon button on a scratch Arabic service document (your document is not touched) and lists what each one answered.	Изпълнява всеки бутон от лентата върху чернови арабски служебен документ (вашият документ не се променя) и показва какво е отговорил всеки.
+	{total} buttons ran in {ms} ms; {errors} answered with an error (a dialog that needs input, a feature that needs a selection); {pages} page(s); service cycle {ok}	{total} бутона за {ms} мс; {errors} отговориха с грешка (диалог, който иска въвеждане, функция, която иска селекция); {pages} страници; служебен цикъл {ok}
+	{shown} of {total} entries	{shown} от {total} записа
+	{shown} of {total} icons	{shown} от {total} икони
+	No Arabic translation yet	Все още няма арабски превод
+	No icon named {icon} (a lettered tile is drawn)	Няма икона с име {icon} (рисува се плочка с буква)
+	{n} ribbon buttons without visual help	{n} бутона на лентата без визуална помощ
+	{n} explanations without an Arabic translation	{n} обяснения без арабски превод
+	{n} icons in the set	{n} икони в комплекта
+	{n} entries in the UI kit	{n} записа в UI комплекта
+	{n} commands in the registry	{n} команди в регистъра
+	{n} Arabic interface strings	{n} низа в арабския интерфейс
+	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Добавяне на команда: икона в icons.rs, един Entry в ui_kit/<tab>.rs, един ред в i18n/ar.tsv — вижте docs/ar-ui-kit.md.
