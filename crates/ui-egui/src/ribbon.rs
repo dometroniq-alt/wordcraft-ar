@@ -979,6 +979,41 @@ fn home(app: &mut WordApp, ui: &mut Ui) {
             });
         });
     });
+    // WordCraft AR: kashida justification beside Paragraph (Word keeps it in Paragraph › Justify
+    // options; here each level is one click away, with a thumbnail of what it does).
+    group(ui, "Kashida", None, app, |ui, app| {
+        use wordcraft_doc::props::Align as A;
+        let cur = app.session.doc.para_at(&app.session.sel.focus).map(|p| app.session.doc.styles.resolve_para(&p.props).align);
+        stack(ui, |ui| {
+            crate::widgets::row(ui, |ui| {
+                small(ui, app, "kashidaLow", Some("Low"), "Low Kashida", "service.kashida", json!({"value": "low"}), cur == Some(A::LowKashida));
+                small(
+                    ui,
+                    app,
+                    "kashidaMedium",
+                    Some("Medium"),
+                    "Medium Kashida",
+                    "service.kashida",
+                    json!({"value": "medium"}),
+                    cur == Some(A::MediumKashida),
+                );
+            });
+            ui.add_space(3.0);
+            crate::widgets::row(ui, |ui| {
+                small(ui, app, "kashidaHigh", Some("High"), "High Kashida", "service.kashida", json!({"value": "high"}), cur == Some(A::HighKashida));
+                small(
+                    ui,
+                    app,
+                    "distribute",
+                    Some("Distribute"),
+                    "Distribute",
+                    "service.kashida",
+                    json!({"value": "distribute"}),
+                    cur == Some(A::Distribute),
+                );
+            });
+        });
+    });
     group(ui, "Styles", Some("styles.pane"), app, |ui, app| {
         crate::previews::style_gallery(app, ui, &st);
     });
@@ -1762,59 +1797,6 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
             }
         });
         big(ui, app, "servicePages", "Page\nNumber", "service.pageNumbers", json!({}), false);
-    });
-    group(ui, "Kashida", None, app, |ui, app| {
-        let cur = app.session.doc.para_at(&app.session.sel.focus).map(|p| app.session.doc.styles.resolve_para(&p.props).align);
-        small(
-            ui,
-            app,
-            "kashidaOff",
-            Some("Justify"),
-            "Justify",
-            "service.kashida",
-            json!({"value": "off"}),
-            cur == Some(wordcraft_doc::props::Align::Justify),
-        );
-        small(
-            ui,
-            app,
-            "kashidaLow",
-            Some("Low"),
-            "Low Kashida",
-            "service.kashida",
-            json!({"value": "low"}),
-            cur == Some(wordcraft_doc::props::Align::LowKashida),
-        );
-        small(
-            ui,
-            app,
-            "kashidaMedium",
-            Some("Medium"),
-            "Medium Kashida",
-            "service.kashida",
-            json!({"value": "medium"}),
-            cur == Some(wordcraft_doc::props::Align::MediumKashida),
-        );
-        small(
-            ui,
-            app,
-            "kashidaHigh",
-            Some("High"),
-            "High Kashida",
-            "service.kashida",
-            json!({"value": "high"}),
-            cur == Some(wordcraft_doc::props::Align::HighKashida),
-        );
-        small(
-            ui,
-            app,
-            "distribute",
-            Some("Distribute"),
-            "Distribute",
-            "service.kashida",
-            json!({"value": "distribute"}),
-            cur == Some(wordcraft_doc::props::Align::Distribute),
-        );
     });
     group(ui, "Engine", None, app, |ui, app| {
         big(ui, app, "serviceEngine", "Format with\nServiceWord-AR", "service.external", json!({}), false);

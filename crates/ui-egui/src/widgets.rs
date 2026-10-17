@@ -64,11 +64,11 @@ fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value)
             ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
             crate::visual_help::thumbnail(ui.painter(), r, &key, &t);
             ui.add_space(4.0);
-            ui.label(egui::RichText::new(tl!(text)).size(11.5));
+            ui.label(egui::RichText::new(crate::i18n::explain(crate::i18n::current(), text)).size(11.5));
             if bilingual && let Some(ar) = crate::i18n::Lang::from_code("ar") {
                 // Plain Arabic prose (the catalog keeps these sentences free of Latin words and
                 // brackets): egui wraps it correctly as it is, right-aligned.
-                let arabic = crate::i18n::tr(ar, text);
+                let arabic = crate::i18n::explain(ar, text);
                 if arabic != text {
                     ui.add_space(2.0);
                     ui.add(egui::Label::new(egui::RichText::new(arabic).size(11.5).color(t.text_dim)).halign(egui::Align::RIGHT));
@@ -322,7 +322,8 @@ pub fn menu_button(
         icons::paint(ui.painter(), Rect::from_center_size(pos2(r.max.x - 6.0, r.center().y), vec2(DROPDOWN, DROPDOWN)), "dropdown", c, c);
         resp
     };
-    let resp = resp.on_hover_text(tip);
+    // WordCraft AR: a menu button about a command gets the command's visual help too.
+    let resp = if id.is_empty() { resp.on_hover_text(tip) } else { tooltip(app, resp, tip, id, &Value::Object(Default::default())) };
     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, on, tip));
     if !on {
         return;
@@ -385,34 +386,9 @@ pub fn group_titled(ui: &mut Ui, id_title: &str, title: &str, launcher: Option<&
     ui.add_space(6.0);
 }
 
-/// The icon a command's button shows outside its own ribbon group (custom groups, the Quick
-/// Access Toolbar): the one its ribbon button uses, which is usually named after the id's last
-/// part. Names the icon set doesn't have draw a lettered tile ([`icons::paint`]).
+/// The icon a command's button shows outside its own ribbon group ([`crate::ui_kit::icon_for`]).
 pub fn command_icon(id: &str) -> &str {
-    const ICONS: &[(&str, &str)] = &[
-        ("arrange.wrap", "wrapText"),
-        ("draw.highlighter", "highlight"),
-        ("format.border", "charborder"),
-        ("format.color", "fontcolor"),
-        ("format.growFont", "grow"),
-        ("format.shrinkFont", "shrink"),
-        ("format.strikethrough", "strike"),
-        ("format.highlight", "highlight"),
-        ("insert.signatureLine", "signature"),
-        ("mailings.envelopes", "envelope"),
-        ("mailings.insertField", "mergeField"),
-        ("para.ltr", "textLtr"),
-        ("para.rtl", "textRtl"),
-        ("para.bullets", "bullets"),
-        ("para.numbering", "numbering"),
-        ("table.insertRowAbove", "insertAbove"),
-        ("view.commentsPane", "showComments"),
-        ("view.marks", "pilcrow"),
-        ("edit.repeat", "redo"),
-        ("file.new", "blankPage"),
-        ("tools.customizeRibbon", "more"),
-    ];
-    ICONS.iter().find(|(c, _)| *c == id).map_or_else(|| id.rsplit('.').next().unwrap_or(id), |(_, icon)| *icon)
+    crate::ui_kit::icon_for(id)
 }
 
 /// Right-click on a command's button: put it on (or take it off) the Quick Access Toolbar, or

@@ -79,6 +79,7 @@ pub mod table_pen;
 pub mod table_resize;
 pub mod table_ruler;
 pub mod theme;
+pub mod ui_kit;
 pub mod visual_help;
 pub mod widgets;
 pub mod window_geometry;

@@ -25,6 +25,11 @@ pub fn set(on: bool) {
     ON.set(on);
 }
 
+/// Mark without recording: for text that is translated where a catalog has it (the visual-help
+/// explanations: English and Arabic) without every catalog being held to it.
+pub fn mark_quiet(s: &str) -> &'static str {
+    CACHE.with_borrow_mut(|c| *c.entry(s.to_string()).or_insert_with(|| Box::leak(format!("⟦{}⟧", s.replace('\n', "⟧\n⟦")).into_boxed_str())))
+}
 pub fn mark(s: &str) -> &'static str {
     LOOKED_UP.with_borrow_mut(|l| l.insert(s.to_string()));
     CACHE.with_borrow_mut(|c| *c.entry(s.to_string()).or_insert_with(|| Box::leak(format!("⟦{}⟧", s.replace('\n', "⟧\n⟦")).into_boxed_str())))

@@ -405,6 +405,17 @@ pub fn lowercase(s: &str) -> String {
     out
 }
 
+/// A visual-help explanation ([`crate::ui_kit`]) in `lang`: translated where the catalog has
+/// it (English and Arabic ship complete; other catalogs may add theirs), English otherwise. The
+/// translation audit doesn't hold every catalog to these sentences.
+pub fn explain(lang: Lang, s: &str) -> &str {
+    #[cfg(test)]
+    if pseudo::on() {
+        return pseudo::mark_quiet(s);
+    }
+    lang.catalog().plain(s).unwrap_or(s)
+}
+
 /// `s` in `lang`; strings without a translation come back unchanged.
 pub fn tr(lang: Lang, s: &str) -> &str {
     #[cfg(test)]

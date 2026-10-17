@@ -31,7 +31,7 @@ pub fn specs() -> Vec<CommandSpec> {
             .params(r#"{"value"?: "عام|محدود|سري|سري وشخصي|سري للغاية" (default محدود), "pageNumbers"?: bool (default true), "start"?: n, "end"?: n}"#),
         CommandSpec::new("service.pageNumbers", "Page Numbers ( n - N )", "Service › Page", page_numbers)
             .params(r#"{"start"?: n (default 1), "end"?: n (default: the section's page count)}"#),
-        CommandSpec::new("service.kashida", "Kashida Justification", "Service › Text", kashida)
+        CommandSpec::new("service.kashida", "Kashida Justification", "Home › Kashida", kashida)
             .params(r#"{"value"?: "distribute|low|medium|high|off" (default distribute)}"#),
         CommandSpec::new("service.finalDot", "End Items with a Dot", "Service › Text", final_dot),
         CommandSpec::new("service.external", "Format with ServiceWord-AR", "Service › Engine", external).params(
