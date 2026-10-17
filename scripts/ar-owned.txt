@@ -8,3 +8,9 @@ crates/engine/src/ribbon.rs
 crates/layout/src/kashida.rs
 crates/ui-egui/src/ribbon.rs
 scripts/
+crates/ui-egui/src/ui_kit/
+crates/ui-egui/src/dev_tools.rs
+crates/ui-egui/src/rtl.rs
+crates/ui-egui/examples/kit_sheet.rs
+docs/ar-ui-kit.md
+scripts/ar-check.sh
