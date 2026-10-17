@@ -29,7 +29,7 @@ pub fn specs() -> Vec<CommandSpec> {
             .params(r#"{"scope"?: "document|selection"} — typed markers become real list levels (١. أ. أولاً. …)"#),
         CommandSpec::new("service.classification", "Classification", "Service › Page", classification)
             .params(r#"{"value": "عام|محدود|سري|سري وشخصي|سري للغاية", "pageNumbers"?: bool (default true), "start"?: n, "end"?: n}"#),
-        CommandSpec::new("service.pageNumbers", "Page Numbers ( n - N )", "Service › Page", |s, v| page_numbers(s, v))
+        CommandSpec::new("service.pageNumbers", "Page Numbers ( n - N )", "Service › Page", page_numbers)
             .params(r#"{"start"?: n (default 1), "end"?: n (default: the section's page count)}"#),
         CommandSpec::new("service.kashida", "Kashida Justification", "Service › Text", kashida)
             .params(r#"{"value"?: "distribute|low|medium|high|off" (default distribute)}"#),
@@ -93,9 +93,36 @@ fn norm(s: &str) -> String {
 }
 
 const ORDINAL_WORDS: [&str; 30] = [
-    "اولا", "ثانيا", "ثالثا", "رابعا", "خامسا", "سادسا", "سابعا", "ثامنا", "تاسعا", "عاشرا", "حادي عشر", "ثاني عشر", "ثالث عشر", "رابع عشر",
-    "خامس عشر", "سادس عشر", "سابع عشر", "ثامن عشر", "تاسع عشر", "عشرون", "حادي وعشرون", "ثاني وعشرون", "ثالث وعشرون", "رابع وعشرون",
-    "خامس وعشرون", "سادس وعشرون", "سابع وعشرون", "ثامن وعشرون", "تاسع وعشرون", "ثلاثون",
+    "اولا",
+    "ثانيا",
+    "ثالثا",
+    "رابعا",
+    "خامسا",
+    "سادسا",
+    "سابعا",
+    "ثامنا",
+    "تاسعا",
+    "عاشرا",
+    "حادي عشر",
+    "ثاني عشر",
+    "ثالث عشر",
+    "رابع عشر",
+    "خامس عشر",
+    "سادس عشر",
+    "سابع عشر",
+    "ثامن عشر",
+    "تاسع عشر",
+    "عشرون",
+    "حادي وعشرون",
+    "ثاني وعشرون",
+    "ثالث وعشرون",
+    "رابع وعشرون",
+    "خامس وعشرون",
+    "سادس وعشرون",
+    "سابع وعشرون",
+    "ثامن وعشرون",
+    "تاسع وعشرون",
+    "ثلاثون",
 ];
 const ABJAD_LETTERS: &str = "أابجدهوزحطيكلمنسعفصقرشتثخذضظغ";
 
@@ -535,9 +562,8 @@ fn find_engine(given: Option<&str>) -> Option<std::path::PathBuf> {
 /// kashida written into the text, equalised markers, embedded digit fonts) and comes back
 /// formatted. Needs Python with the engine's wheels installed.
 fn external(s: &mut Session, v: &Value) -> CmdResult {
-    let engine = find_engine(p::str(v, "engine")).ok_or_else(|| {
-        CmdError::Failed("ServiceWord-AR engine not found (put the servicewordar folder beside the program)".into())
-    })?;
+    let engine = find_engine(p::str(v, "engine"))
+        .ok_or_else(|| CmdError::Failed("ServiceWord-AR engine not found (put the servicewordar folder beside the program)".into()))?;
     let bytes = crate::io::save_bytes("document.docx", &s.doc).map_err(CmdError::Failed)?;
     let dir = std::env::temp_dir();
     let stem = format!("wordcraft-ar-{}", std::process::id());
@@ -600,7 +626,9 @@ mod tests {
 
     #[test]
     fn renumbers_a_cut_out_chapter_from_one() {
-        let mut s = Session::new(wordcraft_doc::Document::from_text("أولا. المهمة\nتوفر رعاية.\nثانياً. الواجبات\n(١) تقديم الخدمات\n(٢) تصنيف المرضى\nثالثا. واجبات المدير"));
+        let mut s = Session::new(wordcraft_doc::Document::from_text(
+            "أولا. المهمة\nتوفر رعاية.\nثانياً. الواجبات\n(١) تقديم الخدمات\n(٢) تصنيف المرضى\nثالثا. واجبات المدير",
+        ));
         let r = s.run("service.renumber", &json!({})).unwrap();
         assert_eq!(r["renumbered"], 5);
         let texts: Vec<String> = s.doc.para_paths(StoryRef::Body).iter().map(|p| s.doc.para(StoryRef::Body, p).unwrap().text.clone()).collect();

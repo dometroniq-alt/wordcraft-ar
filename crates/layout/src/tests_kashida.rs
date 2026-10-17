@@ -51,9 +51,20 @@ fn distributed_arabic_line_is_filled_with_kashida() {
     // The line fills its width: the last x reaches the right edge (within rounding).
     let lo = line.vis.iter().map(|v| v.x).fold(f32::MAX, f32::min);
     let hi = line.vis.iter().map(|v| v.x + v.w).fold(f32::MIN, f32::max);
-    assert!((hi - lo) >= (line.right - line.left) - 1.0, "filled: {lo}..{hi} in {}..{} fills {:?} vis {:?}", line.left, line.right, line.kashida, line.vis);
+    assert!(
+        (hi - lo) >= (line.right - line.left) - 1.0,
+        "filled: {lo}..{hi} in {}..{} fills {:?} vis {:?}",
+        line.left,
+        line.right,
+        line.kashida,
+        line.vis
+    );
     // The stretch sits before the last letter of «على» (after ل).
-    let k = line.kashida.iter().find(|f| text.get(pl.clusters[f.cluster].start..).is_some_and(|s| s.starts_with('ل') && s.starts_with("لى"))).map(|f| f.cluster);
+    let k = line
+        .kashida
+        .iter()
+        .find(|f| text.get(pl.clusters[f.cluster].start..).is_some_and(|s| s.starts_with('ل') && s.starts_with("لى")))
+        .map(|f| f.cluster);
     assert!(k.is_some(), "علــى stretches before its last letter: {:?}", line.kashida);
 }
 
@@ -77,6 +88,9 @@ fn kashida_draws_tatweel_glyphs_in_the_gap() {
     let d = arabic_doc(text, Align::Distribute);
     let l = lay(&d);
     let items = crate::display::page_display(&d, &l.pages[0], &crate::display::DisplayOptions::default());
-    let tatweel = items.iter().filter(|it| matches!(it, crate::display::Draw::Glyphs { text, .. } if text.chars().all(|c| c == '\u{0640}') && !text.is_empty())).count();
+    let tatweel = items
+        .iter()
+        .filter(|it| matches!(it, crate::display::Draw::Glyphs { text, .. } if text.chars().all(|c| c == '\u{0640}') && !text.is_empty()))
+        .count();
     assert!(tatweel >= 3, "one tatweel run per stretch: {tatweel}");
 }

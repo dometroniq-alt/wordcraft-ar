@@ -143,7 +143,9 @@ mod tests {
         let mut i = 0;
         for ch in text.chars() {
             let n = ch.len_utf8();
-            if is_mark(ch) && let Some(last) = v.last_mut() {
+            if is_mark(ch)
+                && let Some(last) = v.last_mut()
+            {
                 let c: &mut Cluster = last;
                 c.end += n;
                 i += n;

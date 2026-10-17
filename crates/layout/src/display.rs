@@ -750,7 +750,7 @@ fn lines(
             // Right-to-left text: the gap is the left part of the box; left-to-right: the right part.
             let rtl = line.cl_rtl(kf.cluster) || line.rtl;
             let gap_x = if rtl { cx } else { nx - kf.width };
-            let count = (kf.width / kf.adv).ceil().max(1.0).min(400.0) as usize;
+            let count = (kf.width / kf.adv).ceil().clamp(1.0, 400.0) as usize;
             let step = kf.width / count as f32;
             let glyphs: Vec<(u32, f32, f32)> = (0..count).map(|i| (kf.gid, x + gap_x + step * i as f32, base - st.shift)).collect();
             out.push(Draw::Glyphs {

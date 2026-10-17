@@ -4130,11 +4130,11 @@ mod tests;
 #[cfg(test)]
 mod tests_bidi;
 #[cfg(test)]
-mod tests_kashida;
-#[cfg(test)]
 mod tests_complex;
 #[cfg(test)]
 mod tests_grid;
+#[cfg(test)]
+mod tests_kashida;
 #[cfg(test)]
 mod tests_numeral;
 #[cfg(test)]

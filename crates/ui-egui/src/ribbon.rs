@@ -1743,7 +1743,16 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
         big(ui, app, "serviceList", "Service\nList", "service.applyList", json!({}), false);
         stack(ui, |ui| {
             small(ui, app, "finalDot", Some("Final Dot"), "End Items with a Dot", "service.finalDot", json!({}), false);
-            small(ui, app, "serviceSelection", Some("Selection Only"), "Renumber the Selection", "service.renumber", json!({"scope": "selection"}), false);
+            small(
+                ui,
+                app,
+                "serviceSelection",
+                Some("Selection Only"),
+                "Renumber the Selection",
+                "service.renumber",
+                json!({"scope": "selection"}),
+                false,
+            );
         });
     });
     group(ui, "Classification", None, app, |ui, app| {
@@ -1756,11 +1765,56 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
     });
     group(ui, "Kashida", None, app, |ui, app| {
         let cur = app.session.doc.para_at(&app.session.sel.focus).map(|p| app.session.doc.styles.resolve_para(&p.props).align);
-        small(ui, app, "kashidaOff", Some("Justify"), "Justify", "service.kashida", json!({"value": "off"}), cur == Some(wordcraft_doc::props::Align::Justify));
-        small(ui, app, "kashidaLow", Some("Low"), "Low Kashida", "service.kashida", json!({"value": "low"}), cur == Some(wordcraft_doc::props::Align::LowKashida));
-        small(ui, app, "kashidaMedium", Some("Medium"), "Medium Kashida", "service.kashida", json!({"value": "medium"}), cur == Some(wordcraft_doc::props::Align::MediumKashida));
-        small(ui, app, "kashidaHigh", Some("High"), "High Kashida", "service.kashida", json!({"value": "high"}), cur == Some(wordcraft_doc::props::Align::HighKashida));
-        small(ui, app, "distribute", Some("Distribute"), "Distribute", "service.kashida", json!({"value": "distribute"}), cur == Some(wordcraft_doc::props::Align::Distribute));
+        small(
+            ui,
+            app,
+            "kashidaOff",
+            Some("Justify"),
+            "Justify",
+            "service.kashida",
+            json!({"value": "off"}),
+            cur == Some(wordcraft_doc::props::Align::Justify),
+        );
+        small(
+            ui,
+            app,
+            "kashidaLow",
+            Some("Low"),
+            "Low Kashida",
+            "service.kashida",
+            json!({"value": "low"}),
+            cur == Some(wordcraft_doc::props::Align::LowKashida),
+        );
+        small(
+            ui,
+            app,
+            "kashidaMedium",
+            Some("Medium"),
+            "Medium Kashida",
+            "service.kashida",
+            json!({"value": "medium"}),
+            cur == Some(wordcraft_doc::props::Align::MediumKashida),
+        );
+        small(
+            ui,
+            app,
+            "kashidaHigh",
+            Some("High"),
+            "High Kashida",
+            "service.kashida",
+            json!({"value": "high"}),
+            cur == Some(wordcraft_doc::props::Align::HighKashida),
+        );
+        small(
+            ui,
+            app,
+            "distribute",
+            Some("Distribute"),
+            "Distribute",
+            "service.kashida",
+            json!({"value": "distribute"}),
+            cur == Some(wordcraft_doc::props::Align::Distribute),
+        );
     });
     group(ui, "Engine", None, app, |ui, app| {
         big(ui, app, "serviceEngine", "Format with\nServiceWord-AR", "service.external", json!({}), false);

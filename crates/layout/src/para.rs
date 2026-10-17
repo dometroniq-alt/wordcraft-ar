@@ -2090,8 +2090,8 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                 lab.x += shift;
             }
         }
-        let justify = display.is_none()
-            && (((rp.align == Align::Justify || rp.align.is_kashida()) && end == LineEnd::Wrap) || rp.align == Align::Distribute);
+        let justify =
+            display.is_none() && (((rp.align == Align::Justify || rp.align.is_kashida()) && end == LineEnd::Wrap) || rp.align == Align::Distribute);
         // A line that only fits with shrunk spaces is shrunk, the last line of the paragraph too.
         let shrink = display.is_none() && shrink_spaces && slack < 0.0 && last_tab.is_none();
         // Kashida (WordCraft AR): a share of the slack lengthens one joining stroke per Arabic
@@ -2099,8 +2099,9 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
         // in the gap (`Line::kashida`).
         let mut kashida_fills: Vec<crate::kashida::KashidaFill> = Vec::new();
         let mut slack = slack;
-        let mut content_end = content_end;
-        if justify && slack > 0.0 && !pl.kashida_joints.is_empty()
+        if justify
+            && slack > 0.0
+            && !pl.kashida_joints.is_empty()
             && let Some(sh) = crate::kashida::share(rp.align)
         {
             let picks = crate::kashida::best_per_word(pl_text, &pl.clusters, &pl.kashida_joints, align_from, c1);

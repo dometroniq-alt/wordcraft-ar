@@ -217,8 +217,14 @@ pub fn levels_for(kind: ListKind) -> Vec<Level> {
                     Level { format: NumFormat::Decimal, text, indent: 18.0 + 25.0 * i as f32, hanging: 18.0 + 7.0 * i as f32, ..Level::default() }
                 }
                 ListKind::Service => service_level(i),
-                ListKind::ArabicNumbered => arabic_level(cyc(NumFormat::HindiNumbers, NumFormat::ArabicAbjad, NumFormat::HindiNumbers), if i % 3 == 2 { format!("%{n})") } else { format!("%{n}.") }, ind),
-                ListKind::ArabicAbjad => arabic_level(cyc(NumFormat::ArabicAbjad, NumFormat::HindiNumbers, NumFormat::OrdinalText), format!("%{n}."), ind),
+                ListKind::ArabicNumbered => arabic_level(
+                    cyc(NumFormat::HindiNumbers, NumFormat::ArabicAbjad, NumFormat::HindiNumbers),
+                    if i % 3 == 2 { format!("%{n})") } else { format!("%{n}.") },
+                    ind,
+                ),
+                ListKind::ArabicAbjad => {
+                    arabic_level(cyc(NumFormat::ArabicAbjad, NumFormat::HindiNumbers, NumFormat::OrdinalText), format!("%{n}."), ind)
+                }
             }
         })
         .collect()
