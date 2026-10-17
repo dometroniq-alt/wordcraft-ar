@@ -76,6 +76,9 @@ $Engine = Join-Path $TargetDir "windows-package-ar\servicewordar"
 Remove-Item -Recurse -Force $Engine -ErrorAction SilentlyContinue
 Copy-Item -Recurse (Join-Path $Root 'servicewordar') $Engine
 Get-ChildItem $Engine -Recurse -Directory -Filter '__pycache__' | Remove-Item -Recurse -Force
+# The wheels are only for machines without the embedded Python (tools\bundle-python.cmd); the
+# installer ships the embedded Python instead.
+if (Test-Path (Join-Path $Engine 'python\python.exe')) { Remove-Item -Recurse -Force (Join-Path $Engine 'wheels') -ErrorAction SilentlyContinue }
 
 # ---- license RTF for the installer's first page ------------------------------------------------
 function ConvertTo-RtfText([string] $Text) {

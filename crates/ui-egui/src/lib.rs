@@ -321,6 +321,10 @@ pub struct UiState {
     /// WordCraft AR, File › Options › General: a button's visual help (thumbnail and
     /// explanation) also shows its Arabic explanation when the interface is another language.
     pub bilingual_tips: bool,
+    /// WordCraft AR, File › Options › General: "Old computer mode" — the interface skips every
+    /// animation (menus, caret, mini toolbar, alignment guides) and opens straight into a blank
+    /// document, so an old office machine draws as few frames as possible.
+    pub low_end: bool,
     /// File › Options › Display: print the page colour (off, as in Word).
     pub print_backgrounds: bool,
     /// File › Options › Display: update fields (dates, page numbers, SEQ…) before printing.
@@ -380,6 +384,7 @@ impl Default for UiState {
             alignment_guides: true,
             start_screen: true,
             bilingual_tips: true,
+            low_end: false,
             print_backgrounds: false,
             update_fields_before_print: false,
             dictionary: Vec::new(),
@@ -1433,6 +1438,21 @@ impl WordApp {
                 let lang = i18n::Lang::from_pref(&self.ui.language);
                 json!({"language": self.ui.language, "effective": lang.code(), "available": i18n::Lang::all().map(|l| json!({"code": l.code(), "name": l.name()})).collect::<Vec<_>>()})
             }
+            // WordCraft AR: one switch for old computers; it sets the individual options so
+            // they show their state everywhere, and `apply_low_end` keeps them off each frame.
+            "ui.lowEnd" => {
+                match p.get("value") {
+                    Some(Value::Bool(on)) => {
+                        self.ui.low_end = *on;
+                        if *on {
+                            self.apply_low_end();
+                        }
+                    }
+                    Some(_) => return Some(Err("value: bool".into())),
+                    None => {}
+                }
+                json!({"value": self.ui.low_end})
+            }
             "ui.recoveryDiscard" => {
                 if let Some(answer) = s("answer") {
                     let Some(dialogs::Dialog::DiscardRecovery { id, .. }) = self.dialog.clone() else {
@@ -1877,7 +1897,19 @@ impl WordApp {
         self.ensure_caption_fonts();
         self.ensure_comment_fonts();
         self.install_ui_fonts(ctx, lang);
+        if self.ui.low_end {
+            self.apply_low_end();
+        }
         self.report_dirty();
+    }
+
+    /// WordCraft AR: the settings "Old computer mode" implies (see `UiState::low_end`).
+    fn apply_low_end(&mut self) {
+        self.ui.animations = theme::Animations::Off;
+        self.ui.caret_animation = false;
+        self.ui.mini_toolbar = false;
+        self.ui.alignment_guides = false;
+        self.ui.start_screen = false;
     }
 
     /// Install the interface fonts when the language, the CJK fallback, or a caption fallback
@@ -2398,6 +2430,7 @@ pub(crate) fn works_without_document(id: &str) -> bool {
             | "ui.theme"
             | "ui.interfaceSize"
             | "ui.animations"
+            | "ui.lowEnd"
             | "ui.language"
             | "ui.saveChanges"
             | "ui.openFileDialog"
@@ -3263,6 +3296,19 @@ mod tests {
         let mut a = app_with_system_animations(&system);
         assert_eq!(a.run("ui.animations", json!({})).unwrap(), json!({"animations": "system", "enabled": false, "system": false}));
         assert_eq!(a.run("ui.animations", json!({"value": "On"})).unwrap()["enabled"], true);
+        // WordCraft AR: old computer mode switches the animated extras off and keeps them off.
+        assert_eq!(a.run("ui.lowEnd", json!({"value": true})).unwrap(), json!({"value": true}));
+        assert_eq!(a.ui.animations, theme::Animations::Off);
+        assert!(!a.ui.caret_animation && !a.ui.mini_toolbar && !a.ui.alignment_guides && !a.ui.start_screen);
+        a.run("ui.animations", json!({"value": "On"})).unwrap();
+        let ctx = egui::Context::default();
+        a.logic(&ctx);
+        assert_eq!(a.ui.animations, theme::Animations::Off, "stays off while the mode is on");
+        assert_eq!(a.run("ui.lowEnd", json!({"value": false})).unwrap(), json!({"value": false}));
+        a.run("ui.animations", json!({"value": "On"})).unwrap();
+        a.logic(&ctx);
+        assert_eq!(a.ui.animations, theme::Animations::On);
+        assert!(a.run("ui.lowEnd", json!({"value": "x"})).is_err());
         system.set(Some(true));
         assert_eq!(a.run("ui.animations", json!({"value": "off"})).unwrap(), json!({"animations": "off", "enabled": false, "system": true}));
         assert!(a.run("ui.animations", json!({"value": "sometimes"})).is_err());

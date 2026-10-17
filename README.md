@@ -54,7 +54,8 @@
 | **Arabic defaults** | A new blank document is right-to-left in Times New Roman 14 pt with Arabic as its complex-script language; digits display in Arabic-Indic form next to Arabic text (Word's *Numeral: Context*). Both are options, not hard-wiring. |
 | **Arabic interface** | A complete Arabic translation of the interface (2 600+ strings), a bundled Arabic UI font (Noto Sans Arabic), and correct right-to-left ordering of labels that mix Arabic with numbers or Latin names. The interface follows the system language; switch it any time in *File › Options*. |
 | **Visual help** | Every button of the Service and Mailings tabs shows, on hover, a drawn thumbnail of what it does and a one-sentence explanation — in the interface language, and in Arabic as well when the interface is another language. |
-| **ServiceWord-AR engine** | The Python engine that measures the real fonts, equalises markers and writes the kashida into the text itself ships beside the app (`servicewordar/`) and is one button away: *Format with ServiceWord-AR*, with or without the stamped print PDF. |
+| **ServiceWord-AR engine** | The Python engine that measures the real fonts, equalises markers and writes the kashida into the text itself ships beside the app (`servicewordar/`) with its own embedded Python, and is one button away: *Format with ServiceWord-AR*, with or without the stamped print PDF. |
+| **Built for old machines** | Whole-program optimised, stripped release builds; an *Old computer mode* that drops every animation; no runtime, no Python and no internet required on the target machine. |
 | **Separate identity** | WordCraft AR installs side by side with WordCraft: its own window title, app id (`ai.storyteller.wordcraft-ar`), settings folder (`%APPDATA%\WordCraft-AR`) and installer upgrade code. |
 
 <table>
@@ -81,9 +82,10 @@ redistributable, no internet needed), so it can be carried on a USB stick to an 
 installs beside WordCraft if that is present, adds a Start-menu entry and a desktop shortcut, and
 puts the ServiceWord-AR engine next to the program.
 
-The *Format with ServiceWord-AR* button needs Python 3 on the machine (the rest of WordCraft AR
-does not). On an offline machine, install Python from its installer and then run
-`servicewordar\install_offline.bat`, which installs the engine's libraries from the bundled wheels.
+Nothing else is needed: the ServiceWord-AR engine ships with its own embedded Python and
+libraries (`servicewordar\python`), so *Format with ServiceWord-AR* works on a machine that has
+never seen Python or the internet. For old machines, *File › Options › General › Old computer
+mode* switches every animation off and starts straight on a blank document.
 
 ### macOS and Linux
 

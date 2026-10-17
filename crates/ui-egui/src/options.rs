@@ -191,6 +191,14 @@ fn general(app: &mut WordApp, ui: &mut Ui) {
         let _ = app.run("view.darkMode", json!({"value": dark_page}));
     }
     ui.checkbox(&mut app.ui.show_discord, tl!("Show the community button in the title bar"));
+    let mut low = app.ui.low_end;
+    if ui
+        .checkbox(&mut low, tl!("Old computer mode (no animations, fastest start)"))
+        .on_hover_text(tl!("For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document."))
+        .changed()
+    {
+        let _ = app.run("ui.lowEnd", json!({"value": low}));
+    }
     ui.checkbox(&mut app.ui.bilingual_tips, tl!("Explain buttons in Arabic too (visual help tooltips)"))
         .on_hover_text(tl!("Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic."));
     default_app_button(app, ui);

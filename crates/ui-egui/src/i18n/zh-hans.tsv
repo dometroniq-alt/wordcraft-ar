@@ -2280,3 +2280,5 @@
 	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	开：新建空白文档从右向左并使用阿拉伯语字体，与界面语言无关。关：使用 WordCraft 的 Aptos 字体、从左向右的文档。
 	Explain buttons in Arabic too (visual help tooltips)	也用阿拉伯语说明按钮（可视化帮助提示）
 	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	“公务”和“邮件”选项卡中的按钮会显示其功能的缩略图和一句界面语言的说明；开启后，当界面不是阿拉伯语时会追加阿拉伯语说明。
+	Old computer mode (no animations, fastest start)	旧电脑模式（无动画，最快启动）
+	For slow or old machines: switches off every interface animation, the blinking caret, the mini toolbar and the alignment guides, and starts on a blank document.	适用于速度慢或老旧的电脑：关闭所有界面动画、闪烁的光标、迷你工具栏和对齐参考线，并以空白文档启动。

@@ -575,11 +575,23 @@ fn find_engine(given: Option<&str>) -> Option<std::path::PathBuf> {
 /// Interpreters to try for the engine, in order: the one given, then on Windows `py -3`, the
 /// per-user installs under `%LOCALAPPDATA%\\Programs\\Python` (a program started before Python
 /// was installed doesn't have them on its PATH) and `python`; `python3` then `python` elsewhere.
-fn python_candidates(given: Option<&str>) -> Vec<(String, Vec<String>)> {
+fn python_candidates(given: Option<&str>, engine: Option<&std::path::Path>) -> Vec<(String, Vec<String>)> {
     let mut c: Vec<(String, Vec<String>)> = Vec::new();
     if let Some(py) = given {
         c.push((py.to_string(), Vec::new()));
         return c;
+    }
+    // A Python shipped beside the engine (`servicewordar\python\python.exe`, the embeddable
+    // distribution with the engine's libraries preinstalled — the installer carries it so an
+    // offline machine needs nothing else). Tried first: it is the one the engine was tested with.
+    if let Some(dir) = engine.and_then(|e| e.parent()) {
+        for exe in ["python.exe", "python3", "python"] {
+            let p = dir.join("python").join(exe);
+            if p.exists() {
+                c.push((p.to_string_lossy().into_owned(), Vec::new()));
+                break;
+            }
+        }
     }
     if cfg!(windows) {
         c.push(("py".into(), vec!["-3".into()]));
@@ -609,8 +621,8 @@ fn python_candidates(given: Option<&str>) -> Vec<(String, Vec<String>)> {
 
 /// Run the engine with the first interpreter that starts; a Python that exists but fails is
 /// reported as such (its last stderr line), a missing one is skipped.
-fn run_python(given: Option<&str>, tail: &[String]) -> Result<std::process::Output, CmdError> {
-    let cands = python_candidates(given);
+fn run_python(given: Option<&str>, engine: Option<&std::path::Path>, tail: &[String]) -> Result<std::process::Output, CmdError> {
+    let cands = python_candidates(given, engine);
     let mut last_err = String::from("no Python interpreter found (install Python 3 from python.org)");
     for (prog, args) in &cands {
         // The engine prints Arabic (file names, progress); a Windows console defaults to a legacy
@@ -638,7 +650,7 @@ fn external(s: &mut Session, v: &Value) -> CmdResult {
     if p::bool(v, "pdf").unwrap_or(false) {
         tail.push("--pdf".into());
     }
-    let out = run_python(p::str(v, "python"), &tail)?;
+    let out = run_python(p::str(v, "python"), Some(&engine), &tail)?;
     if !out.status.success() {
         let err = String::from_utf8_lossy(&out.stderr);
         return Err(CmdError::Failed(format!("ServiceWord-AR failed: {}", err.lines().last().unwrap_or("").trim())));
@@ -660,8 +672,8 @@ mod tests {
 
     #[test]
     fn python_candidates_prefer_the_given_interpreter_and_always_offer_a_fallback() {
-        assert_eq!(python_candidates(Some("/opt/py/bin/python3")), vec![("/opt/py/bin/python3".to_string(), Vec::new())]);
-        let c = python_candidates(None);
+        assert_eq!(python_candidates(Some("/opt/py/bin/python3"), None), vec![("/opt/py/bin/python3".to_string(), Vec::new())]);
+        let c = python_candidates(None, None);
         assert!(!c.is_empty());
         if cfg!(windows) {
             assert_eq!(c[0], ("py".to_string(), vec!["-3".to_string()]));
@@ -672,8 +684,19 @@ mod tests {
     }
 
     #[test]
+    fn a_python_beside_the_engine_comes_first() {
+        let dir = std::env::temp_dir().join(format!("wc-ar-engine-{}", std::process::id()));
+        let _ = std::fs::create_dir_all(dir.join("python"));
+        let exe = dir.join("python").join(if cfg!(windows) { "python.exe" } else { "python3" });
+        std::fs::write(&exe, b"").unwrap();
+        let c = python_candidates(None, Some(&dir.join("cli.py")));
+        assert_eq!(c.first().map(|x| x.0.clone()), Some(exe.to_string_lossy().into_owned()));
+        let _ = std::fs::remove_dir_all(&dir);
+    }
+
+    #[test]
     fn missing_interpreter_is_reported_not_panicked() {
-        let err = run_python(Some("wordcraft-no-such-python-xyz"), &["x".to_string()]).err().map(|e| e.to_string()).unwrap_or_default();
+        let err = run_python(Some("wordcraft-no-such-python-xyz"), None, &["x".to_string()]).err().map(|e| e.to_string()).unwrap_or_default();
         assert!(err.contains("wordcraft-no-such-python-xyz"), "{err}");
     }
 
