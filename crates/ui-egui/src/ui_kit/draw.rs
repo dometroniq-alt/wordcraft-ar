@@ -226,13 +226,20 @@ impl<'a> Draw<'a> {
     pub fn word(&self, x: f32, y: f32, w: f32, c: Color32) {
         self.p.rect_filled(Rect::from_min_size(pos2(x, y - 3.0), vec2(w, 6.0)), 1.0, c);
     }
+    /// The thumbnail's font: the interface's semibold face, or egui's own proportional face
+    /// when the interface fonts aren't installed (a bare test context, a menu drawn alone).
+    pub fn font(&self, size: f32) -> egui::FontId {
+        let semibold = crate::theme::semibold(size);
+        let known = self.p.ctx().fonts_mut(|f| f.definitions().families.contains_key(&semibold.family));
+        if known { semibold } else { egui::FontId::proportional(size) }
+    }
     /// Text set in the thumbnail's own font.
     pub fn label(&self, pos: Pos2, s: &str, size: f32, c: Color32, anchor: Align2) {
-        self.p.text(pos, anchor, crate::i18n::artwork(s), crate::theme::semibold(size), c);
+        self.p.text(pos, anchor, crate::i18n::artwork(s), self.font(size), c);
     }
     /// A large glyph (a letter, a symbol) in the middle of the thumbnail or at `pos`.
     pub fn glyph(&self, pos: Pos2, s: &str, size: f32, c: Color32) {
-        self.p.text(pos, Align2::CENTER_CENTER, crate::i18n::artwork(s), crate::theme::semibold(size), c);
+        self.p.text(pos, Align2::CENTER_CENTER, crate::i18n::artwork(s), self.font(size), c);
     }
     /// A selection band over `rect` (behind the text, so draw it first).
     pub fn selection(&self, rect: Rect) {

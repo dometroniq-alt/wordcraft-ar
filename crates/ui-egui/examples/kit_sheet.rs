@@ -13,7 +13,7 @@ fn main() {
     let what = args.get(1).cloned().unwrap_or_else(|| "thumbs".into());
     let out = args.get(2).cloned().unwrap_or_else(|| "kit.png".into());
     let filter = args.get(3).cloned().unwrap_or_default();
-    let cols = 10usize;
+    let cols = 16usize;
     let cell = vec2(ui_kit::SIZE.x + 12.0, ui_kit::SIZE.y + 30.0);
     let n =
         if what == "icons" { icons::NAMES.len() } else { ui_kit::entries().filter(|e| filter.is_empty() || e.key.contains(filter.as_str())).count() };
@@ -50,7 +50,9 @@ fn main() {
             let r = Rect::from_min_size(origin, ui_kit::SIZE);
             ui.painter().rect_filled(r, 4.0, t.panel);
             ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
-            (e.draw)(&ui_kit::Draw::new(ui.painter(), r, &t));
+            // `KIT_PHASE=0.5` renders every film at that point instead of its still frame.
+            let phase: f32 = std::env::var("KIT_PHASE").ok().and_then(|v| v.parse().ok()).unwrap_or(1.0);
+            (e.draw)(&ui_kit::Draw::animated(ui.painter(), r, &t, phase));
             let ic = Rect::from_min_size(origin + vec2(0.0, ui_kit::SIZE.y + 4.0), vec2(20.0, 20.0));
             icons::paint(ui.painter(), ic, ui_kit::icon_for(e.key), t.icon, t.accent);
             ui.painter().text(origin + vec2(24.0, ui_kit::SIZE.y + 14.0), egui::Align2::LEFT_CENTER, e.key, egui::FontId::proportional(9.5), t.text);

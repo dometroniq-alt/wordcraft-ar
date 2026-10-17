@@ -93,7 +93,7 @@ pub fn key(id: &str, params: &Value) -> String {
 
 /// Parameters whose string value names a button's or menu item's variant, in priority order.
 pub const VARIANT_PARAMS: &[&str] =
-    &["name", "value", "kind", "preset", "mode", "scope", "direction", "position", "style", "format", "level", "layout", "type"];
+    &["name", "value", "kind", "preset", "mode", "scope", "direction", "position", "style", "format", "rule", "level", "layout", "type"];
 
 /// Draw the thumbnail for `key` scaled into `target` (a menu item's preview): the drawing is
 /// made at full [`SIZE`] and its shapes are transformed down. False when there is no entry.
@@ -126,6 +126,52 @@ pub fn paint_scaled(p: &egui::Painter, target: egui::Rect, key: &str, t: &crate:
 /// a command not here and without an icon of its own name would draw a lettered tile.
 pub fn icon_for(key: &str) -> &str {
     const ICONS: &[(&str, &str)] = &[
+        // Menu items (gallery rows) drawn with their menu's icon.
+        ("edit.pasteText", "paste"),
+        ("edit.pasteMerge", "paste"),
+        ("edit.pasteSpecial", "paste"),
+        ("format.doubleStrikethrough", "strike"),
+        ("format.shadow", "effects"),
+        ("format.smallCaps", "case"),
+        ("format.allCaps", "case"),
+        ("para.restartNumbering", "numbering"),
+        ("list.define", "multilevel"),
+        ("para.listLevel", "multilevel"),
+        ("para.addSpaceBefore", "spaceBefore"),
+        ("para.removeSpaceAfter", "spaceAfter"),
+        ("para.dialog", "lineSpacing"),
+        ("insert.horizontalLine", "borders"),
+        ("edit.advancedFind", "find"),
+        ("ui.dialog:goto", "find"),
+        ("select.paragraph", "select"),
+        ("select.sentence", "select"),
+        ("file.options", "properties"),
+        ("ui.dialog:pageSetup", "margins"),
+        ("insert.editHeader", "header"),
+        ("insert.removeHeader", "header"),
+        ("insert.editFooter", "footer"),
+        ("insert.removeFooter", "footer"),
+        ("ui.dialog:insertTable", "table"),
+        ("table.fromText", "table"),
+        ("table.quick", "table"),
+        ("ui.dialog:field", "quickParts"),
+        ("ui.dialog:manualHyphenation", "hyphenation"),
+        ("layout.pageNumberFormat", "pageNumber"),
+        ("arrange.ungroup", "group"),
+        ("canvas.fit", "canvas"),
+        ("canvas.expand", "canvas"),
+        ("canvas.scale", "canvas"),
+        ("references.removeToc", "toc"),
+        ("ui.dialog:createSource", "sources"),
+        ("ui.dialog:newRecipientList", "recipients"),
+        ("ui.openRecipientList", "recipients"),
+        ("review.acceptAll", "accept"),
+        ("review.rejectAll", "reject"),
+        ("ui.dialog:newTableStyle", "styles"),
+        ("table.selectColumn", "selectTable"),
+        ("table.selectRow", "selectTable"),
+        ("table.deleteColumn", "deleteTable"),
+        ("table.deleteRow", "deleteTable"),
         ("arrange.wrap", "wrapText"),
         ("chart.editData", "chartData"),
         ("chart.type", "changeChartType"),

@@ -63,9 +63,17 @@ fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value)
             ui.painter().rect_filled(r, 4.0, t.panel);
             ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
             // The thumbnail plays as a little film from the moment the tooltip opens.
+            // (since, last frame shown): a tooltip that was away for a moment starts over.
             let since_id = egui::Id::new(("visual_help_since", &key));
             let now = ui.input(|i| i.time);
-            let since = ui.data_mut(|d| *d.get_temp_mut_or_insert_with(since_id, || now));
+            let since = ui.data_mut(|d| {
+                let (since, last) = d.get_temp_mut_or_insert_with(since_id, || (now, now));
+                if now - *last > 0.25 {
+                    *since = now;
+                }
+                *last = now;
+                *since
+            });
             let phase = film_phase(ui, since);
             crate::visual_help::thumbnail_animated(ui.painter(), r, &key, &t, phase);
             ui.add_space(4.0);
