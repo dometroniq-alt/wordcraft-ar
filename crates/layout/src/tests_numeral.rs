@@ -176,3 +176,36 @@ fn remap_range_maps_display_bytes_to_original() {
     assert_eq!(remap_range(&map_starts, &orig_of, orig.len(), 99, 200), (4, 4));
     assert_eq!(remap_range(&map_starts, &orig_of, orig.len(), 3, 1), (1, 2));
 }
+
+/// A right-to-left paragraph's list label (shaped on its own, outside the paragraph's bidi
+/// levels) keeps Arabic-Indic digits in Context mode: `١.` is drawn with the Hindi digit glyph,
+/// as it is in Hindi mode, not turned Western for lack of surrounding text.
+#[test]
+fn context_mode_keeps_hindi_digits_in_a_right_to_left_list_label() {
+    use wordcraft_doc::numbering::ListKind;
+    use wordcraft_doc::props::NumRef;
+    let label_gids = |numeral: NumeralMode, rtl: bool| -> Vec<u32> {
+        let mut d = Document::from_text("بند");
+        let num = d.numbering.add_list(ListKind::ArabicNumbered);
+        let at = Pos::body(0, 0);
+        d.format_paragraphs(&at, &at, &|p: &mut ParaProps| {
+            p.numbering = Some(NumRef { num, level: 0 });
+            p.bidi = Some(rtl);
+        })
+        .unwrap();
+        let mut c = LayoutCache::new();
+        let l = layout(&d, &mut c, &LayoutOptions { numeral, ..LayoutOptions::default() });
+        for p in &l.pages {
+            for it in &p.items {
+                if let Placed::Lines { story: StoryRef::Body, para, .. } = it
+                    && let Some(label) = para.label.as_ref()
+                {
+                    return label.glyphs.iter().map(|g| g.gid).collect();
+                }
+            }
+        }
+        panic!("no label");
+    };
+    assert_eq!(label_gids(NumeralMode::Context, true), label_gids(NumeralMode::Hindi, true), "RTL label keeps ١ in Context mode");
+    assert_ne!(label_gids(NumeralMode::Context, true), label_gids(NumeralMode::Arabic, true), "Arabic mode turns it Western");
+}

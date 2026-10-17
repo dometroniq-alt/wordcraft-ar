@@ -230,11 +230,22 @@ struct Item {
 fn analyse(s: &Session, paths: &[wordcraft_doc::Path], first_is_top: bool) -> Vec<Item> {
     let mut items = Vec::new();
     let mut prev_depth: i32 = -1;
+    let mut typed_depth: i32 = -1;
     let mut clamp: Vec<(usize, usize)> = Vec::new(); // typed kind -> depth
     for path in paths {
         let Some(para) = s.doc.para(StoryRef::Body, path) else { continue };
         let det = detect(&para.text);
+        // A real list item (Word numbering, its marker not in the text) nests under the last typed
+        // marker: list level 0 is one level below it.
+        let listed = para.props.numbering.as_ref().filter(|n| n.num > 0).map(|n| n.level as usize);
         match det {
+            None if listed.is_some() => {
+                let level = listed.unwrap_or(0);
+                let base = (typed_depth + 1).max(0) as usize;
+                let depth = (base + level).min(50);
+                items.push(Item { path: path.clone(), marker: None, depth, numbered: true });
+                prev_depth = depth as i32;
+            }
             None => {
                 if para.text.trim().is_empty() || prev_depth < 0 {
                     continue;
@@ -265,6 +276,7 @@ fn analyse(s: &Session, paths: &[wordcraft_doc::Path], first_is_top: bool) -> Ve
                 clamp.retain(|(k, d)| *d <= depth || *k == typed);
                 items.push(Item { path: path.clone(), marker: Some((kind, n, len)), depth, numbered: true });
                 prev_depth = depth as i32;
+                typed_depth = depth as i32;
             }
         }
     }
@@ -324,6 +336,7 @@ fn renumber(s: &mut Session, v: &Value) -> CmdResult {
             para.props.indent_left = Some(start + hang);
             para.props.indent_first = Some(-hang);
             para.props.tabs = Some(vec![TabStop { pos: start + hang, align: TabAlign::Left, leader: Default::default() }]);
+            // a Word list item becomes a typed marker: the list numbering goes
             para.props.numbering = Some(NumRef { num: 0, level: 0 });
             para.touch();
             changed += 1;
@@ -639,6 +652,26 @@ mod tests {
         assert!(texts[5].starts_with("٣.\t"), "{texts:?}");
         // the body line keeps its text and sits under its heading
         assert_eq!(texts[1], "توفر رعاية.");
+    }
+
+    /// Word list items (markers not in the text) nest under the last typed marker and come out as
+    /// typed markers of the next level.
+    #[test]
+    fn word_list_items_nest_under_the_typed_marker() {
+        let mut doc = wordcraft_doc::Document::from_text("١. شعبة الأسنان\nثانياً. الواجبات\nفحص المرضى\nإدامة الأجهزة");
+        let num = doc.numbering.add_list(wordcraft_doc::numbering::ListKind::NumberedParen);
+        for path in doc.para_paths(StoryRef::Body).into_iter().skip(2) {
+            doc.para_mut(StoryRef::Body, &path).unwrap().props.numbering = Some(NumRef { num, level: 0 });
+        }
+        let mut s = Session::new(doc);
+        let r = s.run("service.renumber", &json!({})).unwrap();
+        assert_eq!(r["renumbered"], 4);
+        let texts: Vec<String> = s.doc.para_paths(StoryRef::Body).iter().map(|p| s.doc.para(StoryRef::Body, p).unwrap().text.clone()).collect();
+        assert!(texts[1].starts_with("أ.\t"), "{texts:?}");
+        assert!(texts[2].starts_with("أولاً.\t"), "{texts:?}");
+        assert!(texts[3].starts_with("ثانياً.\t"), "{texts:?}");
+        let p3 = s.doc.para(StoryRef::Body, &s.doc.para_paths(StoryRef::Body)[3]).unwrap();
+        assert_eq!(p3.props.numbering.as_ref().map(|n| n.num), Some(0), "the Word list numbering is gone");
     }
 
     #[test]

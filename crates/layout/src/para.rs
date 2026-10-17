@@ -512,6 +512,10 @@ struct Builder<'a> {
     clusters: Vec<Cluster>,
     /// Bidi level per byte of the paragraph text (empty: all left to right).
     levels: Vec<u8>,
+    /// The paragraph reads right to left: text shaped on its own (a list label, a field result)
+    /// takes its digits' form (Word › Numeral › Context) from the paragraph, so a right-to-left
+    /// paragraph's label `١.` keeps its Arabic-Indic digit.
+    para_rtl: bool,
     /// Text drawn by clusters that stand for an object, by cluster index (see `ParaLayout::shown`).
     shown: Vec<(usize, String, Vec<std::ops::Range<usize>>)>,
 }
@@ -805,7 +809,7 @@ impl<'a> Builder<'a> {
             // Displayed form (Word › Numeral): one char in, one char out. Coverage and the
             // fallback face are picked for the displayed char, so Hindi digits land in an
             // Arabic-capable face and Western digits in a Latin one.
-            let dc = self.numeral_char(&context, i, c, rtl);
+            let dc = self.numeral_char(&context, i, c, if para_text { rtl } else { self.para_rtl });
             let mark = is_mark(c);
             let complex = match cur {
                 Some(k) if mark => k.complex,
@@ -859,7 +863,8 @@ impl<'a> Builder<'a> {
             // Displayed text: numeral substitution is 1 char → 1 char and a capital may be
             // several; `map_starts` holds where each document char's displayed form starts and
             // `orig_of` maps it back to the char's original byte offset (+ a `sub.len()` sentinel).
-            let substituted = expands || sub.char_indices().any(|(i, c)| self.numeral_char(&context, a + i, c, key.rtl) != c);
+            let digit_dir = if para_text { key.rtl } else { self.para_rtl };
+            let substituted = expands || sub.char_indices().any(|(i, c)| self.numeral_char(&context, a + i, c, digit_dir) != c);
             let mut mapped = String::new();
             let mut map_starts: Vec<usize> = Vec::new();
             let mut orig_of: Vec<usize> = Vec::new();
@@ -868,7 +873,7 @@ impl<'a> Builder<'a> {
                 for (i, c) in sub.char_indices() {
                     map_starts.push(mapped.len());
                     orig_of.push(i);
-                    let d = self.numeral_char(&context, a + i, c, key.rtl);
+                    let d = self.numeral_char(&context, a + i, c, digit_dir);
                     if expands {
                         mapped.extend(d.to_uppercase());
                     } else {
@@ -1239,8 +1244,16 @@ pub fn layout_para(p: &Paragraph, env: &ParaEnv) -> ParaLayout {
     }
     let resolve = |c: &CharProps| -> Arc<ResolvedChar> { Arc::new(doc.styles.resolve_char_in(para_style, table_chr, c)) };
     let levels = bidi_levels(&p.text, rp.bidi);
-    let mut b =
-        Builder { env, styles: Vec::new(), style_index: Default::default(), glyphs: Vec::new(), clusters: Vec::new(), levels, shown: Vec::new() };
+    let mut b = Builder {
+        env,
+        styles: Vec::new(),
+        style_index: Default::default(),
+        glyphs: Vec::new(),
+        clusters: Vec::new(),
+        levels,
+        para_rtl: rp.bidi,
+        shown: Vec::new(),
+    };
     let mark_rc = resolve(&p.mark);
     let mark_style = b.style(&mark_rc, None, false);
     let mut has_page_fields = false;
