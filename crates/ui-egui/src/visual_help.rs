@@ -112,17 +112,21 @@ mod tests {
         assert!(!app.session.layout().pages.is_empty());
     }
 
-    /// Every Service and Mailings ribbon control has visual help.
+    /// Every ribbon control of every tab has visual help (a thumbnail and a sentence).
     #[test]
-    fn service_and_mailings_buttons_are_all_explained() {
-        for tab in ["Service", "Mailings"] {
+    fn every_ribbon_button_is_explained() {
+        let mut missing = Vec::new();
+        for tab in crate::ribbon::TABS.iter().chain(&["Table Design", "Table Layout"]) {
             for c in crate::keytips::controls_public_with_params(tab) {
-                if c.0 == "ui.dialog" || c.0 == "ui.tab" {
+                if c.0 == "ui.tab" {
                     continue;
                 }
                 let k = key(c.0, &c.1);
-                assert!(explanation(&k).is_some(), "{tab} › {}: no visual help ({k})", c.0);
+                if explanation(&k).is_none() {
+                    missing.push(format!("{tab} › {} ({k})", c.0));
+                }
             }
         }
+        assert!(missing.is_empty(), "{} buttons without visual help:\n{}", missing.len(), missing.join("\n"));
     }
 }

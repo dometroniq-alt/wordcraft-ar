@@ -483,7 +483,7 @@ pub fn controls_public_with_params(tab: &str) -> Vec<(&'static str, serde_json::
         .into_iter()
         .map(|c| match c.target {
             Target::Cmd { id, params } => (id, params),
-            Target::Dialog { .. } => ("ui.dialog", serde_json::json!({})),
+            Target::Dialog { name } => ("ui.dialog", serde_json::json!({ "name": name })),
             Target::Tab(_) => ("ui.tab", serde_json::json!({})),
         })
         .collect()

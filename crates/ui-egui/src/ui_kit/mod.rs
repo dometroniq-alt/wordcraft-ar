@@ -77,6 +77,8 @@ pub fn key(id: &str, params: &Value) -> String {
         "service.kashida" => params.get("value").and_then(Value::as_str),
         "service.renumber" => params.get("scope").and_then(Value::as_str).filter(|s| *s == "selection"),
         "service.external" => params.get("pdf").and_then(Value::as_bool).filter(|b| *b).map(|_| "pdf"),
+        // A ribbon button that opens a named dialog (Replace, Word Count, Zoom…).
+        "ui.dialog" => params.get("name").and_then(Value::as_str),
         _ => None,
     };
     match variant {
