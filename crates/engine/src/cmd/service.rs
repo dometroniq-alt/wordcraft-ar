@@ -571,6 +571,55 @@ fn find_engine(given: Option<&str>) -> Option<std::path::PathBuf> {
     cands.into_iter().find(|p| p.exists())
 }
 
+/// Interpreters to try for the engine, in order: the one given, then on Windows `py -3`, the
+/// per-user installs under `%LOCALAPPDATA%\\Programs\\Python` (a program started before Python
+/// was installed doesn't have them on its PATH) and `python`; `python3` then `python` elsewhere.
+fn python_candidates(given: Option<&str>) -> Vec<(String, Vec<String>)> {
+    let mut c: Vec<(String, Vec<String>)> = Vec::new();
+    if let Some(py) = given {
+        c.push((py.to_string(), Vec::new()));
+        return c;
+    }
+    if cfg!(windows) {
+        c.push(("py".into(), vec!["-3".into()]));
+        if let Some(local) = std::env::var_os("LOCALAPPDATA") {
+            let programs = std::path::PathBuf::from(local).join("Programs").join("Python");
+            let launcher = programs.join("Launcher").join("py.exe");
+            if launcher.exists() {
+                c.push((launcher.to_string_lossy().into_owned(), vec!["-3".into()]));
+            }
+            if let Ok(rd) = std::fs::read_dir(&programs) {
+                let mut dirs: Vec<std::path::PathBuf> = rd.flatten().map(|e| e.path()).filter(|p| p.join("python.exe").exists()).collect();
+                dirs.sort();
+                for d in dirs.into_iter().rev() {
+                    c.push((d.join("python.exe").to_string_lossy().into_owned(), Vec::new()));
+                }
+            }
+        }
+        // Last: a bare `python`, which on a fresh Windows is the Store's stub (it exits with an
+        // error that then reaches the user as "ServiceWord-AR failed").
+        c.push(("python".into(), Vec::new()));
+    } else {
+        c.push(("python3".into(), Vec::new()));
+        c.push(("python".into(), Vec::new()));
+    }
+    c
+}
+
+/// Run the engine with the first interpreter that starts; a Python that exists but fails is
+/// reported as such (its last stderr line), a missing one is skipped.
+fn run_python(given: Option<&str>, tail: &[String]) -> Result<std::process::Output, CmdError> {
+    let cands = python_candidates(given);
+    let mut last_err = String::from("no Python interpreter found (install Python 3 from python.org)");
+    for (prog, args) in &cands {
+        match std::process::Command::new(prog).args(args).args(tail).output() {
+            Ok(out) => return Ok(out),
+            Err(e) => last_err = format!("cannot run {prog}: {e}"),
+        }
+    }
+    Err(CmdError::Failed(last_err))
+}
+
 /// `service.external`: the document goes to ServiceWord-AR (Python; real-font measurement,
 /// kashida written into the text, equalised markers, embedded digit fonts) and comes back
 /// formatted. Needs Python with the engine's wheels installed.
@@ -582,17 +631,11 @@ fn external(s: &mut Session, v: &Value) -> CmdResult {
     let stem = format!("wordcraft-ar-{}", std::process::id());
     let src = dir.join(format!("{stem}.docx"));
     crate::io::write_file(&src.to_string_lossy(), &bytes).map_err(CmdError::Failed)?;
-    let (prog, mut args): (String, Vec<String>) = match p::str(v, "python") {
-        Some(py) => (py.to_string(), Vec::new()),
-        None if cfg!(windows) => ("py".into(), vec!["-3".into()]),
-        None => ("python3".into(), Vec::new()),
-    };
-    args.push(engine.to_string_lossy().into_owned());
-    args.push(src.to_string_lossy().into_owned());
+    let mut tail: Vec<String> = vec![engine.to_string_lossy().into_owned(), src.to_string_lossy().into_owned()];
     if p::bool(v, "pdf").unwrap_or(false) {
-        args.push("--pdf".into());
+        tail.push("--pdf".into());
     }
-    let out = std::process::Command::new(&prog).args(&args).output().map_err(|e| CmdError::Failed(format!("cannot run {prog}: {e}")))?;
+    let out = run_python(p::str(v, "python"), &tail)?;
     if !out.status.success() {
         let err = String::from_utf8_lossy(&out.stderr);
         return Err(CmdError::Failed(format!("ServiceWord-AR failed: {}", err.lines().last().unwrap_or("").trim())));
@@ -611,6 +654,25 @@ fn external(s: &mut Session, v: &Value) -> CmdResult {
 mod tests {
     use super::*;
     use wordcraft_doc::section::NumFormat;
+
+    #[test]
+    fn python_candidates_prefer_the_given_interpreter_and_always_offer_a_fallback() {
+        assert_eq!(python_candidates(Some("/opt/py/bin/python3")), vec![("/opt/py/bin/python3".to_string(), Vec::new())]);
+        let c = python_candidates(None);
+        assert!(!c.is_empty());
+        if cfg!(windows) {
+            assert_eq!(c[0], ("py".to_string(), vec!["-3".to_string()]));
+            assert_eq!(c.last().map(|x| x.0.as_str()), Some("python"));
+        } else {
+            assert_eq!(c[0], ("python3".to_string(), Vec::new()));
+        }
+    }
+
+    #[test]
+    fn missing_interpreter_is_reported_not_panicked() {
+        let err = run_python(Some("wordcraft-no-such-python-xyz"), &["x".to_string()]).err().map(|e| e.to_string()).unwrap_or_default();
+        assert!(err.contains("wordcraft-no-such-python-xyz"), "{err}");
+    }
 
     #[test]
     fn detects_typed_markers() {
