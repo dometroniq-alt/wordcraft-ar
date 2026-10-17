@@ -225,9 +225,12 @@ fn rtl_list_label_sits_on_the_right() {
     let text_right = caret_x(&l, 0, 0);
     assert!(x + lab.x >= text_right - 0.5, "label {} is right of the text start {text_right}", x + lab.x);
     assert!(x + lab.x + lab.width <= 540.5);
-    // "1." reads right to left: the full stop is drawn left of the number.
-    let st = &pl.styles[lab.style as usize];
-    let (one, dot) = (st.face.glyph_for('1'), st.face.glyph_for('.'));
+    // "1." reads right to left: the full stop is drawn left of the number (the digit shown as
+    // the default numeral mode shows it in a right-to-left paragraph: `١` in Context mode).
+    // Each label run has its own face (the digit may come from an Arabic-capable fallback).
+    let digit = crate::NumeralMode::default().map('1', true);
+    let glyph = |c: char| lab.runs.iter().map(|r| pl.styles[r.style as usize].face.glyph_for(c)).find(|g| *g != 0).unwrap_or_default();
+    let (one, dot) = (glyph(digit), glyph('.'));
     let gx = |gid: u32| lab.glyphs.iter().find(|g| g.gid == gid).map(|g| g.dx).unwrap();
     assert!(gx(dot) < gx(one), "label shows .1");
 }

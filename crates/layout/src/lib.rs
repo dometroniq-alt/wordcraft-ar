@@ -65,13 +65,14 @@ pub enum ViewMode {
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, Default, serde::Serialize, serde::Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub enum NumeralMode {
-    /// Western digits everywhere (`0123456789`); the default, today's behaviour.
-    #[default]
+    /// Western digits everywhere (`0123456789`); upstream WordCraft's default.
     Arabic,
     /// Eastern Arabic-Indic digits everywhere (`٠١٢٣٤٥٦٧٨٩`).
     Hindi,
     /// Hindi digits in and around right-to-left text, Western digits elsewhere (numbers take
-    /// an even bidi level, so the surrounding text decides).
+    /// an even bidi level, so the surrounding text decides). WordCraft AR's default, so a typed
+    /// `١.` or a `١.` list label stays Arabic-Indic in every view, export and the CLI.
+    #[default]
     Context,
     /// Hindi digits when the system locale is an Arabic-script language, else Western digits.
     /// Call [`NumeralMode::resolve`] before laying out.
