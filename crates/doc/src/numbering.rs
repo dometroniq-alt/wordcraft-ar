@@ -133,6 +133,12 @@ pub enum ListKind {
     LowerRoman,
     /// 1. 1.1. 1.1.1.
     Legal,
+    /// ١. أ. أولاً. (١). (أ). (أولاً). — Arabic service writing (WordCraft AR).
+    Service,
+    /// ١. ٢. ٣. with Arabic-Indic digits, then أ. ب. جـ. and ١) ٢) ٣).
+    ArabicNumbered,
+    /// أ. ب. جـ. د. هـ. (abjad), then ١. and أولاً.
+    ArabicAbjad,
 }
 
 impl ListKind {
@@ -147,6 +153,9 @@ impl ListKind {
             "lowerLetterDot" => ListKind::LowerLetterDot,
             "lowerRoman" => ListKind::LowerRoman,
             "legal" | "multilevel" => ListKind::Legal,
+            "service" | "arabicService" => ListKind::Service,
+            "arabicNumbered" | "hindi" => ListKind::ArabicNumbered,
+            "arabicAbjad" | "abjad" => ListKind::ArabicAbjad,
             s if s.chars().count() == 1 => ListKind::BulletChar(s.chars().next()?),
             _ => return None,
         })
@@ -207,9 +216,53 @@ pub fn levels_for(kind: ListKind) -> Vec<Level> {
                     let text: String = (1..=n).map(|k| format!("%{k}.")).collect();
                     Level { format: NumFormat::Decimal, text, indent: 18.0 + 25.0 * i as f32, hanging: 18.0 + 7.0 * i as f32, ..Level::default() }
                 }
+                ListKind::Service => service_level(i),
+                ListKind::ArabicNumbered => arabic_level(cyc(NumFormat::HindiNumbers, NumFormat::ArabicAbjad, NumFormat::HindiNumbers), if i % 3 == 2 { format!("%{n})") } else { format!("%{n}.") }, ind),
+                ListKind::ArabicAbjad => arabic_level(cyc(NumFormat::ArabicAbjad, NumFormat::HindiNumbers, NumFormat::OrdinalText), format!("%{n}."), ind),
             }
         })
         .collect()
+}
+
+/// A right-to-left list level labelled in Arabic.
+fn arabic_level(format: NumFormat, text: String, indent: f32) -> Level {
+    Level { format, text, indent, hanging: 18.0, chr: CharProps { lang_bidi: Some("ar-IQ".into()), ..CharProps::default() }, ..Level::default() }
+}
+
+/// The width a service-writing marker needs at level `i` (digits are narrow, ordinal words wide),
+/// in points at a 14 pt body.
+pub fn service_hanging(i: usize) -> f32 {
+    match i % 6 {
+        0 => 20.0,
+        1 => 21.0,
+        2 => 41.0,
+        3 => 28.0,
+        4 => 29.0,
+        _ => 49.0,
+    }
+}
+
+/// Level `i` of the Arabic service-writing cycle: `١.` `أ.` `أولاً.` `(١).` `(أ).` `(أولاً).`,
+/// each level's text starting under its parent's marker.
+pub fn service_level(i: usize) -> Level {
+    let n = i + 1;
+    let format = match i % 6 {
+        0 | 3 => NumFormat::HindiNumbers,
+        1 | 4 => NumFormat::ArabicAbjad,
+        _ => NumFormat::OrdinalText,
+    };
+    let text = if i % 6 >= 3 { format!("(%{n}).") } else { format!("%{n}.") };
+    let hanging = service_hanging(i);
+    let start: f32 = (0..i).map(|d| service_hanging(d) * 0.9).sum();
+    Level {
+        format,
+        text,
+        indent: start + hanging,
+        hanging,
+        suffix: LevelSuffix::Tab,
+        chr: CharProps { lang_bidi: Some("ar-IQ".into()), ..CharProps::default() },
+        ..Level::default()
+    }
 }
 
 impl Numbering {
@@ -350,7 +403,8 @@ impl Counters {
                     _ if def.legal => NumFormat::Decimal,
                     f => f,
                 };
-                label.push_str(&fmt.format(val));
+                let lang = level_def(k).and_then(|l| l.chr.lang_bidi.as_deref().or(l.chr.lang.as_deref()));
+                label.push_str(&fmt.format_lang(val, lang));
             } else {
                 label.push(c);
             }

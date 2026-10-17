@@ -2672,3 +2672,33 @@ template	Letter	Thư
 # Reading Mode column widths (#1040)
 	Narrow	Hẹp
 	Medium	Trung bình
+
+# Service writing (WordCraft AR)
+	Service	Công vụ
+	Engine	Bộ máy
+	Classification	Độ mật
+	Kashida	Kashida
+	Renumber by the Service Cycle	Đánh số lại theo chu trình công vụ
+	Service Multilevel List	Danh sách đa cấp công vụ
+	Page Numbers ( n - N )	Số trang ( n - N )
+	Kashida Justification	Căn đều bằng kashida
+	End Items with a Dot	Kết thúc mục bằng dấu chấm
+	Format with ServiceWord-AR	Định dạng bằng ServiceWord-AR
+	Renumber\nCycle	Đánh số lại\nchu trình
+	Service\nList	Danh sách\ncông vụ
+	Final Dot	Dấu chấm cuối
+	Selection Only	Chỉ vùng chọn
+	Renumber the Selection	Đánh số lại vùng chọn
+	Low	Thấp
+	High	Cao
+	Low Kashida	Kashida thấp
+	Medium Kashida	Kashida vừa
+	High Kashida	Kashida cao
+	Distribute	Dàn đều
+	Format with\nServiceWord-AR	Định dạng bằng\nServiceWord-AR
+	With PDF	Kèm PDF
+	Format and make the print PDF	Định dạng và tạo PDF in
+	Arabic-Indic 1. 2. 3.	Ả Rập-Ấn 1. 2. 3.
+	Abjad a. b. c.	Abjad a. b. c.
+	Service Cycle 1. a. (1).	Chu trình công vụ 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Không tìm thấy bộ máy ServiceWord-AR (đặt thư mục servicewordar cạnh chương trình)

@@ -2233,3 +2233,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	狭い
 	Medium	中
+
+# Service writing (WordCraft AR)
+	Service	公務
+	Engine	エンジン
+	Classification	秘密区分
+	Kashida	カシーダ
+	Renumber by the Service Cycle	公務サイクルで番号を振り直す
+	Service Multilevel List	公務の多階層リスト
+	Page Numbers ( n - N )	ページ番号 ( n - N )
+	Kashida Justification	カシーダ均等割り付け
+	End Items with a Dot	項目の末尾にピリオド
+	Format with ServiceWord-AR	ServiceWord-AR で書式設定
+	Renumber\nCycle	サイクルの\n番号振り直し
+	Service\nList	公務\nリスト
+	Final Dot	末尾のピリオド
+	Selection Only	選択範囲のみ
+	Renumber the Selection	選択範囲の番号を振り直す
+	Low	低
+	High	高
+	Low Kashida	カシーダ (低)
+	Medium Kashida	カシーダ (中)
+	High Kashida	カシーダ (高)
+	Distribute	均等割り付け
+	Format with\nServiceWord-AR	ServiceWord-AR で\n書式設定
+	With PDF	PDF も作成
+	Format and make the print PDF	書式設定して印刷用 PDF を作成
+	Arabic-Indic 1. 2. 3.	アラビア・インド数字 1. 2. 3.
+	Abjad a. b. c.	アブジャド a. b. c.
+	Service Cycle 1. a. (1).	公務サイクル 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR エンジンが見つかりません (servicewordar フォルダーをプログラムの隣に置いてください)

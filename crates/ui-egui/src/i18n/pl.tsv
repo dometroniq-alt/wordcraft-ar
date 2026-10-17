@@ -2622,3 +2622,33 @@ preview	Title	Tytuł
 # Reading Mode column widths (#1040)
 	Narrow	Wąska
 	Medium	Średnia
+
+# Service writing (WordCraft AR)
+	Service	Służba
+	Engine	Silnik
+	Classification	Klauzula
+	Kashida	Kaszida
+	Renumber by the Service Cycle	Przenumeruj według cyklu służbowego
+	Service Multilevel List	Służbowa lista wielopoziomowa
+	Page Numbers ( n - N )	Numery stron ( n - N )
+	Kashida Justification	Justowanie kaszidą
+	End Items with a Dot	Kończ pozycje kropką
+	Format with ServiceWord-AR	Formatuj w ServiceWord-AR
+	Renumber\nCycle	Przenumeruj\ncykl
+	Service\nList	Lista\nsłużbowa
+	Final Dot	Kropka końcowa
+	Selection Only	Tylko zaznaczenie
+	Renumber the Selection	Przenumeruj zaznaczenie
+	Low	Niska
+	High	Wysoka
+	Low Kashida	Kaszida niska
+	Medium Kashida	Kaszida średnia
+	High Kashida	Kaszida wysoka
+	Distribute	Rozłóż
+	Format with\nServiceWord-AR	Formatuj w\nServiceWord-AR
+	With PDF	Z PDF
+	Format and make the print PDF	Formatuj i utwórz PDF do druku
+	Arabic-Indic 1. 2. 3.	Arabsko-indyjskie 1. 2. 3.
+	Abjad a. b. c.	Abdżad a. b. c.
+	Service Cycle 1. a. (1).	Cykl służbowy 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Nie znaleziono silnika ServiceWord-AR (umieść folder servicewordar obok programu)

@@ -2624,3 +2624,33 @@ preview	Title	Ukázka
 # Reading Mode column widths (#1040)
 	Narrow	Úzká
 	Medium	Střední
+
+# Service writing (WordCraft AR)
+	Service	Služba
+	Engine	Jádro
+	Classification	Stupeň utajení
+	Kashida	Kašida
+	Renumber by the Service Cycle	Přečíslovat podle služebního cyklu
+	Service Multilevel List	Služební víceúrovňový seznam
+	Page Numbers ( n - N )	Čísla stránek ( n - N )
+	Kashida Justification	Zarovnání kašidou
+	End Items with a Dot	Ukončovat položky tečkou
+	Format with ServiceWord-AR	Formátovat pomocí ServiceWord-AR
+	Renumber\nCycle	Přečíslovat\ncyklus
+	Service\nList	Služební\nseznam
+	Final Dot	Koncová tečka
+	Selection Only	Jen výběr
+	Renumber the Selection	Přečíslovat výběr
+	Low	Nízká
+	High	Vysoká
+	Low Kashida	Nízká kašida
+	Medium Kashida	Střední kašida
+	High Kashida	Vysoká kašida
+	Distribute	Rozložit
+	Format with\nServiceWord-AR	Formátovat pomocí\nServiceWord-AR
+	With PDF	S PDF
+	Format and make the print PDF	Formátovat a vytvořit PDF pro tisk
+	Arabic-Indic 1. 2. 3.	Arabsko-indické 1. 2. 3.
+	Abjad a. b. c.	Abdžad a. b. c.
+	Service Cycle 1. a. (1).	Služební cyklus 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Jádro ServiceWord-AR nenalezeno (vložte složku servicewordar vedle programu)

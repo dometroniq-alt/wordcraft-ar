@@ -1673,7 +1673,16 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
                             }
                         }
                     });
-                    const ALIGNS: [(&str, &str); 4] = [("left", "Left"), ("center", "Center"), ("right", "Right"), ("justify", "Justify")];
+                    const ALIGNS: [(&str, &str); 8] = [
+                        ("left", "Left"),
+                        ("center", "Center"),
+                        ("right", "Right"),
+                        ("justify", "Justify"),
+                        ("distribute", "Distribute"),
+                        ("lowKashida", "Low Kashida"),
+                        ("mediumKashida", "Medium Kashida"),
+                        ("highKashida", "High Kashida"),
+                    ];
                     ui.horizontal(|ui| {
                         ui.label(tl!("Alignment:"));
                         let shown = if mixed.contains("align") {
@@ -3025,6 +3034,21 @@ fn table_properties(ui: &mut Ui, f: &mut TableForm) {
 }
 
 /// The Paragraph dialog as one paragraph's formatting fills it, on page `tab`.
+/// An alignment as `para.set`'s `onPage.align` spells it.
+fn align_key(a: wordcraft_doc::Align) -> &'static str {
+    use wordcraft_doc::Align as A;
+    match a {
+        A::Left => "left",
+        A::Center => "center",
+        A::Right => "right",
+        A::Justify => "justify",
+        A::Distribute => "distribute",
+        A::LowKashida => "lowKashida",
+        A::MediumKashida => "mediumKashida",
+        A::HighKashida => "highKashida",
+    }
+}
+
 fn paragraph_dialog(rp: &wordcraft_doc::resolve::ResolvedPara, tab: u8) -> Dialog {
     let line = match rp.line_spacing {
         wordcraft_doc::props::LineSpacing::Multiple(m) => m,
@@ -3034,7 +3058,7 @@ fn paragraph_dialog(rp: &wordcraft_doc::resolve::ResolvedPara, tab: u8) -> Dialo
     let unit = crate::options::unit().pt_per_unit();
     Dialog::Paragraph {
         rtl: rp.bidi,
-        align: format!("{:?}", rp.align.visual(rp.bidi)).to_lowercase(),
+        align: align_key(rp.align.visual(rp.bidi)).to_string(),
         left: vl / unit,
         right: vr / unit,
         first: rp.indent_first / unit,

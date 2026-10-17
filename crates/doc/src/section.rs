@@ -255,12 +255,24 @@ impl NumFormat {
     pub fn from_ooxml(s: &str) -> NumFormat {
         NumFormat::ALL.into_iter().find(|f| f.ooxml() == s).unwrap_or(NumFormat::Decimal)
     }
-    /// Format `n` (1-based). Formats WordCraft doesn't draw yet (Hebrew, Arabic, Hindi, Thai,
+    /// Format `n` (1-based). Formats WordCraft doesn't draw yet (Hebrew, Hindi, Thai,
     /// Vietnamese, text amounts) show decimal, as do values past a sequence's end
-    /// (the 21st item of ①…⑳).
+    /// (the 21st item of ①…⑳). Arabic formats (WordCraft AR): abjad letters (أ، ب، جـ…),
+    /// alphabetical letters, Arabic-Indic digits (`hindiNumbers`).
     pub fn format(self, n: u32) -> String {
+        self.format_lang(n, None)
+    }
+
+    /// [`NumFormat::format`] for a level or field whose complex-script language is `lang`:
+    /// `ordinalText` in Arabic gives the ordinal words (أولاً، ثانياً…), as Word does.
+    pub fn format_lang(self, n: u32, lang: Option<&str>) -> String {
+        use crate::arabic_numbers as ar;
         use crate::cjk_numbers as cjk;
         match self {
+            NumFormat::ArabicAbjad => ar::abjad(n),
+            NumFormat::ArabicAlpha => ar::alpha(n),
+            NumFormat::HindiNumbers => ar::arabic_indic(n),
+            NumFormat::OrdinalText if ar::is_arabic_lang(lang) => ar::ordinal(n),
             NumFormat::DecimalZero => format!("{n:02}"),
             NumFormat::UpperRoman => roman(n).to_uppercase(),
             NumFormat::LowerRoman => roman(n),
@@ -308,11 +320,8 @@ impl NumFormat {
             | NumFormat::VietnameseCounting
             | NumFormat::Hebrew1
             | NumFormat::Hebrew2
-            | NumFormat::ArabicAlpha
-            | NumFormat::ArabicAbjad
             | NumFormat::HindiVowels
             | NumFormat::HindiConsonants
-            | NumFormat::HindiNumbers
             | NumFormat::HindiCounting
             | NumFormat::ThaiLetters
             | NumFormat::ThaiNumbers

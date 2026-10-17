@@ -35,6 +35,7 @@ pub mod phonetic;
 pub mod protect;
 pub mod references;
 pub mod review;
+pub mod service;
 pub mod smart_art;
 pub mod speech;
 pub mod table;
@@ -100,6 +101,7 @@ pub fn registry() -> Registry {
     v.extend(protect::specs());
     v.extend(speech::specs());
     v.extend(controls::specs());
+    v.extend(service::specs());
     Registry::new(v)
 }
 

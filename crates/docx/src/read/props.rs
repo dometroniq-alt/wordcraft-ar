@@ -356,7 +356,10 @@ pub fn align(v: &str) -> Align {
     match v {
         "center" => Align::Center,
         "right" | "end" => Align::Right,
-        "both" | "justify" | "lowKashida" | "mediumKashida" | "highKashida" => Align::Justify,
+        "both" | "justify" => Align::Justify,
+        "lowKashida" => Align::LowKashida,
+        "mediumKashida" => Align::MediumKashida,
+        "highKashida" => Align::HighKashida,
         "distribute" | "thaiDistribute" => Align::Distribute,
         _ => Align::Left,
     }

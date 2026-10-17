@@ -2488,3 +2488,33 @@ preview	Title	제목
 	Bottom Right Cell	오른쪽 아래 셀
 	Inside Horizontal Border	안쪽 가로 테두리
 	Inside Vertical Border	안쪽 세로 테두리
+
+# Service writing (WordCraft AR)
+	Service	공무
+	Engine	엔진
+	Classification	비밀 등급
+	Kashida	카시다
+	Renumber by the Service Cycle	공무 순환에 따라 번호 다시 매기기
+	Service Multilevel List	공무 다단계 목록
+	Page Numbers ( n - N )	페이지 번호 ( n - N )
+	Kashida Justification	카시다 양쪽 맞춤
+	End Items with a Dot	항목을 마침표로 끝내기
+	Format with ServiceWord-AR	ServiceWord-AR로 서식 지정
+	Renumber\nCycle	순환 번호\n다시 매기기
+	Service\nList	공무\n목록
+	Final Dot	끝 마침표
+	Selection Only	선택 영역만
+	Renumber the Selection	선택 영역 번호 다시 매기기
+	Low	낮음
+	High	높음
+	Low Kashida	낮은 카시다
+	Medium Kashida	중간 카시다
+	High Kashida	높은 카시다
+	Distribute	배분
+	Format with\nServiceWord-AR	ServiceWord-AR로\n서식 지정
+	With PDF	PDF 포함
+	Format and make the print PDF	서식 지정 후 인쇄용 PDF 만들기
+	Arabic-Indic 1. 2. 3.	아랍-인도 숫자 1. 2. 3.
+	Abjad a. b. c.	아브자드 a. b. c.
+	Service Cycle 1. a. (1).	공무 순환 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR 엔진을 찾을 수 없습니다 (servicewordar 폴더를 프로그램 옆에 두세요)

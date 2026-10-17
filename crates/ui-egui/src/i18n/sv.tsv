@@ -2647,3 +2647,33 @@ preview	Title	Titel
 	Bottom Right Cell	Nedre högra cellen
 	Inside Horizontal Border	Inre vågrät kantlinje
 	Inside Vertical Border	Inre lodrät kantlinje
+
+# Service writing (WordCraft AR)
+	Service	Tjänst
+	Engine	Motor
+	Classification	Klassificering
+	Kashida	Kashida
+	Renumber by the Service Cycle	Numrera om enligt tjänstecykeln
+	Service Multilevel List	Flernivålista för tjänst
+	Page Numbers ( n - N )	Sidnummer ( n - N )
+	Kashida Justification	Kashida-marginaljustering
+	End Items with a Dot	Avsluta punkter med punkt
+	Format with ServiceWord-AR	Formatera med ServiceWord-AR
+	Renumber\nCycle	Numrera om\ncykel
+	Service\nList	Tjänste-\nlista
+	Final Dot	Slutpunkt
+	Selection Only	Endast markering
+	Renumber the Selection	Numrera om markeringen
+	Low	Låg
+	High	Hög
+	Low Kashida	Låg kashida
+	Medium Kashida	Medelhög kashida
+	High Kashida	Hög kashida
+	Distribute	Fördela
+	Format with\nServiceWord-AR	Formatera med\nServiceWord-AR
+	With PDF	Med PDF
+	Format and make the print PDF	Formatera och skapa utskrifts-PDF
+	Arabic-Indic 1. 2. 3.	Arabisk-indiska 1. 2. 3.
+	Abjad a. b. c.	Abjad a. b. c.
+	Service Cycle 1. a. (1).	Tjänstecykel 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR-motorn hittades inte (lägg mappen servicewordar bredvid programmet)

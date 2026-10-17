@@ -103,6 +103,10 @@ pub fn format_switch(instr: &str) -> Option<NumFormat> {
                 "OrdText" | "ordtext" => NumFormat::OrdinalText,
                 "Ordinal" | "ordinal" => NumFormat::Ordinal,
                 "Arabic" | "arabic" => NumFormat::Decimal,
+                // Arabic Word's switches (WordCraft AR): ٠١٢ digits, abjad and alphabetical letters.
+                v if v.eq_ignore_ascii_case("HindiArabic") => NumFormat::HindiNumbers,
+                v if v.eq_ignore_ascii_case("ArabicAbjad") => NumFormat::ArabicAbjad,
+                v if v.eq_ignore_ascii_case("ArabicAlpha") => NumFormat::ArabicAlpha,
                 // Chinese numerals: counting (一百零一), legal (壹佰零壹), digit by digit (一〇一).
                 v if v.eq_ignore_ascii_case("ChineseNum1") => NumFormat::ChineseCountingThousand,
                 v if v.eq_ignore_ascii_case("ChineseNum2") => NumFormat::ChineseLegalSimplified,

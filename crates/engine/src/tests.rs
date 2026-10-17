@@ -4154,7 +4154,7 @@ fn reading_mode_reflows_per_viewport_without_changing_document_or_export() {
 fn numeral_mode_sets_gets_and_rejects_junk() {
     use wordcraft_layout::NumeralMode;
     let mut s = s();
-    assert_eq!(s.view.numeral, NumeralMode::Arabic, "Western digits by default");
+    assert_eq!(s.view.numeral, NumeralMode::Context, "WordCraft AR: context digits by default");
     let r = run(&mut s, "view.numeral", json!({"value": "hindi"}));
     assert_eq!(r["value"], "hindi");
     assert_eq!(s.view.numeral, NumeralMode::Hindi);

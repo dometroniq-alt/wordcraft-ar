@@ -739,6 +739,34 @@ fn lines(
                 text_bg: None,
             });
         }
+        // Kashida (WordCraft AR): the stretched cluster's box grew on the side of the next letter
+        // of its word; tatweel glyphs of its own face tile that gap, and its letter is drawn past it.
+        for kf in &line.kashida {
+            let Some(st) = pl.styles.get(kf.style as usize) else { continue };
+            let (Some(cx), Some(nx)) = (line.cl_left(kf.cluster), line.cl_right(kf.cluster)) else { continue };
+            if kf.adv <= 0.0 || kf.width <= 0.05 {
+                continue;
+            }
+            // Right-to-left text: the gap is the left part of the box; left-to-right: the right part.
+            let rtl = line.cl_rtl(kf.cluster) || line.rtl;
+            let gap_x = if rtl { cx } else { nx - kf.width };
+            let count = (kf.width / kf.adv).ceil().max(1.0).min(400.0) as usize;
+            let step = kf.width / count as f32;
+            let glyphs: Vec<(u32, f32, f32)> = (0..count).map(|i| (kf.gid, x + gap_x + step * i as f32, base - st.shift)).collect();
+            out.push(Draw::Glyphs {
+                face: st.face,
+                size: st.size,
+                glyphs,
+                color: text_color(&st.rc.color, None),
+                alpha,
+                synth_bold: st.synth_bold,
+                synth_italic: st.synth_italic,
+                text: "\u{0640}".repeat(count),
+                link: None,
+                ranges: Vec::new(),
+                text_bg: None,
+            });
+        }
         // Glyph runs grouped by style.
         let mut k = line.c0;
         while k < line.c1 {
@@ -757,7 +785,13 @@ fn lines(
                 if c.style != si {
                     break;
                 }
-                let cx = x + line.cl_left(k).unwrap_or(0.0);
+                let mut cx = x + line.cl_left(k).unwrap_or(0.0);
+                // A kashida-stretched right-to-left cluster draws its letter past the gap.
+                if let Some(kf) = line.kashida.iter().find(|f| f.cluster == k)
+                    && (line.cl_rtl(k) || line.rtl)
+                {
+                    cx += kf.width;
+                }
                 if matches!(c.kind, ClKind::Text | ClKind::Space) {
                     let a = text.len();
                     // An object's cluster (a field, a note number) stands for the text it shows.

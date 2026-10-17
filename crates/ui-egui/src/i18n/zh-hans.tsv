@@ -2245,3 +2245,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	窄
 	Medium	中等
+
+# Service writing (WordCraft AR)
+	Service	公务
+	Engine	引擎
+	Classification	密级
+	Kashida	Kashida
+	Renumber by the Service Cycle	按公务循环重新编号
+	Service Multilevel List	公务多级列表
+	Page Numbers ( n - N )	页码 ( n - N )
+	Kashida Justification	Kashida 两端对齐
+	End Items with a Dot	条目以句点结尾
+	Format with ServiceWord-AR	用 ServiceWord-AR 排版
+	Renumber\nCycle	重新编号\n循环
+	Service\nList	公务\n列表
+	Final Dot	末尾句点
+	Selection Only	仅选定内容
+	Renumber the Selection	重新编号选定内容
+	Low	低
+	High	高
+	Low Kashida	低 Kashida
+	Medium Kashida	中 Kashida
+	High Kashida	高 Kashida
+	Distribute	分散对齐
+	Format with\nServiceWord-AR	用 ServiceWord-AR\n排版
+	With PDF	附带 PDF
+	Format and make the print PDF	排版并生成打印 PDF
+	Arabic-Indic 1. 2. 3.	阿拉伯-印度数字 1. 2. 3.
+	Abjad a. b. c.	阿布贾德 a. b. c.
+	Service Cycle 1. a. (1).	公务循环 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	未找到 ServiceWord-AR 引擎（请将 servicewordar 文件夹放在程序旁边）

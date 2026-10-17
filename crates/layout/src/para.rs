@@ -166,6 +166,9 @@ pub struct Line {
     pub vis: Vec<VisCl>,
     /// The paragraph reads right to left (its start edge is on the right).
     pub rtl: bool,
+    /// Kashida stretches of a justified Arabic line: the cluster whose box grew and the tatweel
+    /// glyph that fills the gap (WordCraft AR).
+    pub kashida: Vec<crate::kashida::KashidaFill>,
 }
 
 /// Where a cluster of a bidirectional line is drawn.
@@ -335,6 +338,9 @@ pub struct ParaLayout {
     pub drop_cap: Option<(usize, u8, f32)>,
     /// Clusters after which the line may break with a hyphen (soft hyphens, auto hyphenation), sorted.
     pub hyph_after: Vec<u32>,
+    /// Clusters after which a kashida may be inserted (Arabic letters joined to the next letter of
+    /// their word), sorted ([`crate::kashida`]).
+    pub kashida_joints: Vec<u32>,
     /// Bidi embedding level of each byte of the paragraph text (UAX #9, before the per-line
     /// rule L1). Empty when the paragraph is plain left-to-right text.
     pub bidi_levels: Vec<u8>,
@@ -1570,6 +1576,7 @@ pub fn layout_para(p: &Paragraph, env: &ParaEnv) -> ParaLayout {
         issues: env.proofing.map(|o| proof_issues(p, &runs, &o)).unwrap_or_default(),
         drop_cap,
         hyph_after: Vec::new(),
+        kashida_joints: Vec::new(),
         bidi_levels: b.levels,
         drop_cap_w,
         maths,
@@ -1580,13 +1587,16 @@ pub fn layout_para(p: &Paragraph, env: &ParaEnv) -> ParaLayout {
     };
     let auto = env.doc.settings.auto_hyphenation && !pl.rp.suppress_hyphens;
     pl.hyph_after = hyphenation_points(&text, to_para, &pl, auto, env.doc.settings.hyphenate_caps, &runs);
+    if pl.rp.align.is_kashida() || pl.rp.align == Align::Distribute {
+        pl.kashida_joints = crate::kashida::joints(&p.text, &pl.clusters);
+    }
     pl.left_out = left;
     for k in pl.hyph_after.clone() {
         if let Some(c) = pl.clusters.get_mut(k as usize) {
             c.break_after = true;
         }
     }
-    break_lines(&mut pl, env, mark_style, env.label.as_ref().map(|(_, l)| l));
+    break_lines(&mut pl, env, mark_style, env.label.as_ref().map(|(_, l)| l), &p.text);
     pl
 }
 
@@ -1612,7 +1622,7 @@ fn next_tab(x: f32, tabs: &[TabStop], default_tab: f32, hanging_at: Option<f32>)
     })
 }
 
-fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Option<&Level>) {
+fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Option<&Level>, pl_text: &str) {
     let suffix = level.map(|l| l.suffix);
     let rp = pl.rp.clone();
     let width = env.width.max(12.0);
@@ -1659,6 +1669,7 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
     };
     let mut first_x0: Option<f32> = None;
     let mut hcache: Vec<(u32, u32, f32)> = Vec::new();
+    let mut kcache: Vec<(u32, u32, f32)> = Vec::new();
     let mut lines: Vec<Line> = Vec::new();
     let mut i = 0usize;
     let mut top = 0.0f32;
@@ -2079,9 +2090,45 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                 lab.x += shift;
             }
         }
-        let justify = display.is_none() && ((rp.align == Align::Justify && end == LineEnd::Wrap) || rp.align == Align::Distribute);
+        let justify = display.is_none()
+            && (((rp.align == Align::Justify || rp.align.is_kashida()) && end == LineEnd::Wrap) || rp.align == Align::Distribute);
         // A line that only fits with shrunk spaces is shrunk, the last line of the paragraph too.
         let shrink = display.is_none() && shrink_spaces && slack < 0.0 && last_tab.is_none();
+        // Kashida (WordCraft AR): a share of the slack lengthens one joining stroke per Arabic
+        // word before the spaces widen; the stretched clusters' boxes grow, the tatweel is drawn
+        // in the gap (`Line::kashida`).
+        let mut kashida_fills: Vec<crate::kashida::KashidaFill> = Vec::new();
+        let mut slack = slack;
+        let mut content_end = content_end;
+        if justify && slack > 0.0 && !pl.kashida_joints.is_empty()
+            && let Some(sh) = crate::kashida::share(rp.align)
+        {
+            let picks = crate::kashida::best_per_word(pl_text, &pl.clusters, &pl.kashida_joints, align_from, c1);
+            if !picks.is_empty() {
+                let total = slack * sh;
+                let per = total / picks.len() as f32;
+                let mut add = 0.0;
+                let mut pi = 0;
+                for k in align_from..c1 {
+                    if let Some(v) = xs.get_mut(k - c0) {
+                        *v += add;
+                    }
+                    if picks.get(pi) == Some(&k) {
+                        let (st, gid, adv) = tatweel_glyph(pl, pl.clusters.get(k).map(|c| c.style).unwrap_or(0), &mut kcache);
+                        if adv > 0.0 {
+                            kashida_fills.push(crate::kashida::KashidaFill { cluster: k, width: per, style: st, gid, adv });
+                            add += per;
+                        }
+                        pi += 1;
+                    }
+                }
+                if let Some(v) = xs.last_mut() {
+                    *v += add;
+                }
+                content_end += add;
+                slack -= add;
+            }
+        }
         if shrink {
             shrink_line_spaces(pl, &mut xs, c0, c1, content_end, slack);
         } else if justify && slack > 0.0 {
@@ -2140,6 +2187,7 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
             beside,
             vis: Vec::new(),
             rtl: rtl_para,
+            kashida: kashida_fills,
         };
         if bidi {
             reorder_line(pl, &mut line, width);
@@ -2186,6 +2234,7 @@ fn break_lines(pl: &mut ParaLayout, env: &ParaEnv, mark_style: u32, level: Optio
                     beside: false,
                     vis: Vec::new(),
                     rtl: rtl_para,
+                    kashida: Vec::new(),
                 });
                 top += h;
             }
@@ -2395,6 +2444,28 @@ fn shrink_line_spaces(pl: &ParaLayout, xs: &mut [f32], c0: usize, c1: usize, con
     if let Some(v) = xs.last_mut() {
         *v -= take;
     }
+}
+
+/// The tatweel (kashida) glyph and advance in a style (cached per paragraph); advance 0 when
+/// the face has none.
+fn tatweel_glyph(pl: &ParaLayout, style: u32, cache: &mut Vec<(u32, u32, f32)>) -> (u32, u32, f32) {
+    if let Some(h) = cache.iter().find(|h| h.0 == style) {
+        return *h;
+    }
+    let h = pl
+        .styles
+        .get(style as usize)
+        .and_then(|st| {
+            let g = wordcraft_fonts::shape(&st.face, "\u{0640}", &[], |c| c).into_iter().next()?;
+            if g.gid == 0 {
+                return None;
+            }
+            let k = st.size / st.face.upem.max(1.0) as f32 * st.rc.scale / 100.0;
+            Some((style, g.gid, g.x_advance as f32 * k))
+        })
+        .unwrap_or((style, 0, 0.0));
+    cache.push(h);
+    h
 }
 
 /// The hyphen glyph and advance in a style (cached per paragraph).
@@ -2737,7 +2808,7 @@ mod label_spacing_tests {
             (st.ascent, st.descent) = if i == label_style as usize { label_metrics } else { (11.1328125, 2.9296875) };
         }
         let mark_style = pl.clusters[0].style;
-        break_lines(&mut pl, &env, mark_style, Some(&level));
+        break_lines(&mut pl, &env, mark_style, Some(&level), &p.text);
         pl.lines
     }
 

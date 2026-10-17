@@ -2629,3 +2629,33 @@ preview	Title	Örnek
 # Reading Mode column widths (#1040)
 	Narrow	Dar
 	Medium	Orta
+
+# Service writing (WordCraft AR)
+	Service	Hizmet
+	Engine	Motor
+	Classification	Gizlilik derecesi
+	Kashida	Keşide
+	Renumber by the Service Cycle	Hizmet döngüsüne göre yeniden numaralandır
+	Service Multilevel List	Hizmet çok düzeyli listesi
+	Page Numbers ( n - N )	Sayfa numaraları ( n - N )
+	Kashida Justification	Keşide ile yaslama
+	End Items with a Dot	Maddeleri nokta ile bitir
+	Format with ServiceWord-AR	ServiceWord-AR ile biçimlendir
+	Renumber\nCycle	Döngüyü yeniden\nnumaralandır
+	Service\nList	Hizmet\nlistesi
+	Final Dot	Son nokta
+	Selection Only	Yalnızca seçim
+	Renumber the Selection	Seçimi yeniden numaralandır
+	Low	Düşük
+	High	Yüksek
+	Low Kashida	Düşük keşide
+	Medium Kashida	Orta keşide
+	High Kashida	Yüksek keşide
+	Distribute	Dağıt
+	Format with\nServiceWord-AR	ServiceWord-AR ile\nbiçimlendir
+	With PDF	PDF ile
+	Format and make the print PDF	Biçimlendir ve baskı PDF'sini oluştur
+	Arabic-Indic 1. 2. 3.	Arap-Hint 1. 2. 3.
+	Abjad a. b. c.	Ebced a. b. c.
+	Service Cycle 1. a. (1).	Hizmet döngüsü 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR motoru bulunamadı (servicewordar klasörünü programın yanına koyun)

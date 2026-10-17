@@ -2621,3 +2621,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	Тясна
 	Medium	Средна
+
+# Service writing (WordCraft AR)
+	Service	Служба
+	Engine	Двигател
+	Classification	Гриф
+	Kashida	Кашида
+	Renumber by the Service Cycle	Преномериране по служебния цикъл
+	Service Multilevel List	Служебен многостепенен списък
+	Page Numbers ( n - N )	Номера на страници ( n - N )
+	Kashida Justification	Подравняване с кашида
+	End Items with a Dot	Завършване на точките с точка
+	Format with ServiceWord-AR	Форматиране със ServiceWord-AR
+	Renumber\nCycle	Преномерирай\nцикъла
+	Service\nList	Служебен\nсписък
+	Final Dot	Крайна точка
+	Selection Only	Само селекцията
+	Renumber the Selection	Преномерирай селекцията
+	Low	Ниска
+	High	Висока
+	Low Kashida	Ниска кашида
+	Medium Kashida	Средна кашида
+	High Kashida	Висока кашида
+	Distribute	Разпредели
+	Format with\nServiceWord-AR	Форматирай със\nServiceWord-AR
+	With PDF	С PDF
+	Format and make the print PDF	Форматиране и създаване на PDF за печат
+	Arabic-Indic 1. 2. 3.	Арабско-индийски 1. 2. 3.
+	Abjad a. b. c.	Абджад а. б. в.
+	Service Cycle 1. a. (1).	Служебен цикъл 1. а. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Двигателят ServiceWord-AR не е намерен (поставете папката servicewordar до програмата)

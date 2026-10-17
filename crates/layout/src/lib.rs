@@ -13,6 +13,7 @@ mod contour;
 pub mod display;
 pub mod fields;
 pub mod hit;
+pub mod kashida;
 pub mod kinsoku;
 pub mod math;
 pub mod outline;
@@ -4128,6 +4129,8 @@ pub fn now_ms() -> f64 {
 mod tests;
 #[cfg(test)]
 mod tests_bidi;
+#[cfg(test)]
+mod tests_kashida;
 #[cfg(test)]
 mod tests_complex;
 #[cfg(test)]

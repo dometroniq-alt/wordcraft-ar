@@ -2243,3 +2243,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	Uska
 	Medium	Srednja
+
+# Service writing (WordCraft AR)
+	Service	Služba
+	Engine	Motor
+	Classification	Klasifikacija
+	Kashida	Kašida
+	Renumber by the Service Cycle	Prenumeriši po službenom ciklusu
+	Service Multilevel List	Službena višenivovska lista
+	Page Numbers ( n - N )	Brojevi stranica ( n - N )
+	Kashida Justification	Poravnanje kašidom
+	End Items with a Dot	Završi stavke tačkom
+	Format with ServiceWord-AR	Oblikuj pomoću ServiceWord-AR
+	Renumber\nCycle	Prenumeriši\nciklus
+	Service\nList	Službena\nlista
+	Final Dot	Završna tačka
+	Selection Only	Samo izbor
+	Renumber the Selection	Prenumeriši izbor
+	Low	Niska
+	High	Visoka
+	Low Kashida	Niska kašida
+	Medium Kashida	Srednja kašida
+	High Kashida	Visoka kašida
+	Distribute	Rasporedi
+	Format with\nServiceWord-AR	Oblikuj pomoću\nServiceWord-AR
+	With PDF	Sa PDF-om
+	Format and make the print PDF	Oblikuj i napravi PDF za štampu
+	Arabic-Indic 1. 2. 3.	Arapsko-indijski 1. 2. 3.
+	Abjad a. b. c.	Abdžad a. b. v.
+	Service Cycle 1. a. (1).	Službeni ciklus 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR motor nije pronađen (stavite fasciklu servicewordar pored programa)

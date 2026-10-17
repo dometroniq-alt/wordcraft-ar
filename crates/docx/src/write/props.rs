@@ -154,6 +154,9 @@ pub fn align_val(a: Align) -> &'static str {
         Align::Right => "right",
         Align::Justify => "both",
         Align::Distribute => "distribute",
+        Align::LowKashida => "lowKashida",
+        Align::MediumKashida => "mediumKashida",
+        Align::HighKashida => "highKashida",
     }
 }
 
@@ -434,7 +437,7 @@ fn tblpr_inner(w: &mut W, t: &TableProps) {
         w.empty("w:tblW", &[("w:w", "0"), ("w:type", "auto")]);
     }
     if let Some(a) = t.align {
-        w.val("w:jc", align_val(if a == Align::Justify || a == Align::Distribute { Align::Left } else { a }));
+        w.val("w:jc", align_val(if a.is_justified() { Align::Left } else { a }));
     }
     if let Some(i) = t.indent {
         w.empty("w:tblInd", &[("w:w", &twips(i)), ("w:type", "dxa")]);
@@ -489,7 +492,7 @@ fn tblprex(w: &mut W, t: &TableProps) {
         w.empty("w:tblW", &[("w:w", &twips(v.max(0.0))), ("w:type", "dxa")]);
     }
     if let Some(a) = t.align {
-        w.val("w:jc", align_val(if a == Align::Justify || a == Align::Distribute { Align::Left } else { a }));
+        w.val("w:jc", align_val(if a.is_justified() { Align::Left } else { a }));
     }
     if let Some(i) = t.indent {
         w.empty("w:tblInd", &[("w:w", &twips(i)), ("w:type", "dxa")]);

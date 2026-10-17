@@ -239,7 +239,8 @@ impl Default for ViewState {
             show_markup: true,
             track_changes_pane: false,
             proofing: true,
-            numeral: NumeralMode::default(),
+            // WordCraft AR: Hindi digits inside Arabic text, Western digits elsewhere.
+            numeral: NumeralMode::Context,
             hide_ink: false,
             draw: Default::default(),
             field_codes: false,

@@ -2267,3 +2267,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	Kitsas
 	Medium	Keskmine
+
+# Service writing (WordCraft AR)
+	Service	Teenistus
+	Engine	Mootor
+	Classification	Salastatus
+	Kashida	Kašida
+	Renumber by the Service Cycle	Nummerda teenistustsükli järgi
+	Service Multilevel List	Teenistuse mitmetasemeline loend
+	Page Numbers ( n - N )	Leheküljenumbrid ( n - N )
+	Kashida Justification	Kašida-rööpjoondus
+	End Items with a Dot	Lõpeta punktid punktiga
+	Format with ServiceWord-AR	Vorminda ServiceWord-AR-iga
+	Renumber\nCycle	Nummerda\ntsükkel
+	Service\nList	Teenistuse\nloend
+	Final Dot	Lõpupunkt
+	Selection Only	Ainult valik
+	Renumber the Selection	Nummerda valik
+	Low	Madal
+	High	Kõrge
+	Low Kashida	Madal kašida
+	Medium Kashida	Keskmine kašida
+	High Kashida	Kõrge kašida
+	Distribute	Jaota
+	Format with\nServiceWord-AR	Vorminda\nServiceWord-AR-iga
+	With PDF	Koos PDF-iga
+	Format and make the print PDF	Vorminda ja loo prindi-PDF
+	Arabic-Indic 1. 2. 3.	Araabia-india 1. 2. 3.
+	Abjad a. b. c.	Abdžad a. b. c.
+	Service Cycle 1. a. (1).	Teenistustsükkel 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR mootorit ei leitud (pange kaust servicewordar programmi kõrvale)

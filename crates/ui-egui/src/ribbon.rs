@@ -9,7 +9,7 @@ use crate::theme::{Tokens, medium, regular, semibold};
 use crate::widgets::{CONTENT_H, LABEL_H, big, big_toggle, combo, font_combo, group, menu_button, small, split};
 use crate::{WordApp, icons};
 
-pub const TABS: [&str; 13] = wordcraft_engine::ribbon::TABS;
+pub const TABS: [&str; 14] = wordcraft_engine::ribbon::TABS;
 
 /// True when the caret/selection touches a picture (#147).
 pub fn has_picture_selected(s: &wordcraft_engine::Session) -> bool {
@@ -369,6 +369,7 @@ pub fn show(app: &mut WordApp, ui: &mut Ui) {
                         "View" => view(app, ui),
                         "Developer" => developer(app, ui),
                         "Zotero" => zotero(app, ui),
+                        "Service" => service(app, ui),
                         "Help" => help(app, ui),
                         "Table Design" => table_design(app, ui),
                         "Table Layout" => table_layout(app, ui),
@@ -905,6 +906,8 @@ fn home(app: &mut WordApp, ui: &mut Ui) {
                         ("A. B. C.", "upperLetter"),
                         ("a) b) c)", "lowerLetter"),
                         ("i. ii. iii.", "lowerRoman"),
+                        ("Arabic-Indic 1. 2. 3.", "arabicNumbered"),
+                        ("Abjad a. b. c.", "arabicAbjad"),
                     ] {
                         mi(ui, app, l, "para.numbering", json!({"kind": k}));
                     }
@@ -915,6 +918,7 @@ fn home(app: &mut WordApp, ui: &mut Ui) {
                 split(ui, app, "multilevel", "Multilevel List", "para.multilevel", json!({}), lists.multilevel, None, |ui, app| {
                     mi(ui, app, "1. 1.1. 1.1.1.", "para.multilevel", json!({"kind": "legal"}));
                     mi(ui, app, "I. A. 1. a.", "para.multilevel", json!({"kind": "outline"}));
+                    mi(ui, app, "Service Cycle 1. a. (1).", "para.multilevel", json!({"kind": "service"}));
                     ui.separator();
                     mi(ui, app, "Define New Multilevel List…", "list.define", json!({}));
                     ui.separator();
@@ -1731,6 +1735,39 @@ fn mailings(app: &mut WordApp, ui: &mut Ui) {
 }
 
 /// Zotero (`docs/zotero.md`): the Zotero desktop app does the work in its own window.
+/// «كتابات الخدمة» — WordCraft AR's service-writing tab: the numbering cycle, the classification
+/// word, Arabic-Indic page numbers, kashida justification and the hand-off to ServiceWord-AR.
+fn service(app: &mut WordApp, ui: &mut Ui) {
+    group(ui, "Numbering", None, app, |ui, app| {
+        big(ui, app, "serviceRenumber", "Renumber\nCycle", "service.renumber", json!({}), false);
+        big(ui, app, "serviceList", "Service\nList", "service.applyList", json!({}), false);
+        stack(ui, |ui| {
+            small(ui, app, "finalDot", Some("Final Dot"), "End Items with a Dot", "service.finalDot", json!({}), false);
+            small(ui, app, "serviceSelection", Some("Selection Only"), "Renumber the Selection", "service.renumber", json!({"scope": "selection"}), false);
+        });
+    });
+    group(ui, "Classification", None, app, |ui, app| {
+        menu_button(ui, app, "classification", Some("Classification"), "Classification", true, "service.classification", |ui, app| {
+            for c in wordcraft_engine::cmd::service::CLASSIFICATIONS {
+                mi_text(ui, app, c, "service.classification", json!({"value": c}));
+            }
+        });
+        big(ui, app, "servicePages", "Page\nNumber", "service.pageNumbers", json!({}), false);
+    });
+    group(ui, "Kashida", None, app, |ui, app| {
+        let cur = app.session.doc.para_at(&app.session.sel.focus).map(|p| app.session.doc.styles.resolve_para(&p.props).align);
+        small(ui, app, "kashidaOff", Some("Justify"), "Justify", "service.kashida", json!({"value": "off"}), cur == Some(wordcraft_doc::props::Align::Justify));
+        small(ui, app, "kashidaLow", Some("Low"), "Low Kashida", "service.kashida", json!({"value": "low"}), cur == Some(wordcraft_doc::props::Align::LowKashida));
+        small(ui, app, "kashidaMedium", Some("Medium"), "Medium Kashida", "service.kashida", json!({"value": "medium"}), cur == Some(wordcraft_doc::props::Align::MediumKashida));
+        small(ui, app, "kashidaHigh", Some("High"), "High Kashida", "service.kashida", json!({"value": "high"}), cur == Some(wordcraft_doc::props::Align::HighKashida));
+        small(ui, app, "distribute", Some("Distribute"), "Distribute", "service.kashida", json!({"value": "distribute"}), cur == Some(wordcraft_doc::props::Align::Distribute));
+    });
+    group(ui, "Engine", None, app, |ui, app| {
+        big(ui, app, "serviceEngine", "Format with\nServiceWord-AR", "service.external", json!({}), false);
+        small(ui, app, "serviceEnginePdf", Some("With PDF"), "Format and make the print PDF", "service.external", json!({"pdf": true}), false);
+    });
+}
+
 fn zotero(app: &mut WordApp, ui: &mut Ui) {
     group(ui, "Citations", None, app, |ui, app| {
         big(ui, app, "citation", "Add/Edit\nCitation", "ui.zotero.addEditCitation", json!({}), false);

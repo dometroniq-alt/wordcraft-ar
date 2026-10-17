@@ -2628,3 +2628,33 @@
 # Reading Mode column widths (#1040)
 	Narrow	Keskeny
 	Medium	Közepes
+
+# Service writing (WordCraft AR)
+	Service	Szolgálat
+	Engine	Motor
+	Classification	Minősítés
+	Kashida	Kasida
+	Renumber by the Service Cycle	Újraszámozás a szolgálati ciklus szerint
+	Service Multilevel List	Szolgálati többszintű lista
+	Page Numbers ( n - N )	Oldalszámok ( n - N )
+	Kashida Justification	Kasida sorkizárás
+	End Items with a Dot	Tételek lezárása ponttal
+	Format with ServiceWord-AR	Formázás a ServiceWord-AR-ral
+	Renumber\nCycle	Ciklus\nújraszámozása
+	Service\nList	Szolgálati\nlista
+	Final Dot	Záró pont
+	Selection Only	Csak a kijelölés
+	Renumber the Selection	Kijelölés újraszámozása
+	Low	Alacsony
+	High	Magas
+	Low Kashida	Alacsony kasida
+	Medium Kashida	Közepes kasida
+	High Kashida	Magas kasida
+	Distribute	Elosztás
+	Format with\nServiceWord-AR	Formázás a\nServiceWord-AR-ral
+	With PDF	PDF-fel
+	Format and make the print PDF	Formázás és nyomtatási PDF készítése
+	Arabic-Indic 1. 2. 3.	Arab-indiai 1. 2. 3.
+	Abjad a. b. c.	Abdzsad a. b. c.
+	Service Cycle 1. a. (1).	Szolgálati ciklus 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	A ServiceWord-AR motor nem található (tegye a servicewordar mappát a program mellé)

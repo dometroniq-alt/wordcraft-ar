@@ -2641,3 +2641,33 @@ preview	Title	Esempio
 # Reading Mode column widths (#1040)
 	Narrow	Stretta
 	Medium	Media
+
+# Service writing (WordCraft AR)
+	Service	Servizio
+	Engine	Motore
+	Classification	Classificazione
+	Kashida	Kashida
+	Renumber by the Service Cycle	Rinumera secondo il ciclo di servizio
+	Service Multilevel List	Elenco a più livelli di servizio
+	Page Numbers ( n - N )	Numeri di pagina ( n - N )
+	Kashida Justification	Giustificazione kashida
+	End Items with a Dot	Termina le voci con un punto
+	Format with ServiceWord-AR	Formatta con ServiceWord-AR
+	Renumber\nCycle	Rinumera\nciclo
+	Service\nList	Elenco di\nservizio
+	Final Dot	Punto finale
+	Selection Only	Solo selezione
+	Renumber the Selection	Rinumera la selezione
+	Low	Bassa
+	High	Alta
+	Low Kashida	Kashida bassa
+	Medium Kashida	Kashida media
+	High Kashida	Kashida alta
+	Distribute	Distribuisci
+	Format with\nServiceWord-AR	Formatta con\nServiceWord-AR
+	With PDF	Con PDF
+	Format and make the print PDF	Formatta e crea il PDF di stampa
+	Arabic-Indic 1. 2. 3.	Arabo-indiano 1. 2. 3.
+	Abjad a. b. c.	Abjad a. b. c.
+	Service Cycle 1. a. (1).	Ciclo di servizio 1. a. (1).
+	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Motore ServiceWord-AR non trovato (metti la cartella servicewordar accanto al programma)

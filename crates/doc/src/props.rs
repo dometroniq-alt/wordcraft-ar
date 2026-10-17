@@ -485,9 +485,22 @@ pub enum Align {
     Right,
     Justify,
     Distribute,
+    /// Word's kashida justification levels (Arabic): justified, with the slack going into the
+    /// letters' joining strokes rather than the spaces, a little / mostly / entirely.
+    LowKashida,
+    MediumKashida,
+    HighKashida,
 }
 
 impl Align {
+    /// Justified text (the line is filled to both edges) in any of its forms.
+    pub fn is_justified(self) -> bool {
+        matches!(self, Align::Justify | Align::Distribute | Align::LowKashida | Align::MediumKashida | Align::HighKashida)
+    }
+    /// A kashida-justified alignment (`lowKashida`, `mediumKashida`, `highKashida`).
+    pub fn is_kashida(self) -> bool {
+        matches!(self, Align::LowKashida | Align::MediumKashida | Align::HighKashida)
+    }
     /// Alignment is logical (`Left` is the start edge, ISO 29500 `start`): the alignment as seen
     /// on the page, or the logical one for a visual choice, in a paragraph that reads right to
     /// left when `rtl` (Left and Right swap; the swap is its own inverse).

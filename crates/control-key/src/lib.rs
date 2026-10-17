@@ -3,23 +3,36 @@
 
 use std::path::{Path, PathBuf};
 
+/// Product name of this fork (WordCraft AR: WordCraft with complete Arabic typography and the
+/// military service-writing tools). Kept apart from upstream WordCraft: its own window title,
+/// app id and settings folder, so both can be installed side by side and an upstream update
+/// never overwrites this fork's settings.
+pub const PRODUCT: &str = "WordCraft AR";
+/// Arabic display name.
+pub const PRODUCT_AR: &str = "وورد كرافت العربي";
+/// Settings folder name (`%APPDATA%\WordCraft-AR`, `~/.config/wordcraft-ar`).
+pub const SETTINGS_FOLDER: &str = "WordCraft-AR";
+pub const SETTINGS_FOLDER_UNIX: &str = "wordcraft-ar";
+/// Desktop/app id.
+pub const APP_ID: &str = "ai.storyteller.wordcraft-ar";
+
 /// The app's settings folder (preferences, logs, key files): macOS
-/// `~/Library/Application Support/WordCraft`, Windows `%APPDATA%\WordCraft`, otherwise
-/// `$XDG_CONFIG_HOME/wordcraft` or `~/.config/wordcraft`.
+/// `~/Library/Application Support/WordCraft-AR`, Windows `%APPDATA%\WordCraft-AR`, otherwise
+/// `$XDG_CONFIG_HOME/wordcraft-ar` or `~/.config/wordcraft-ar`.
 /// `WORDCRAFT_PROFILE_DIR` overrides the entire folder for isolated runs.
 pub fn settings_dir() -> Option<PathBuf> {
     if let Some(path) = std::env::var_os("WORDCRAFT_PROFILE_DIR").filter(|p| !p.is_empty()) {
         return Some(PathBuf::from(path));
     }
     if cfg!(target_os = "macos") {
-        std::env::var_os("HOME").map(|h| PathBuf::from(h).join("Library/Application Support/WordCraft"))
+        std::env::var_os("HOME").map(|h| PathBuf::from(h).join("Library/Application Support").join(SETTINGS_FOLDER))
     } else if cfg!(windows) {
-        std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join("WordCraft"))
+        std::env::var_os("APPDATA").map(|a| PathBuf::from(a).join(SETTINGS_FOLDER))
     } else {
         std::env::var_os("XDG_CONFIG_HOME")
             .map(PathBuf::from)
             .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".config")))
-            .map(|c| c.join("wordcraft"))
+            .map(|c| c.join(SETTINGS_FOLDER_UNIX))
     }
 }
 
@@ -81,7 +94,7 @@ mod tests {
     fn settings_dir_is_the_apps_folder() {
         if let Some(d) = settings_dir() {
             let name = d.file_name().and_then(|n| n.to_str()).unwrap_or("");
-            assert!(name == "wordcraft" || name == "WordCraft", "{}", d.display());
+            assert!(name == SETTINGS_FOLDER_UNIX || name == SETTINGS_FOLDER, "{}", d.display());
         }
     }
 }
