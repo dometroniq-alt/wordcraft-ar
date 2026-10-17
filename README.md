@@ -152,6 +152,14 @@ scripts/sync-upstream.sh      # fetch upstream/main, merge it into ar-main, run 
 Conflicts in the files this fork owns (`scripts/ar-owned.txt`) are resolved in the fork's favour
 and reviewed by hand; everything else takes upstream's side.
 
+## Releasing
+
+A release is one commit: write `docs/releases/<tag>.md`, put the tag in `ar-release.txt`
+(`v0.7.0-ar.3`), commit with a message starting `release:` and push `ar-main`. The
+[Release (WordCraft AR)](.github/workflows/release-ar.yml) workflow builds the installer and the
+portable zip on a Windows runner (embedded Python included), tags the commit and publishes the
+GitHub Release with those notes. Enable Actions on the fork once (the Actions tab) for it to run.
+
 ## Roadmap
 
 - Right-to-left dialogs and task panes (the ribbon, title bar and status bar already mirror).

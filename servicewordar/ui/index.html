@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>منسّق كتابات الخدمة</title>
+<style>
+:root{
+  --paper:#F4F5F2; --panel:#E8EAE4; --ink:#1B1E1A; --ink-2:#4B5046; --line:#C9CDC3;
+  --olive:#4A5A38; --olive-2:#6D7F57; --olive-soft:#DDE3D2; --warn:#8A3A2E; --ok:#2F6B3A;
+  --radius:6px; --font:"Segoe UI","Tahoma","Noto Sans Arabic","Arial",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --paper:#1C1E1A; --panel:#262924; --ink:#ECEDE8; --ink-2:#AEB3A6; --line:#3B3F38;
+         --olive:#9DB07F; --olive-2:#7E9263; --olive-soft:#2F3628; --warn:#E08A7D; --ok:#8FCB97; }
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font);font-size:15px;line-height:1.7}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--olive)}
+.app{display:grid;grid-template-rows:auto 1fr auto;height:100vh}
+
+/* ---------- top bar ---------- */
+.bar{display:flex;align-items:center;gap:18px;padding:10px 22px;border-bottom:1px solid var(--line);background:var(--paper)}
+.brand{font-weight:600;font-size:17px;letter-spacing:0}
+.brand small{display:block;font-weight:400;color:var(--ink-2);font-size:12.5px}
+.state{margin-inline-start:auto;color:var(--ink-2);font-size:13px}
+.state b{color:var(--ink);font-weight:600}
+.bar .ghost{background:none;border:1px solid var(--line);border-radius:var(--radius);padding:5px 12px;cursor:pointer}
+.bar .ghost:hover{border-color:var(--olive)}
+
+/* ---------- main ---------- */
+.main{display:grid;grid-template-columns:1fr 340px;min-height:0}
+.main.settings-hidden{grid-template-columns:1fr 0}
+.stage{min-height:0;overflow:auto;padding:22px 26px}
+.rail{border-inline-start:1px solid var(--line);background:var(--panel);overflow:auto;padding:16px 18px 40px;min-width:0}
+.main.settings-hidden .rail{display:none}
+
+/* drop zone */
+.drop{border:1.5px dashed var(--line);border-radius:var(--radius);padding:52px 24px;text-align:center;color:var(--ink-2);
+      background:transparent;transition:border-color .15s,background .15s;cursor:pointer}
+.drop.over{border-color:var(--olive);background:var(--olive-soft)}
+.drop h2{margin:0 0 6px;font-size:20px;font-weight:600;color:var(--ink)}
+.drop p{margin:0}
+.drop input{display:none}
+.pathrow{display:flex;gap:8px;margin-top:14px}
+.pathrow input{flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);direction:ltr;text-align:left}
+.or{color:var(--ink-2);font-size:13px;margin:16px 0 0}
+
+/* document preview */
+.doc{background:#fff;color:#111;border:1px solid var(--line);border-radius:var(--radius);padding:34px 40px;max-width:900px;margin:0 auto;
+     box-shadow:0 1px 0 rgba(0,0,0,.04)}
+@media (prefers-color-scheme: dark){ .doc{background:#F7F7F3;color:#111} }
+.doc .para{display:flex;gap:10px;align-items:baseline;padding:2px 0;position:relative}
+.doc .para .m{flex:none;white-space:nowrap}
+.doc .para .t{flex:1}
+.doc .para.cover{justify-content:center;font-size:1.6em;font-weight:700;margin-bottom:14px}
+.doc .para.main{font-size:1.25em;font-weight:700;margin-top:14px}
+.doc .para.section{font-size:1.35em;font-weight:700;margin-top:16px;background:#F7CAAC55;padding-inline:6px}
+.doc .para.heading{font-weight:700;margin-top:8px}
+.doc .para.item,.doc .para.body{text-align:justify;text-justify:kashida}
+.doc .para.pagebreak{border-top:1px dashed #999;margin:14px 0;height:0;padding:0}
+.doc .para.pagebreak::after{content:"فاصل صفحة";position:absolute;top:-11px;right:50%;transform:translateX(50%);font-size:11px;color:#777;background:#fff;padding:0 6px;font-family:var(--font)}
+.doc .para .chg{position:absolute;inset-inline-start:calc(100% + 14px);top:4px;font-family:var(--font);font-size:11px;color:var(--olive-2);white-space:nowrap;opacity:.95;max-width:150px;overflow:hidden;text-overflow:ellipsis;direction:rtl}
+.doc:not(.show-changes) .para.removed{display:none}
+.doc.show-changes .para:hover{outline:1px solid var(--olive-soft)}
+.doc .para.changed .t{box-shadow:inset 3px 0 0 var(--olive-soft)}
+.docwrap{position:relative;padding-inline-end:175px}
+.doc .para.removed{color:#999;text-decoration:line-through;font-size:.85em}
+
+/* tabs & results */
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:0 0 16px}
+.tabs button{background:none;border:0;border-bottom:2px solid transparent;padding:8px 14px;cursor:pointer;color:var(--ink-2)}
+.tabs button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--olive)}
+.tabs .sp{flex:1}
+.tabs label{font-size:13px;color:var(--ink-2);display:flex;align-items:center;gap:6px}
+table.rep{width:100%;border-collapse:collapse;font-size:14px}
+table.rep th,table.rep td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:start;vertical-align:top}
+table.rep th{color:var(--ink-2);font-weight:600}
+table.rep td.num{font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.counts{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:10px;margin-bottom:20px}
+.count{border:1px solid var(--line);border-radius:var(--radius);padding:10px 12px;background:var(--panel)}
+.count b{display:block;font-size:22px;font-weight:600;line-height:1.2}
+.count span{color:var(--ink-2);font-size:13px}
+textarea.json{width:100%;min-height:420px;direction:ltr;text-align:left;font-family:Consolas,"Courier New",monospace;font-size:13px;
+  border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);padding:10px;line-height:1.5}
+
+/* ---------- settings rail ---------- */
+.rail h3{font-size:13.5px;font-weight:600;color:var(--ink-2);margin:18px 0 8px;padding-bottom:4px;border-bottom:1px solid var(--line)}
+.rail h3:first-child{margin-top:0}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;align-items:center}
+.row.one{grid-template-columns:1fr}
+.row label{font-size:13px;color:var(--ink-2)}
+.field{display:flex;flex-direction:column;gap:3px}
+.field input,.field select{padding:6px 8px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);width:100%}
+.field input[type=number]{direction:ltr;text-align:center}
+.role{border:1px solid var(--line);border-radius:var(--radius);padding:8px 10px;margin-bottom:8px;background:var(--paper)}
+.role .hd{display:flex;align-items:center;gap:8px;font-size:13.5px;margin-bottom:6px}
+.role .hd b{font-weight:600}
+.role .hd span{color:var(--ink-2);font-size:12px}
+.role .grid{display:grid;grid-template-columns:1fr 62px 118px;gap:6px;align-items:end}
+.tri{display:flex;gap:2px}
+.tri button{flex:1;padding:5px 0;font-size:11.5px;white-space:nowrap;background:var(--panel);border:1px solid var(--line);cursor:pointer}
+.tri button:first-child{border-radius:0 var(--radius) var(--radius) 0}
+.tri button:last-child{border-radius:var(--radius) 0 0 var(--radius)}
+.tri button[aria-pressed=true]{background:var(--olive);color:#fff;border-color:var(--olive)}
+.check{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:6px 0}
+.check input{accent-color:var(--olive)}
+.fmt{display:grid;grid-template-columns:auto 1fr;gap:6px 10px;align-items:center;font-size:13px}
+.fmt input{padding:4px 6px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);direction:rtl}
+.fmt .ex{color:var(--ink-2);font-size:12px}
+.railbtns{display:flex;gap:8px;margin-top:16px}
+.railbtns button{flex:1;padding:7px 10px;border:1px solid var(--line);border-radius:var(--radius);background:var(--paper);cursor:pointer}
+.railbtns button:hover{border-color:var(--olive)}
+.hint{font-size:12.5px;color:var(--ink-2);margin:4px 0 0;line-height:1.5}
+
+/* ---------- bottom bar ---------- */
+.foot{display:flex;align-items:center;gap:14px;padding:12px 22px;border-top:1px solid var(--line);background:var(--panel)}
+.foot .file{color:var(--ink-2);font-size:13.5px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.foot .file b{color:var(--ink);font-weight:600}
+.run{margin-inline-start:auto;background:var(--olive);color:#fff;border:0;border-radius:var(--radius);padding:11px 26px;font-size:16px;font-weight:600;cursor:pointer;min-width:190px}
+.run:disabled{opacity:.45;cursor:default}
+.run:not(:disabled):hover{background:var(--olive-2)}
+.sec{background:none;border:1px solid var(--line);border-radius:var(--radius);padding:9px 14px;cursor:pointer}
+.sec:hover{border-color:var(--olive)}
+.sec[hidden]{display:none}
+.warnbox{border:1px solid var(--warn);color:var(--warn);border-radius:var(--radius);padding:8px 12px;margin-bottom:12px;font-size:13.5px;background:transparent}
+.doc .para .lay{font-family:var(--font);font-size:10.5px;color:#8a8f84;margin-inline-start:8px;white-space:nowrap}
+.msg{font-size:13.5px}
+.msg.err{color:var(--warn)}
+.msg.ok{color:var(--ok)}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--olive);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px;margin-inline-end:6px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion: reduce){ .spin{animation:none} }
+:focus-visible{outline:2px solid var(--olive);outline-offset:2px}
+@media (max-width:900px){ .main{grid-template-columns:1fr} .rail{border:0;border-top:1px solid var(--line)} .docwrap{padding-inline-end:0} .doc .para .chg{display:none} }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="bar">
+    <div class="brand">منسّق كتابات الخدمة<small>ترقيم هرمي · محاذاة من اليمين · كشيدة مضبوطة · بلا إنترنت</small></div>
+    <div class="state" id="state">جاهز · <b id="rulesState">القواعد الافتراضية</b></div>
+    <button class="ghost" id="toggleRail" title="إظهار/إخفاء الإعدادات (Ctrl+,)">الإعدادات</button>
+  </header>
+
+  <div class="main" id="main">
+    <section class="stage" id="stage">
+      <div id="emptyView">
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="اختر ملف Word">
+          <h2>أسقط ملف Word هنا</h2>
+          <p>أو اضغط للاختيار. الأصل لا يُلمس؛ تُكتب نسخة جديدة باسم «‎…_منسق.docx» في نفس المجلد.</p>
+          <input type="file" id="fileInput" accept=".docx">
+        </div>
+        <p class="or">أو اكتب مسار الملف على هذا الجهاز مباشرة (أسرع، والنتيجة تُحفظ بجانب الأصل):</p>
+        <div class="pathrow">
+          <input id="pathInput" placeholder="C:\Users\MSI\Desktop\واجبات مستوصف طبي11.docx" spellcheck="false">
+        </div>
+      </div>
+
+      <div id="resultView" hidden>
+        <div class="tabs" role="tablist">
+          <button role="tab" aria-selected="true" data-tab="preview">المعاينة الهيكلية</button>
+          <button role="tab" aria-selected="false" data-tab="changes">التغييرات</button>
+          <button role="tab" aria-selected="false" data-tab="rules">القواعد (JSON)</button>
+          <span class="sp"></span>
+          <label><input type="checkbox" id="showChanges" checked> إظهار ما تغيّر بجانب كل فقرة</label>
+        </div>
+        <div id="fontWarn" class="warnbox" hidden></div>
+        <div id="tab-preview">
+          <p class="hint" style="margin-bottom:10px">معاينة لبنية الناتج (المستويات والترقيم والنص بعد التنظيف). ليست صورة صفحة Word: الالتفاف الفعلي والكشيدة يحددهما Word بالخط الأصلي عند فتح الملف.</p>
+          <div class="docwrap"><div class="doc show-changes" id="doc"></div></div>
+        </div>
+        <div id="tab-changes" hidden>
+          <div class="counts" id="counts"></div>
+          <table class="rep"><thead><tr><th>#</th><th>الدور</th><th>المستوى</th><th>الترقيم</th><th>النص</th><th>التغييرات</th></tr></thead><tbody id="repBody"></tbody></table>
+        </div>
+        <div id="tab-rules" hidden>
+          <p class="hint" style="margin-bottom:8px">هذا هو ملف القواعد الكامل الذي يحكم التنسيق (<span id="rulesPath" dir="ltr"></span>). عدّله هنا أو من لوحة الإعدادات؛ الاثنان يكتبان الملف نفسه.</p>
+          <textarea class="json" id="rulesJson" spellcheck="false"></textarea>
+          <div class="railbtns" style="max-width:420px"><button id="applyJson">تطبيق وحفظ</button><button id="resetJson">إعادة الافتراضي</button></div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="rail" id="rail">
+      <h3>الصفحة والهوامش</h3>
+      <div class="row one"><div class="field"><label>تخطيط الصفحة</label>
+        <select id="marginPreset">
+          <option value="tight">استغلال العرض: يمين/يسار ١٫٢٧ سم، أعلى/أسفل كما في الملف</option>
+          <option value="narrow">ضيّق: ١٫٢٧ سم من كل الجهات</option>
+          <option value="moderate">متوسط: يمين/يسار ١٫٩ سم، أعلى/أسفل ٢٫٥٤</option>
+          <option value="normal">عادي: ٢٫٥٤ سم من كل الجهات</option>
+          <option value="file">كما في الملف</option>
+          <option value="custom">مخصص</option>
+        </select></div></div>
+      <div class="row" id="customMargins" hidden>
+        <div class="field"><label>يمين (سم)</label><input type="number" id="mRight" step="0.1" min="0.5" max="5"></div>
+        <div class="field"><label>يسار (سم)</label><input type="number" id="mLeft" step="0.1" min="0.5" max="5"></div>
+        <div class="field"><label>أعلى (سم)</label><input type="number" id="mTop" step="0.1" min="0.5" max="5" placeholder="كما هو"></div>
+        <div class="field"><label>أسفل (سم)</label><input type="number" id="mBottom" step="0.1" min="0.5" max="5" placeholder="كما هو"></div>
+      </div>
+      <p class="hint">كل عرض نص جديد يُعاد عليه حساب الأعمدة والالتفاف والكشيدة تلقائيًا.</p>
+      <div class="row one" style="margin-top:8px"><div class="field"><label>درجة الكتمان (الرأس والتذييل)</label>
+        <select id="classification"><option>عام</option><option>محدود</option><option>سري</option><option>سري وشخصي</option><option>سري للغاية</option></select></div></div>
+      <div class="row">
+        <div class="field"><label>ترقيم الصفحات من</label><input type="number" id="pgStart" min="1" step="1"></div>
+        <div class="field"><label>إلى (فارغ = تلقائي)</label><input type="number" id="pgEnd" min="1" step="1" placeholder="تلقائي"></div>
+      </div>
+      <p class="hint">التذييل: «( رقم الصفحة - الأخيرة )» بالأرقام العربية الهندية، وتحته درجة الكتمان. الغلاف لا يُرقَّم.</p>
+
+      <h3>الخطوط والأحجام</h3>
+      <p class="hint" style="margin:0 0 8px">«كما هو» = يبقى خط/حجم الملف الأصلي. غيّر فقط ما تريد توحيده.</p>
+      <div id="roles"></div>
+
+      <h3>الضبط والكشيدة</h3>
+      <div class="row one"><div class="field"><label>محاذاة المتن والبنود</label>
+        <select id="align">
+          <option value="lowKashida">ضبط مع كشيدة خفيفة (Justify Low)</option>
+          <option value="mediumKashida">ضبط مع كشيدة متوسطة (Justify Medium)</option>
+          <option value="highKashida">ضبط مع كشيدة عالية (Justify High)</option>
+          <option value="both">ضبط بالمسافات فقط (Justify)</option>
+          <option value="start">محاذاة يمين بلا ضبط</option>
+        </select></div></div>
+      <label class="check"><input type="checkbox" id="balance" checked> موازنة الأسطر بقياس الخطوط الحقيقية (لا كلمة وحيدة في سطر)</label>
+      <label class="check"><input type="checkbox" id="fillKashida" checked> مدّ كل سطر إلى نهاية السطر بالكشيدة (حتى لو كان كلمة واحدة)</label>
+      <div class="row">
+        <div class="field"><label>لا يُمدّ السطر إذا امتلأ أقل من ٪ (٠ = يُمدّ دائمًا)</label><input type="number" id="stretchMin" min="0" max="95" step="5"></div>
+        <div class="field"><label>هامش أمان العرض ٪</label><input type="number" id="lineSafety" min="0" max="15" step="1"></div>
+      </div>
+      <label class="check"><input type="checkbox" id="orphan"> في الفقرات غير الممدودة: ضمّ آخر كلمتين معًا</label>
+      <label class="check"><input type="checkbox" id="keepLines" checked disabled> عدم تقسيم الفقرة بين صفحتين (دائم)</label>
+
+      <h3>الترقيم</h3>
+      <div class="fmt" id="fmts"></div>
+      <div class="row" style="margin-top:8px">
+        <div class="field"><label>حروف تأخذ تطويلًا (جـ هـ)</label><input id="tatweelLetters" value="ج ه"></div>
+        <div class="field"><label>الأرقام</label><select id="digits"><option value="1">عربية هندية ١٢٣</option><option value="0">إنكليزية 123</option></select></div>
+      </div>
+      <label class="check"><input type="checkbox" id="keepTop" checked> إبقاء رقم البداية للمستوى الأول كما في الملف (مثل «٤.»)</label>
+      <label class="check"><input type="checkbox" id="firstTop" checked> أول مستوى في المستند = المستوى الأول «١.» (حتى لو كُتب «أ.»)</label>
+      <label class="check"><input type="checkbox" id="digitsText" checked> تحويل الأرقام داخل النص إلى عربية هندية</label>
+
+      <h3>التنظيف</h3>
+      <label class="check"><input type="checkbox" id="softBreaks" checked> حذف كسور الأسطر اليدوية (Shift+Enter) داخل الفقرة</label>
+      <label class="check"><input type="checkbox" id="tatweel" checked> حذف التطويل المكتوب داخل الكلمات</label>
+      <label class="check"><input type="checkbox" id="spaces" checked> توحيد المسافات وإزالة المكرّر منها</label>
+      <label class="check"><input type="checkbox" id="empties" checked> حذف الفقرات الفارغة (تبقى فواصل الصفحات)</label>
+      <div class="row one" style="margin-top:6px"><div class="field"><label>فاصل صفحة قبل كل شعبة (المستوى أ. ب. جـ.)</label>
+        <select id="pbSection"><option value="keep">كما في الملف</option><option value="always">دائمًا</option></select></div></div>
+
+      <div class="railbtns"><button id="saveRules">حفظ القواعد</button><button id="reloadRules">استرجاع المحفوظ</button></div>
+      <p class="hint">القواعد تُحفظ في rules.json بجانب الأداة، وتُطبَّق تلقائيًا على كل ملف لاحق. هذا هو «التدريب»: كل تصحيح تثبّته هنا يتكرر بلا إعادة شرح.</p>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <div class="file" id="fileLabel">لم يُختر ملف بعد</div>
+    <span class="msg" id="msg"></span>
+    <a class="sec" id="dl" hidden>تنزيل الناتج</a>
+    <button class="sec" id="finalPdf" hidden title="يصيّر الصفحات ويطبع أرقام الصفحات بالعربية الهندية فوق كل صفحة بموضع آمن">نسخة الطباعة (PDF)</button>
+    <a class="sec" id="dlPdf" hidden>تنزيل PDF</a>
+    <button class="sec" id="again" hidden>ملف آخر</button>
+    <button class="run" id="run" disabled>تنسيق الآن</button>
+  </footer>
+</div>
+
+<script>
+(() => {
+const $ = s => document.querySelector(s);
+const ROLES = [
+  ["main","العنوان الرئيسي","١. مهام وواجبات…"],
+  ["section","عناوين الشعب","أ. شعبة الطوارئ…"],
+  ["heading","العناوين الفرعية","أولاً. المهمة"],
+  ["item","البنود المرقّمة","(١) تقديم الخدمات…"],
+  ["body","المتن غير المرقّم","نص المهمة"],
+];
+const KINDS = [["{n}.","١."],["{n}.","أ."],["{n}.","أولاً."],["({n})","(١)"],["({n}).","(أ)."],["({n}).","(أولاً)."]];
+let rules = null, defaults = null, fonts = [], pendingFile = null, lastReport = null, rulesPath = "";
+
+// ---------- settings rail ----------
+function buildRoles(){
+  const box = $("#roles"); box.innerHTML = "";
+  for (const [key,label,ex] of ROLES){
+    const d = document.createElement("div"); d.className = "role"; d.dataset.role = key;
+    d.innerHTML = `<div class="hd"><b>${label}</b><span>${ex}</span></div>
+      <div class="grid">
+        <div class="field"><label>الخط</label><select data-k="font"><option value="">كما هو</option></select></div>
+        <div class="field"><label>الحجم</label><input type="number" data-k="size" min="6" max="72" step="0.5" placeholder="كما هو"></div>
+        <div class="field"><label>غامق</label><div class="tri" data-k="bold"><button data-v="null">أصل</button><button data-v="true">نعم</button><button data-v="false">لا</button></div></div>
+      </div>`;
+    box.appendChild(d);
+  }
+  for (const b of box.querySelectorAll(".tri button")) b.addEventListener("click", e => {
+    const tri = e.currentTarget.parentElement; for (const x of tri.children) x.setAttribute("aria-pressed","false");
+    e.currentTarget.setAttribute("aria-pressed","true"); markDirty();
+  });
+}
+function fillFonts(){
+  for (const sel of document.querySelectorAll('select[data-k="font"]')){
+    const cur = sel.value; sel.innerHTML = '<option value="">كما هو</option>' + fonts.map(f => `<option>${f}</option>`).join("");
+    sel.value = cur;
+  }
+}
+function buildFmts(){
+  const box = $("#fmts"); box.innerHTML = "";
+  const names = ["المستوى ١ (رقم.)","المستوى ٢ (حرف.)","المستوى ٣ (ترتيبي.)","المستوى ٤ (رقم)","المستوى ٥ (حرف)","المستوى ٦ (ترتيبي)"];
+  KINDS.forEach((k,i) => {
+    const l = document.createElement("label"); l.textContent = names[i];
+    const inp = document.createElement("input"); inp.dataset.i = i; inp.addEventListener("input", markDirty);
+    box.append(l, inp);
+  });
+}
+function rulesToUI(r){
+  for (const d of document.querySelectorAll(".role")){
+    const cfg = r.roles[d.dataset.role];
+    d.querySelector('[data-k="font"]').value = cfg.font || "";
+    d.querySelector('[data-k="size"]').value = cfg.size ?? "";
+    const v = cfg.bold === null || cfg.bold === undefined ? "null" : String(cfg.bold);
+    for (const b of d.querySelectorAll(".tri button")) b.setAttribute("aria-pressed", b.dataset.v === v ? "true" : "false");
+  }
+  $("#align").value = r.roles.item.align || "lowKashida";
+  $("#orphan").checked = !!r.cleanup.prevent_orphan_word;
+  $("#balance").checked = !!r.layout.balance_lines;
+  $("#fillKashida").checked = r.layout.fill_lines_with_kashida !== false;
+  $("#stretchMin").value = Math.round((r.layout.stretch_min_fill ?? 0) * 100);
+  $("#lineSafety").value = Math.round((r.layout.line_safety ?? 0.04) * 100);
+  $("#classification").value = (r.page && r.page.classification) || "محدود";
+  $("#pgStart").value = (r.page && r.page.numbering && r.page.numbering.start) || 1;
+  $("#pgEnd").value = (r.page && r.page.numbering && r.page.numbering.end) || "";
+  const m = (r.page && r.page.margins) || "file";
+  const PRESETS = {tight:{right:1.27,left:1.27,top:null,bottom:null}, narrow:{right:1.27,left:1.27,top:1.27,bottom:1.27}, moderate:{right:1.9,left:1.9,top:2.54,bottom:2.54}, normal:{right:2.54,left:2.54,top:2.54,bottom:2.54}};
+  let preset = "custom";
+  if (m === "file") preset = "file"; else for (const k in PRESETS) if (JSON.stringify(PRESETS[k]) === JSON.stringify({right:m.right,left:m.left,top:m.top??null,bottom:m.bottom??null})) preset = k;
+  $("#marginPreset").value = preset; $("#customMargins").hidden = preset !== "custom";
+  if (m !== "file") { $("#mRight").value = m.right ?? ""; $("#mLeft").value = m.left ?? ""; $("#mTop").value = m.top ?? ""; $("#mBottom").value = m.bottom ?? ""; }
+  document.querySelectorAll("#fmts input").forEach((inp,i) => inp.value = r.numbering.formats[i] || KINDS[i][0]);
+  $("#tatweelLetters").value = (r.numbering.tatweel_letters || []).join(" ");
+  $("#digits").value = r.numbering.arabic_indic_digits ? "1" : "0";
+  $("#keepTop").checked = !!r.numbering.keep_top_level_start;
+  $("#firstTop").checked = r.numbering.first_level_is_top !== false;
+  $("#digitsText").checked = r.cleanup.digits_in_text === "arabic_indic";
+  $("#softBreaks").checked = !!r.cleanup.remove_soft_breaks;
+  $("#tatweel").checked = !!r.cleanup.remove_tatweel;
+  $("#spaces").checked = !!r.cleanup.collapse_spaces;
+  $("#empties").checked = !!r.cleanup.remove_empty_paragraphs;
+  $("#pbSection").value = r.layout.page_break_before_section || "keep";
+  $("#rulesJson").value = JSON.stringify(r, null, 2);
+}
+function uiToRules(){
+  const r = JSON.parse(JSON.stringify(rules));
+  for (const d of document.querySelectorAll(".role")){
+    const cfg = r.roles[d.dataset.role];
+    cfg.font = d.querySelector('[data-k="font"]').value || null;
+    const s = d.querySelector('[data-k="size"]').value; cfg.size = s === "" ? null : parseFloat(s);
+    const v = d.querySelector('.tri button[aria-pressed="true"]')?.dataset.v ?? "null";
+    cfg.bold = v === "null" ? null : v === "true";
+  }
+  r.roles.item.align = $("#align").value; r.roles.body.align = $("#align").value;
+  r.cleanup.prevent_orphan_word = $("#orphan").checked;
+  r.layout.balance_lines = $("#balance").checked;
+  r.layout.fill_lines_with_kashida = $("#fillKashida").checked;
+  r.layout.stretch_min_fill = (parseFloat($("#stretchMin").value) || 0) / 100;
+  r.layout.line_safety = (parseFloat($("#lineSafety").value) || 0) / 100;
+  const PRESETS2 = {tight:{right:1.27,left:1.27,top:null,bottom:null}, narrow:{right:1.27,left:1.27,top:1.27,bottom:1.27}, moderate:{right:1.9,left:1.9,top:2.54,bottom:2.54}, normal:{right:2.54,left:2.54,top:2.54,bottom:2.54}};
+  const pv = $("#marginPreset").value;
+  r.page = r.page || {};
+  r.page.classification = $("#classification").value;
+  r.page.numbering = Object.assign({}, r.page.numbering || {}, {enabled: true, start: parseInt($("#pgStart").value) || 1, end: $("#pgEnd").value ? parseInt($("#pgEnd").value) : null, digits: "arabic_indic"});
+  if (pv === "file") r.page.margins = "file";
+  else if (pv === "custom") r.page.margins = {right: parseFloat($("#mRight").value)||1.27, left: parseFloat($("#mLeft").value)||1.27, top: $("#mTop").value ? parseFloat($("#mTop").value) : null, bottom: $("#mBottom").value ? parseFloat($("#mBottom").value) : null};
+  else r.page.margins = PRESETS2[pv];
+  r.numbering.formats = [...document.querySelectorAll("#fmts input")].map((inp,i) => inp.value.trim() || KINDS[i][0]);
+  r.numbering.tatweel_letters = $("#tatweelLetters").value.replace(/[،,]/g," ").split(/\s+/).filter(Boolean);
+  r.numbering.arabic_indic_digits = $("#digits").value === "1";
+  r.numbering.keep_top_level_start = $("#keepTop").checked;
+  r.numbering.first_level_is_top = $("#firstTop").checked;
+  r.cleanup.digits_in_text = $("#digitsText").checked ? "arabic_indic" : "keep";
+  r.cleanup.remove_soft_breaks = $("#softBreaks").checked;
+  r.cleanup.remove_tatweel = $("#tatweel").checked;
+  r.cleanup.collapse_spaces = $("#spaces").checked;
+  r.cleanup.remove_empty_paragraphs = $("#empties").checked;
+  r.layout.page_break_before_section = $("#pbSection").value;
+  return r;
+}
+let dirty = false;
+function markDirty(){ dirty = true; $("#rulesState").textContent = "قواعد معدّلة (غير محفوظة)"; }
+document.addEventListener("change", e => { if (e.target.closest(".rail")) markDirty(); });
+$("#marginPreset").addEventListener("change", () => { $("#customMargins").hidden = $("#marginPreset").value !== "custom"; });
+
+async function loadRules(){
+  const r = await (await fetch("/api/rules")).json();
+  rules = r.rules; defaults = r.defaults; rulesPath = r.path; $("#rulesPath").textContent = rulesPath;
+  rulesToUI(rules); dirty = false; $("#rulesState").textContent = "القواعد المحفوظة";
+}
+async function saveRules(r){
+  const res = await (await fetch("/api/rules", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({rules:r})})).json();
+  if (res.error) throw new Error(res.error);
+  rules = res.rules; rulesToUI(rules); dirty = false; $("#rulesState").textContent = "القواعد محفوظة";
+}
+$("#saveRules").addEventListener("click", () => saveRules(uiToRules()).then(() => say("حُفظت القواعد في rules.json","ok")).catch(e => say(e.message,"err")));
+$("#reloadRules").addEventListener("click", loadRules);
+$("#applyJson").addEventListener("click", () => { try { saveRules(JSON.parse($("#rulesJson").value)).then(() => say("طُبّقت القواعد","ok")); } catch(e){ say("JSON غير صالح: " + e.message, "err"); } });
+$("#resetJson").addEventListener("click", async () => { const r = await (await fetch("/api/rules/reset",{method:"POST"})).json(); rules = r.rules; rulesToUI(rules); say("أُعيدت القواعد الافتراضية","ok"); });
+
+// ---------- file selection ----------
+const drop = $("#drop"), fi = $("#fileInput"), pathInput = $("#pathInput");
+drop.addEventListener("click", () => fi.click());
+drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); fi.click(); } });
+for (const ev of ["dragenter","dragover"]) drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("over"); });
+for (const ev of ["dragleave","drop"]) drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("over"); });
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) chooseFile(f); });
+fi.addEventListener("change", () => { if (fi.files[0]) chooseFile(fi.files[0]); });
+pathInput.addEventListener("input", () => { pendingFile = null; const v = pathInput.value.trim(); $("#run").disabled = !v; $("#fileLabel").innerHTML = v ? `المسار: <b dir="ltr">${esc(v)}</b>` : "لم يُختر ملف بعد"; });
+pathInput.addEventListener("keydown", e => { if (e.key === "Enter" && !$("#run").disabled) run(); });
+function chooseFile(f){
+  if (!/\.docx$/i.test(f.name)) { say("الأداة تعمل على .docx فقط. احفظ ملف .doc بصيغة .docx من Word أولًا.","err"); return; }
+  pendingFile = f; pathInput.value = ""; $("#run").disabled = false;
+  $("#fileLabel").innerHTML = `الملف: <b>${esc(f.name)}</b> · ${(f.size/1024).toFixed(0)} KB`; say("");
+}
+
+// ---------- run ----------
+async function run(){
+  const btn = $("#run"); btn.disabled = true; say('<span class="spin"></span>جارٍ التنسيق…');
+  const r = uiToRules();
+  try {
+    let res;
+    if (pendingFile){
+      const fd = new FormData(); fd.append("file", pendingFile); fd.append("rules", JSON.stringify(r));
+      res = await (await fetch("/api/format-upload", {method:"POST", body: fd})).json();
+    } else {
+      res = await (await fetch("/api/format-path", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({path: pathInput.value.trim(), rules: r})})).json();
+    }
+    if (res.error) throw new Error(res.error);
+    lastReport = res.report; showReport(res.report);
+    const out = res.report.summary.output;
+    say(`تم. الناتج: <b dir="ltr">${esc(out)}</b>`, "ok");
+    const dl = $("#dl"); dl.hidden = false; dl.href = "/api/download?path=" + encodeURIComponent(out); dl.download = res.report.summary.output_name;
+    $("#again").hidden = false;
+    $("#finalPdf").hidden = false; $("#finalPdf").dataset.path = out; $("#dlPdf").hidden = true;
+  } catch(e){ say("فشل التنسيق: " + e.message, "err"); }
+  btn.disabled = false;
+}
+$("#run").addEventListener("click", run);
+$("#finalPdf").addEventListener("click", async () => {
+  const btn = $("#finalPdf"); btn.disabled = true; say('<span class="spin"></span>جارٍ التصيير وطباعة أرقام الصفحات…');
+  try {
+    const res = await (await fetch("/api/final-pdf", {method:"POST", headers:{"Content-Type":"application/json"}, body: JSON.stringify({path: btn.dataset.path, rules: uiToRules()})})).json();
+    if (res.error) throw new Error(res.error);
+    const p = res.pdf;
+    say(`PDF جاهز (${p.renderer}): ${p.stamped} صفحة مرقّمة من ${p.first} إلى ${p.last} — <b dir="ltr">${esc(p.output)}</b>`, "ok");
+    const a = $("#dlPdf"); a.hidden = false; a.href = "/api/download?path=" + encodeURIComponent(p.output); a.download = p.output.split(/[\\/]/).pop();
+  } catch(e){ say("فشل إنشاء PDF: " + e.message, "err"); }
+  btn.disabled = false;
+});
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey||e.metaKey) && e.key === "Enter" && !$("#run").disabled) run();
+  if ((e.ctrlKey||e.metaKey) && e.key === ",") { e.preventDefault(); $("#toggleRail").click(); }
+});
+$("#again").addEventListener("click", () => { $("#finalPdf").hidden = true; $("#dlPdf").hidden = true; $("#resultView").hidden = true; $("#emptyView").hidden = false; $("#dl").hidden = true; $("#again").hidden = true; pendingFile = null; fi.value = ""; pathInput.value = ""; $("#run").disabled = true; $("#fileLabel").textContent = "لم يُختر ملف بعد"; say(""); });
+$("#toggleRail").addEventListener("click", () => $("#main").classList.toggle("settings-hidden"));
+
+// ---------- results ----------
+const CHG = {kashida_filled:"كشيدة", marker_equalized:"توحيد عرض العلامة", page_break_folded:"فاصل صفحة مدمج", lines_balanced:"موازنة أسطر", soft_break_removed:"كسر سطر", tatweel_removed:"تطويل", spaces_collapsed:"مسافات", punctuation_spaces_fixed:"ترقيم", digits_converted:"أرقام",
+  auto_numbering_replaced:"ترقيم تلقائي→مكتوب", empty_paragraph_removed:"فقرة فارغة", orphan_word_protected:"كلمة يتيمة", mirrored_paren_fixed:"قوس معكوس", font_set:"خط", size_set:"حجم", marker:"علامة"};
+function summarizeChanges(list){
+  const m = new Map();
+  for (const c of list){ const k = c.split(":")[0]; m.set(k, (m.get(k)||0)+1); }
+  return [...m].map(([k,n]) => (CHG[k]||k) + (n>1 ? " ×"+n : "")).join(" · ");
+}
+function showReport(rep){
+  $("#emptyView").hidden = true; $("#resultView").hidden = false;
+  const r = uiToRules(), fontFor = role => r.roles[role]?.font || "";
+  const doc = $("#doc"); doc.innerHTML = "";
+  for (const p of rep.paragraphs){
+    if (p.role === "empty" && !p.changes.includes("empty_paragraph_removed")) continue;
+    const div = document.createElement("div");
+    div.className = "para " + (p.changes.includes("empty_paragraph_removed") ? "removed" : p.role) + (p.changes.length ? " changed" : "");
+    if (p.role === "pagebreak") { doc.appendChild(div); continue; }
+    const depth = p.depth ?? 0;
+    const indent = p.role === "cover" ? 0 : (p.marker ? depth : Math.max(depth-1,0)) * 2.2;
+    div.style.paddingInlineStart = indent + "em";
+    if (fontFor(p.role)) div.style.fontFamily = `"${fontFor(p.role)}", serif`;
+    const txt = p.clean_text ?? p.text;
+    const lay = p.layout && p.layout.lines ? `<span class="lay">${p.layout.lines > 1 ? p.layout.lines + " أسطر" : "سطر"} · ${p.layout.mode === "distribute" ? "ممدود" : "غير ممدود"}${p.layout.fills ? " · " + p.layout.fills.map(f => Math.round(f*100) + "٪").join(" / ") : " · " + Math.round((p.layout.fill||0)*100) + "٪"}</span>` : "";
+    div.innerHTML = (p.marker ? `<span class="m">${esc(p.marker)}</span>` : "") + `<span class="t">${esc(p.changes.includes("empty_paragraph_removed") ? "(فقرة فارغة حُذفت)" : txt)}${lay}</span>` +
+      (p.changes.length ? `<span class="chg" title="${esc(summarizeChanges(p.changes))}">${esc(summarizeChanges(p.changes))}</span>` : "");
+    doc.appendChild(div);
+  }
+  const subs = rep.summary.font_substitutions || {};
+  const fw = $("#fontWarn");
+  const subKeys = Object.keys(subs);
+  if (subKeys.length){ fw.hidden = false; fw.innerHTML = "تنبيه: خطوط المستند غير موجودة على هذا الجهاز فقِيست بدائل عنها، لذلك قد يختلف التفاف الأسطر عن Word: " + subKeys.map(k => `<b>${esc(k)}</b> ← ${esc(subs[k])}`).join("، ") + ". ضع ملفات الخطوط الأصلية في مجلد <code>fonts</code> بجانب الأداة ثم أعد التنسيق."; }
+  else fw.hidden = true;
+  const counts = $("#counts"); counts.innerHTML = "";
+  const cc = rep.summary.change_counts || {};
+  const order = Object.entries(cc).sort((a,b) => b[1]-a[1]);
+  counts.innerHTML = `<div class="count"><b>${rep.summary.paragraphs}</b><span>فقرة قُرئت</span></div>` +
+    order.map(([k,n]) => `<div class="count"><b>${n}</b><span>${CHG[k]||k}</span></div>`).join("");
+  const tb = $("#repBody"); tb.innerHTML = "";
+  for (const p of rep.paragraphs){
+    if (!p.changes.length && p.role === "empty") continue;
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td class="num">${p.index}</td><td>${ROLE_AR[p.role]||p.role}</td><td class="num">${p.depth ?? ""}</td><td>${esc(p.marker||"")}</td><td>${esc((p.clean_text||p.text).slice(0,90))}</td><td>${esc([...new Set(p.changes.map(c => c.startsWith("marker") ? c.replace("marker: ","علامة: ") : (CHG[c]||c)))].join("، "))}</td>`;
+    tb.appendChild(tr);
+  }
+  $("#showChanges").onchange = () => doc.classList.toggle("show-changes", $("#showChanges").checked);
+  document.querySelectorAll(".doc .chg").forEach(x => x.style.display = $("#showChanges").checked ? "" : "none");
+}
+const ROLE_AR = {cover:"غلاف", main:"رئيسي", section:"شعبة", heading:"عنوان فرعي", item:"بند", body:"متن", empty:"فارغة", pagebreak:"فاصل صفحة"};
+for (const t of document.querySelectorAll('.tabs [role=tab]')) t.addEventListener("click", () => {
+  document.querySelectorAll('.tabs [role=tab]').forEach(x => x.setAttribute("aria-selected", x === t ? "true" : "false"));
+  for (const id of ["preview","changes","rules"]) $("#tab-"+id).hidden = id !== t.dataset.tab;
+  if (t.dataset.tab === "rules") $("#rulesJson").value = JSON.stringify(uiToRules(), null, 2);
+});
+$("#showChanges").addEventListener("change", () => { document.querySelectorAll(".doc .chg").forEach(x => x.style.display = $("#showChanges").checked ? "" : "none"); });
+
+function say(html, cls){ const m = $("#msg"); m.innerHTML = html || ""; m.className = "msg " + (cls||""); }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+// ---------- init ----------
+buildRoles(); buildFmts();
+loadRules().then(async () => { fonts = (await (await fetch("/api/fonts")).json()).fonts; fillFonts(); rulesToUI(rules); });
+})();
+</script>
+</body>
+</html>

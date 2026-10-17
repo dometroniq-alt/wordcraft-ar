@@ -143,6 +143,14 @@ scripts/sync-upstream.sh      # يجلب upstream/main ويدمجه في ar-main
 التعارضات في الملفات التي تملكها هذه النسخة (`scripts/ar-owned.txt`) تُحسم لصالحها وتُراجع يدويًا؛
 ما عداها يُؤخذ من الأصل.
 
+## إصدار نسخة
+
+الإصدار commit واحد: اكتب `docs/releases/<tag>.md`، ضع الوسم في `ar-release.txt` (مثل `v0.7.0-ar.3`)،
+ثم commit برسالة تبدأ بـ `release:` وادفع `ar-main`. سير العمل
+[Release (WordCraft AR)](.github/workflows/release-ar.yml) يبني المثبّت والنسخة المحمولة على خادم Windows
+(مع Python المضمّن)، ويضع الوسم، وينشر إصدار GitHub بتلك الملاحظات. فعّل Actions على الـfork مرة واحدة
+(من تبويب Actions) ليعمل.
+
 ## خارطة الطريق
 
 - مربعات الحوار وجزء المهام من اليمين إلى اليسار (الشريط وشريط العنوان وشريط الحالة معكوسة أصلًا).

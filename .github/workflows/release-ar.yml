@@ -1,0 +1,96 @@
+# WordCraft AR release: builds the Windows installer and the portable zip on a GitHub runner,
+# tags the commit and publishes the GitHub Release with the notes from docs/releases/<tag>.md.
+#
+# How to release (no tag pushing, no clicking through the web UI):
+#   1. write docs/releases/v0.7.0-ar.3.md
+#   2. put the tag name in ar-release.txt (one line: v0.7.0-ar.3)
+#   3. commit with a message that starts with "release:" and push ar-main
+# or run it by hand from the Actions tab (workflow_dispatch). A tag that already exists is a
+# re-run: the release is updated, not duplicated.
+name: Release (WordCraft AR)
+
+on:
+  push:
+    branches: [ar-main]
+    paths: [ar-release.txt]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-ar
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    if: github.event_name == 'workflow_dispatch' || startsWith(github.event.head_commit.message, 'release:')
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Read the tag
+        id: tag
+        shell: pwsh
+        run: |
+          $tag = (Get-Content ar-release.txt -Raw).Trim()
+          if ($tag -notmatch '^v\d+\.\d+\.\d+-ar\.\d+$') { throw "ar-release.txt must hold a tag like v0.7.0-ar.2, got '$tag'" }
+          "tag=$tag" >> $env:GITHUB_OUTPUT
+          if (-not (Test-Path "docs/releases/$tag.md")) { throw "docs/releases/$tag.md is missing" }
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          key: release-ar
+
+      - name: WiX 5
+        shell: pwsh
+        run: |
+          dotnet tool install --global wix --version 5.0.2
+          wix extension add -g WixToolset.UI.wixext/5.0.2
+          wix extension add -g WixToolset.Util.wixext/5.0.2
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Embedded Python beside the engine
+        shell: pwsh
+        run: powershell -ExecutionPolicy Bypass -File packaging/windows/bundle-python.ps1
+
+      - name: Engine self-test
+        shell: pwsh
+        run: |
+          cd servicewordar
+          python\python.exe tests\run_tests.py
+
+      - name: Build the installer and the portable zip
+        shell: pwsh
+        env:
+          WORDCRAFT_BUILD_SHA: ${{ github.sha }}
+        run: powershell -ExecutionPolicy Bypass -File packaging/windows/package-ar.ps1
+
+      - name: Tag
+        shell: pwsh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          $tag = "${{ steps.tag.outputs.tag }}"
+          git tag -f $tag
+          git push -f origin $tag
+
+      - name: Publish the release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $tag = "${{ steps.tag.outputs.tag }}"
+          $title = "WordCraft AR " + $tag.TrimStart('v').Replace('-ar.', ' (ar.') + ")"
+          $files = Get-ChildItem dist/release/*.msi, dist/release/*.zip | ForEach-Object { $_.FullName }
+          if (gh release view $tag 2>$null) {
+            gh release upload $tag $files --clobber
+            gh release edit $tag --title $title --notes-file "docs/releases/$tag.md"
+          } else {
+            gh release create $tag $files --title $title --notes-file "docs/releases/$tag.md" --target $env:GITHUB_SHA
+          }

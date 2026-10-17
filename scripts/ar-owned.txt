@@ -14,3 +14,7 @@ crates/ui-egui/src/rtl.rs
 crates/ui-egui/examples/kit_sheet.rs
 docs/ar-ui-kit.md
 scripts/ar-check.sh
+servicewordar/
+packaging/windows/
+.github/workflows/release-ar.yml
+ar-release.txt
