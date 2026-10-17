@@ -1772,45 +1772,54 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
         }
         // WordCraft AR — the Service tab (right-to-left artwork: markers on the right, lines
         // running left from them).
+        // Service tab (WordCraft AR). The big buttons show them at 32 pt, where the Arabic
+        // markers read as text; at 17 pt they still read as a numbered outline.
         "serviceRenumber" => {
-            // Three levels stepping in from the right, each with its marker (the first in accent).
-            for (i, (y, indent)) in [(5.0, 0.0), (10.0, 3.0), (15.0, 6.0)].iter().enumerate() {
-                let x = 17.0 - indent;
-                pen.frect(x - 2.5, y - 1.5, x, y + 1.5, if i == 0 { a } else { c });
-                pen.line(&[(3.0, *y), (x - 4.0, *y)]);
+            // The cycle's markers, each level stepped in from the right.
+            for (i, (y, mark, indent)) in [(4.5, "١.", 0.0), (10.0, "أ.", 3.0), (15.5, "أولاً.", 6.0)].iter().enumerate() {
+                let x = 19.0 - indent;
+                let w = if i == 2 { 9.0 } else { 5.0 };
+                pen.text(x - w / 2.0, *y, 8.0, mark, if i == 0 { a } else { c }, true);
+                pen.line(&[(1.5, *y), (x - w - 1.5, *y)]);
             }
         }
         "serviceList" => {
-            // A multilevel list from the right, markers in boxes (a Word list, not typed text).
-            for (i, (x, y)) in [(15.5, 4.5), (12.5, 10.0), (9.5, 15.5)].iter().enumerate() {
-                pen.rect(x - 1.8, y - 1.8, x + 1.8, y + 1.8, if i == 0 { a } else { c });
-                pen.line(&[(3.0, *y), (x - 3.5, *y)]);
+            // Word list markers in boxes, each level stepped in: a list that numbers itself.
+            for (i, (y, mark, indent)) in [(4.5, "١", 0.0), (10.0, "أ", 3.5), (15.5, "ب", 3.5)].iter().enumerate() {
+                let x = 19.0 - indent;
+                pen.rect(x - 5.5, y - 2.8, x, y + 2.8, if i == 0 { a } else { c });
+                pen.text(x - 2.75, *y, 6.5, mark, if i == 0 { a } else { c }, true);
+                pen.line(&[(1.5, *y), (x - 7.5, *y)]);
             }
         }
         "finalDot" => {
-            pen.lines(6.0, 17.0, &[5.0, 10.0]);
-            pen.line(&[(9.0, 15.0), (17.0, 15.0)]);
+            // Right-to-left lines, each ending (at its left) in a firm dot.
+            pen.lines(7.0, 18.0, &[5.0, 10.0]);
+            pen.line(&[(10.0, 15.0), (18.0, 15.0)]);
             for y in [5.0, 10.0, 15.0] {
-                pen.fcircle(3.5, y, 1.4, a);
+                pen.fcircle(4.0, y, 1.8, a);
             }
         }
         "serviceSelection" => {
-            pen.lines(3.0, 17.0, &[4.0, 16.0]);
-            pen.frect(2.0, 7.0, 18.0, 13.0, a.linear_multiply(0.25));
-            pen.line_c(&[(3.0, 8.5), (17.0, 8.5)], a);
-            pen.line_c(&[(3.0, 11.5), (17.0, 11.5)], a);
+            // Only the selected band of lines gets the cycle's markers.
+            pen.lines(3.0, 17.0, &[3.5, 16.5]);
+            pen.frect(2.0, 6.0, 18.0, 14.0, a.linear_multiply(0.22));
+            pen.text(16.0, 8.5, 5.5, "١.", a, true);
+            pen.line_c(&[(3.0, 8.5), (12.5, 8.5)], a);
+            pen.text(14.0, 12.0, 5.5, "أ.", a, true);
+            pen.line_c(&[(3.0, 12.0), (10.5, 12.0)], a);
         }
         "classification" => {
             // A page with the classification word stamped top and bottom.
-            pen.page(4.0, 2.0, 16.0, 18.0);
-            pen.frect(7.0, 4.5, 13.0, 6.5, a);
-            pen.frect(7.0, 13.5, 13.0, 15.5, a);
-            pen.lines(6.5, 13.5, &[9.0, 11.0]);
+            pen.page(3.0, 1.5, 17.0, 18.5);
+            pen.text(10.0, 4.5, 4.5, "محدود", a, true);
+            pen.lines(5.5, 14.5, &[8.5, 11.0]);
+            pen.text(10.0, 15.5, 4.5, "محدود", a, true);
         }
         "servicePages" => {
-            pen.page(4.0, 2.0, 16.0, 18.0);
-            pen.lines(6.5, 13.5, &[6.0, 8.5, 11.0]);
-            pen.text(10.0, 15.0, 5.5, "(١-٥)", a, true);
+            pen.page(3.0, 1.5, 17.0, 18.5);
+            pen.lines(5.5, 14.5, &[5.5, 8.0, 10.5]);
+            pen.text(10.0, 15.5, 5.0, "( ٣ - ٧ )", a, true);
         }
         // Kashida levels: a word of two strokes whose joining stroke (the accent) lengthens.
         // Kashida levels: two ordinary lines and, between them, a right-to-left word whose

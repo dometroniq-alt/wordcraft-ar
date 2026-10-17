@@ -64,27 +64,59 @@ pub fn entries() -> impl Iterator<Item = &'static Entry> {
     .flatten()
 }
 
-/// The entry for a key (`id` or `id:variant`).
+/// The entry for a key (`id` or `id:variant`); a variant without a picture of its own shows
+/// the command's.
 pub fn entry(key: &str) -> Option<&'static Entry> {
-    entries().find(|e| e.key == key)
+    entries().find(|e| e.key == key).or_else(|| {
+        let id = key.split(':').next().unwrap_or(key);
+        (id != key).then(|| entries().find(|e| e.key == id)).flatten()
+    })
 }
 
 /// The visual-help key of a command and its parameters: the id, plus the parameter that picks
-/// the variant a button shows (`:low` for the kashida level, `:selection` for Selection Only,
-/// `:pdf` for the engine's PDF variant, `:kind` values for list and border kinds).
+/// the variant a button or menu item shows — `service.kashida:low`, `service.renumber:selection`,
+/// `service.external:pdf`, `ui.dialog:wordCount`, `insert.header:title`, `layout.break:column`,
+/// `format.changeCase:upper`, `para.bullets:off`. One string parameter from [`VARIANT_PARAMS`]
+/// (the first present) names the variant; the flags `pdf`, `off` and `remove` name it when true.
 pub fn key(id: &str, params: &Value) -> String {
-    let variant = match id {
-        "service.kashida" => params.get("value").and_then(Value::as_str),
-        "service.renumber" => params.get("scope").and_then(Value::as_str).filter(|s| *s == "selection"),
-        "service.external" => params.get("pdf").and_then(Value::as_bool).filter(|b| *b).map(|_| "pdf"),
-        // A ribbon button that opens a named dialog (Replace, Word Count, Zoom…).
-        "ui.dialog" => params.get("name").and_then(Value::as_str),
-        _ => None,
-    };
+    let variant = VARIANT_PARAMS
+        .iter()
+        .find_map(|k| params.get(*k).and_then(Value::as_str))
+        .map(str::to_string)
+        .or_else(|| ["pdf", "off", "remove"].iter().find(|f| params.get(**f).and_then(Value::as_bool) == Some(true)).map(|f| f.to_string()));
     match variant {
-        Some(v) => format!("{id}:{v}"),
-        None => id.to_string(),
+        // Selection Only is the one scope variant with its own picture; the default scope isn't a variant.
+        Some(v) if !(id == "service.renumber" && v != "selection") => format!("{id}:{v}"),
+        _ => id.to_string(),
     }
+}
+
+/// Parameters whose string value names a button's or menu item's variant, in priority order.
+pub const VARIANT_PARAMS: &[&str] =
+    &["name", "value", "kind", "preset", "mode", "scope", "direction", "position", "style", "format", "level", "layout", "type"];
+
+/// Draw the thumbnail for `key` scaled into `target` (a menu item's preview): the drawing is
+/// made at full [`SIZE`] and its shapes are transformed down. False when there is no entry.
+pub fn paint_scaled(p: &egui::Painter, target: egui::Rect, key: &str, t: &crate::theme::Tokens) -> bool {
+    let Some(e) = entry(key) else { return false };
+    let scale = (target.width() / SIZE.x).min(target.height() / SIZE.y);
+    // Draw unclipped at the origin, then move and shrink every shape into `target`, clipped to it.
+    let full = egui::Rect::from_min_size(egui::Pos2::ZERO, SIZE);
+    let painter = p.with_clip_rect(egui::Rect::EVERYTHING);
+    let layer = painter.layer_id();
+    let start = p.ctx().graphics_mut(|g| g.entry(layer).next_idx());
+    painter.rect_filled(full, 4.0 / scale, t.panel);
+    (e.draw)(&Draw::new(&painter, full, t));
+    let end = p.ctx().graphics_mut(|g| g.entry(layer).next_idx());
+    let clip = target.intersect(p.clip_rect());
+    p.ctx().graphics_mut(|g| {
+        let list = g.entry(layer);
+        list.transform_range(start, end, egui::emath::TSTransform::new(target.min.to_vec2(), scale));
+        for i in start.0..end.0 {
+            list.mutate_shape(egui::layers::ShapeIdx(i), |cs| cs.clip_rect = clip);
+        }
+    });
+    true
 }
 
 /// The icon a command's button shows (custom groups, the Quick Access Toolbar, the kit

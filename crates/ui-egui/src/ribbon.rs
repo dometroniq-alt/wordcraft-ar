@@ -535,7 +535,14 @@ pub(crate) fn mi(ui: &mut Ui, app: &mut WordApp, label: &str, id: &str, params: 
 fn mi_text(ui: &mut Ui, app: &mut WordApp, text: &str, id: &str, params: Value) {
     let sc = crate::widgets::shortcut_text(app, id);
     let enabled = crate::widgets::enabled(app, id);
-    let resp = ui.add_enabled(enabled, crate::rtl::menu_item(text, &sc).min_size(vec2(200.0, 0.0)));
+    // WordCraft AR: a menu item with a picture of its own (the header presets, the break
+    // kinds, the case modes…) is drawn as a gallery row: the preview, then the text.
+    let key = crate::visual_help::key(id, &params);
+    let resp = if crate::ui_kit::entries().any(|e| e.key == key) {
+        crate::widgets::gallery_item(ui, app, text, &sc, enabled, id, &params)
+    } else {
+        ui.add_enabled(enabled, crate::rtl::menu_item(text, &sc).min_size(vec2(200.0, 0.0)))
+    };
     if resp.clicked() {
         crate::widgets::run_from_ribbon(app, id, params);
         ui.close();

@@ -21,6 +21,10 @@ pub struct Draw<'a> {
     pub p: &'a Painter,
     pub r: Rect,
     pub t: &'a Tokens,
+    /// Animation phase, 0 → 1 over one loop of the thumbnail's little film (1.0 when drawn
+    /// still — the gallery, the contact sheet, a machine with animations off). Drawings that
+    /// move use [`Draw::reveal`] or read it directly; the rest ignore it.
+    pub phase: f32,
 }
 
 /// Which way a drawn "paragraph" runs.
@@ -38,7 +42,28 @@ impl Dir {
 
 impl<'a> Draw<'a> {
     pub fn new(p: &'a Painter, r: Rect, t: &'a Tokens) -> Self {
-        Self { p, r, t }
+        Self { p, r, t, phase: 1.0 }
+    }
+    /// A drawing in motion: `phase` runs 0 → 1 and loops.
+    pub fn animated(p: &'a Painter, r: Rect, t: &'a Tokens, phase: f32) -> Self {
+        Self { p, r, t, phase: phase.clamp(0.0, 1.0) }
+    }
+    /// The same kit drawing through another painter (a clip for a reveal).
+    pub fn with_painter<'b>(&self, p: &'b Painter) -> Draw<'b>
+    where
+        'a: 'b,
+    {
+        Draw { p, r: self.r, t: self.t, phase: self.phase }
+    }
+    /// How far a change has come: 0 at the start of the loop, 1 from `at` on, eased. Static
+    /// drawings (phase 1) get 1.
+    pub fn reveal(&self, from: f32, to: f32) -> f32 {
+        if self.phase >= 1.0 {
+            return 1.0;
+        }
+        let x = ((self.phase - from) / (to - from).max(0.001)).clamp(0.0, 1.0);
+        // Smoothstep.
+        x * x * (3.0 - 2.0 * x)
     }
 
     // ---- coordinates and colours ----
@@ -98,12 +123,36 @@ impl<'a> Draw<'a> {
         a
     }
     /// Two pages with an arrow between them: `before(area)` then `after(area)`.
-    pub fn before_after(&self, before: impl FnOnce(&Self, Rect), after: impl FnOnce(&Self, Rect)) {
+    ///
+    /// In motion, the arrow grows first and the "after" page is then wiped in from the left,
+    /// so the eye reads what the button changes.
+    pub fn before_after(&self, before: impl FnOnce(&Draw<'_>, Rect), after: impl FnOnce(&Draw<'_>, Rect)) {
         let b = self.page(6.0, 8.0, 70.0, 88.0);
-        let a = self.page(100.0, 8.0, 70.0, 88.0);
-        self.arrow_right(self.at(80.0, 52.0), self.at(96.0, 52.0));
+        let a_outer = Rect::from_min_size(self.at(100.0, 8.0), vec2(70.0, 88.0));
         before(self, b);
-        after(self, a);
+        let arrow = self.reveal(0.05, 0.3);
+        if arrow > 0.0 {
+            self.arrow_right(self.at(80.0, 52.0), self.at(80.0 + 16.0 * arrow, 52.0));
+        }
+        let wipe = self.reveal(0.3, 0.75);
+        if wipe <= 0.0 {
+            // Before the wipe: the empty page outline, so the layout doesn't jump.
+            self.p.rect_filled(a_outer, 2.0, Color32::WHITE);
+            self.p.rect_stroke(a_outer, 2.0, self.stroke(self.t.border_strong), egui::StrokeKind::Inside);
+            return;
+        }
+        let clip = Rect::from_min_max(a_outer.min - vec2(2.0, 2.0), pos2(a_outer.min.x + a_outer.width() * wipe + 2.0, a_outer.max.y + 2.0));
+        let clipped = self.p.with_clip_rect(clip.intersect(self.p.clip_rect()));
+        let d = self.with_painter(&clipped);
+        let a = d.page(100.0, 8.0, 70.0, 88.0);
+        after(&d, a);
+        if wipe < 1.0 {
+            // The rest of the page, still blank.
+            let rest =
+                self.p.with_clip_rect(Rect::from_min_max(pos2(clip.max.x, clip.min.y), a_outer.max + vec2(2.0, 2.0)).intersect(self.p.clip_rect()));
+            rest.rect_filled(a_outer, 2.0, Color32::WHITE);
+            rest.rect_stroke(a_outer, 2.0, self.stroke(self.t.border_strong), egui::StrokeKind::Inside);
+        }
     }
     /// A stack of `n` pages fanned to the bottom-right; returns the top page's text area.
     pub fn page_stack(&self, x: f32, y: f32, w: f32, h: f32, n: usize) -> Rect {

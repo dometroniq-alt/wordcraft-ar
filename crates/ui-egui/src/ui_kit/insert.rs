@@ -36,6 +36,14 @@ pub const ENTRIES: &[Entry] = &[
     Entry::new("review.newComment", "Attaches a note to the selected text; it shows in the margin, not in the text.", |d| d.in_comment()),
     Entry::new("insert.header", "Adds text that repeats at the top of every page, such as a title or a stamp.", |d| d.in_header_footer(true)),
     Entry::new("insert.footer", "Adds text that repeats at the bottom of every page, such as a note or a date.", |d| d.in_header_footer(false)),
+    Entry::new("insert.header:blank", "A header with one empty line to type into, at the top of every page.", |d| d.in_hf_preset(true, 0)),
+    Entry::new("insert.header:blankThree", "A header with three slots: left, centre and right, for a date, a title and a number.", |d| {
+        d.in_hf_preset(true, 1)
+    }),
+    Entry::new("insert.header:title", "A header that shows the document's title on every page.", |d| d.in_hf_preset(true, 2)),
+    Entry::new("insert.footer:blank", "A footer with one empty line to type into, at the bottom of every page.", |d| d.in_hf_preset(false, 0)),
+    Entry::new("insert.footer:blankThree", "A footer with three slots: left, centre and right.", |d| d.in_hf_preset(false, 1)),
+    Entry::new("insert.footer:pageNumber", "A footer with the page number centred at the bottom of every page.", |d| d.in_hf_preset(false, 3)),
     Entry::new("insert.pageNumber", "Numbers every page automatically, at the top or the bottom.", |d| d.in_page_number()),
     Entry::new("insert.textBox", "Inserts a framed box of text you can place anywhere on the page.", |d| {
         let a = d.page_rl();
@@ -184,6 +192,29 @@ impl Draw<'_> {
             self.line(pos2(a.min.x, y), pos2(a.max.x, y), self.accent(), 2.5);
             let sep = if header { y + 5.0 } else { y - 5.0 };
             self.line(pos2(a.min.x, sep), pos2(a.max.x, sep), self.t.border, 1.0);
+        }
+    }
+
+    /// One page with the preset drawn in its header or footer band: 0 blank line, 1 three
+    /// slots, 2 the title, 3 the page number.
+    fn in_hf_preset(&self, header: bool, preset: u8) {
+        let a = self.page(50.0, 6.0, 76.0, 92.0);
+        let body =
+            if header { Rect::from_min_max(pos2(a.min.x, a.min.y + 16.0), a.max) } else { Rect::from_min_max(a.min, pos2(a.max.x, a.max.y - 16.0)) };
+        self.paragraph(body, Dir::Rtl, 6, self.grey());
+        let y = if header { a.min.y + 2.0 } else { a.max.y - 4.0 };
+        let band = Rect::from_min_max(pos2(a.min.x - 4.0, y - 6.0), pos2(a.max.x + 4.0, y + 6.0));
+        self.p.rect_filled(band, 1.0, self.accent().linear_multiply(0.12));
+        let show = self.reveal(0.2, 0.6);
+        match preset {
+            0 => self.caret(pos2(a.max.x - 2.0, y - 4.0), 8.0),
+            1 => {
+                for x in [a.min.x + 10.0, a.center().x, a.max.x - 10.0] {
+                    self.line(pos2(x - 8.0 * show, y), pos2(x + 8.0 * show, y), self.accent(), 2.0);
+                }
+            }
+            2 => self.label(pos2(a.center().x, y), "عنوان المستند", 7.0, self.accent().linear_multiply(show.max(0.2)), Align2::CENTER_CENTER),
+            _ => self.label(pos2(a.center().x, y), "٣", 8.0, self.accent().linear_multiply(show.max(0.2)), Align2::CENTER_CENTER),
         }
     }
 

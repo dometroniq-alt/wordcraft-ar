@@ -62,7 +62,12 @@ fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value)
             let (r, _) = ui.allocate_exact_size(crate::visual_help::SIZE, Sense::hover());
             ui.painter().rect_filled(r, 4.0, t.panel);
             ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
-            crate::visual_help::thumbnail(ui.painter(), r, &key, &t);
+            // The thumbnail plays as a little film from the moment the tooltip opens.
+            let since_id = egui::Id::new(("visual_help_since", &key));
+            let now = ui.input(|i| i.time);
+            let since = ui.data_mut(|d| *d.get_temp_mut_or_insert_with(since_id, || now));
+            let phase = film_phase(ui, since);
+            crate::visual_help::thumbnail_animated(ui.painter(), r, &key, &t, phase);
             ui.add_space(4.0);
             ui.label(egui::RichText::new(crate::i18n::explain(crate::i18n::current(), text)).size(11.5));
             if bilingual && let Some(ar) = crate::i18n::Lang::from_code("ar") {
@@ -83,6 +88,66 @@ fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value)
         }
     })
 }
+
+/// A menu item with a preview of what it does (WordCraft AR): the thumbnail of its key scaled
+/// to a small picture at the start edge, the text after it, the shortcut at the end; hovering
+/// shows the full-size, animated help. Returns the row's response.
+pub fn gallery_item(ui: &mut Ui, app: &WordApp, text: &str, shortcut: &str, enabled: bool, id: &str, params: &Value) -> Response {
+    const PREVIEW: egui::Vec2 = egui::Vec2::new(96.0, 56.0);
+    let t = Tokens::get(ui.ctx());
+    let text_w = ui.ctx().fonts_mut(|f| f.layout_no_wrap(text.to_string(), regular(13.0), t.text).size().x);
+    let sc_w = if shortcut.is_empty() {
+        0.0
+    } else {
+        ui.ctx().fonts_mut(|f| f.layout_no_wrap(shortcut.to_string(), regular(12.0), t.text_dim).size().x) + 12.0
+    };
+    let w = (PREVIEW.x + 12.0 + text_w + sc_w + 16.0).max(240.0);
+    let (r, resp) = ui.allocate_exact_size(vec2(w, PREVIEW.y + 8.0), if enabled { Sense::click() } else { Sense::hover() });
+    if !ui.is_rect_visible(r) {
+        return resp;
+    }
+    if enabled && (resp.hovered() || resp.is_pointer_button_down_on()) {
+        ui.painter().rect_filled(r, CornerRadius::same(4), if resp.is_pointer_button_down_on() { t.pressed } else { t.hover });
+    }
+    let rtl = crate::rtl::on();
+    let preview = if rtl {
+        Rect::from_min_size(pos2(r.max.x - 4.0 - PREVIEW.x, r.min.y + 4.0), PREVIEW)
+    } else {
+        Rect::from_min_size(pos2(r.min.x + 4.0, r.min.y + 4.0), PREVIEW)
+    };
+    let key = crate::visual_help::key(id, params);
+    crate::ui_kit::paint_scaled(ui.painter(), preview, &key, &t);
+    ui.painter().rect_stroke(preview, CornerRadius::same(3), Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
+    let color = if enabled { t.text } else { t.text_disabled };
+    if rtl {
+        ui.painter().text(pos2(preview.min.x - 8.0, r.center().y), Align2::RIGHT_CENTER, text, regular(13.0), color);
+        if !shortcut.is_empty() {
+            ui.painter().text(pos2(r.min.x + 8.0, r.center().y), Align2::LEFT_CENTER, shortcut, regular(12.0), t.text_dim);
+        }
+    } else {
+        ui.painter().text(pos2(preview.max.x + 8.0, r.center().y), Align2::LEFT_CENTER, text, regular(13.0), color);
+        if !shortcut.is_empty() {
+            ui.painter().text(pos2(r.max.x - 8.0, r.center().y), Align2::RIGHT_CENTER, shortcut, regular(12.0), t.text_dim);
+        }
+    }
+    resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, enabled, text));
+    tooltip(app, resp, text, id, params)
+}
+
+/// The phase (0 → 1, looping every [`FILM_SECONDS`]) of an animated thumbnail that started
+/// showing at `since`, or 1 (still) when animations are off. Asks for the next frame while the
+/// film plays.
+pub fn film_phase(ui: &Ui, since: f64) -> f32 {
+    if ui.ctx().global_style().animation_time <= 0.0 {
+        return 1.0;
+    }
+    let now = ui.input(|i| i.time);
+    ui.ctx().request_repaint_after(std::time::Duration::from_millis(33));
+    (((now - since) / FILM_SECONDS) % 1.0) as f32
+}
+
+/// One loop of a thumbnail's film.
+pub const FILM_SECONDS: f64 = 2.4;
 
 /// Record a keytip badge over a control's rect when keytips are showing commands. `ui` reaches
 /// the phase and badge list through egui memory, so widgets without `&mut WordApp` can record too.
@@ -128,20 +193,32 @@ pub fn enabled(app: &WordApp, id: &str) -> bool {
     }
 }
 
-pub(crate) fn bg(ui: &Ui, r: Rect, resp: &Response, checked: bool, t: &Tokens) {
+/// Draws a button's background; returns how far its hover animation has come (0 at rest, 1
+/// hovered), so the caller can let the icon grow a little with it (WordCraft AR: buttons
+/// answer the pointer with motion, not only a tint). Animations off: 0 or 1, no steps.
+pub(crate) fn bg(ui: &Ui, r: Rect, resp: &Response, checked: bool, t: &Tokens) -> f32 {
+    let hover = ui.ctx().animate_bool_with_time(resp.id.with("hover_pop"), resp.hovered() && !resp.is_pointer_button_down_on(), 0.18);
     let fill = if resp.is_pointer_button_down_on() {
-        t.pressed
+        Some(t.pressed)
     } else if checked {
-        t.checked
-    } else if resp.hovered() {
-        t.hover
+        Some(t.checked)
+    } else if hover > 0.0 {
+        Some(t.hover.linear_multiply(hover))
     } else {
-        return;
+        None
     };
-    ui.painter().rect_filled(r, CornerRadius::same(4), fill);
+    if let Some(fill) = fill {
+        ui.painter().rect_filled(r, CornerRadius::same(4), fill);
+    }
     if checked {
         ui.painter().rect_stroke(r, CornerRadius::same(4), Stroke::new(1.0, t.accent.linear_multiply(0.5)), egui::StrokeKind::Inside);
     }
+    hover
+}
+
+/// A rect grown by the hover pop: up to 12 % larger around its centre.
+pub(crate) fn pop(r: Rect, hover: f32) -> Rect {
+    Rect::from_center_size(r.center(), r.size() * (1.0 + 0.12 * hover))
 }
 
 /// Runs a ribbon button's command, then hands keyboard focus back to the document so typing
@@ -198,8 +275,8 @@ fn big_button(ui: &mut Ui, app: &mut WordApp, icon: &str, label: &str, id: &str,
     let (r, resp) = ui.allocate_exact_size(vec2(w, CONTENT_H), Sense::click());
     keytip_badge(ui, r, id, &label.replace('\n', " "));
     let on = enabled(app, id);
-    bg(ui, r, &resp, checked, &t);
-    let ic = Rect::from_center_size(pos2(r.center().x, r.min.y + BIG_ICON_Y), vec2(32.0, 32.0));
+    let hover = bg(ui, r, &resp, checked, &t);
+    let ic = pop(Rect::from_center_size(pos2(r.center().x, r.min.y + BIG_ICON_Y), vec2(32.0, 32.0)), hover);
     let (c, a) = if on { (t.icon, t.accent) } else { (t.text_disabled, t.text_disabled) };
     icons::paint(ui.painter(), ic, icon, c, a);
     let mut y = r.min.y + BIG_LABEL_Y;
@@ -225,8 +302,8 @@ pub fn small(ui: &mut Ui, app: &mut WordApp, icon: &str, label: Option<&str>, ti
     let (r, resp) = ui.allocate_exact_size(vec2(24.0 + text_w, 22.0), Sense::click());
     keytip_badge(ui, r, id, tip);
     let on = enabled(app, id);
-    bg(ui, r, &resp, checked, &t);
-    let ic = Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0));
+    let hover = bg(ui, r, &resp, checked, &t);
+    let ic = pop(Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0)), hover);
     let (c, a) = if on { (t.icon, t.accent) } else { (t.text_disabled, t.text_disabled) };
     icons::paint(ui.painter(), ic, icon, c, a);
     if let Some(l) = label {
@@ -259,9 +336,9 @@ pub fn split(
     let (r, resp) = ui.allocate_exact_size(vec2(24.0, 22.0), Sense::click());
     keytip_badge(ui, r, id, tip);
     let (ar, aresp) = ui.allocate_exact_size(vec2(11.0, 22.0), Sense::click());
-    bg(ui, r, &resp, checked, &t);
+    let hover = bg(ui, r, &resp, checked, &t);
     bg(ui, ar, &aresp, false, &t);
-    let ic = Rect::from_center_size(r.center(), vec2(17.0, 17.0));
+    let ic = pop(Rect::from_center_size(r.center(), vec2(17.0, 17.0)), hover);
     icons::paint(ui.painter(), ic, icon, t.icon, t.accent);
     if let Some(sw) = swatch {
         ui.painter().rect_filled(Rect::from_min_max(pos2(r.min.x + 4.0, r.max.y - 5.0), pos2(r.max.x - 4.0, r.max.y - 2.0)), 0.0, sw);
@@ -309,8 +386,8 @@ pub fn menu_button(
         let w = (galley_w + 22.0).max(44.0);
         let (r, resp) = ui.allocate_exact_size(vec2(w, CONTENT_H), Sense::click());
         keytip_badge(ui, r, "menu", tip);
-        bg(ui, r, &resp, false, &t);
-        icons::paint(ui.painter(), Rect::from_center_size(pos2(r.center().x, r.min.y + BIG_ICON_Y), vec2(32.0, 32.0)), icon, c, a);
+        let hover = bg(ui, r, &resp, false, &t);
+        icons::paint(ui.painter(), pop(Rect::from_center_size(pos2(r.center().x, r.min.y + BIG_ICON_Y), vec2(32.0, 32.0)), hover), icon, c, a);
         let lines: Vec<&str> = label.unwrap_or("").split('\n').collect();
         let mut y = r.min.y + BIG_LABEL_Y;
         for (i, l) in lines.iter().enumerate() {
@@ -322,9 +399,15 @@ pub fn menu_button(
         let text_w = label.map(|l| ui.ctx().fonts_mut(|f| f.layout_no_wrap(l.to_string(), regular(11.5), t.text).size().x) + 6.0).unwrap_or(0.0);
         let (r, resp) = ui.allocate_exact_size(vec2(24.0 + text_w + 10.0, 22.0), Sense::click());
         keytip_badge(ui, r, "menu", tip);
-        bg(ui, r, &resp, false, &t);
+        let hover = bg(ui, r, &resp, false, &t);
         // The icon at the start edge, the label after it, the drop-down marker at the end edge.
-        icons::paint(ui.painter(), Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0)), icon, c, a);
+        icons::paint(
+            ui.painter(),
+            pop(Rect::from_center_size(pos2(crate::rtl::start_x(r, 12.0), r.center().y), vec2(17.0, 17.0)), hover),
+            icon,
+            c,
+            a,
+        );
         if let Some(l) = label {
             ui.painter().text(pos2(crate::rtl::start_x(r, 24.0), r.center().y), crate::rtl::start_center(), l, regular(11.5), text);
         }

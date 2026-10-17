@@ -25,9 +25,14 @@ pub fn explanation(key: &str) -> Option<&'static str> {
 /// Draw the thumbnail for `key` into `r`; false when there is none (the tooltip then shows text
 /// only).
 pub fn thumbnail(p: &Painter, r: Rect, key: &str, t: &Tokens) -> bool {
+    thumbnail_animated(p, r, key, t, 1.0)
+}
+
+/// [`thumbnail`] at a point of its little film: `phase` 0 → 1 (1 = the finished picture).
+pub fn thumbnail_animated(p: &Painter, r: Rect, key: &str, t: &Tokens, phase: f32) -> bool {
     match ui_kit::entry(key) {
         Some(e) => {
-            (e.draw)(&ui_kit::Draw::new(p, r, t));
+            (e.draw)(&ui_kit::Draw::animated(p, r, t, phase));
             true
         }
         None => false,
@@ -67,6 +72,12 @@ mod tests {
         assert_eq!(key("service.external", &serde_json::json!({"pdf": true})), "service.external:pdf");
         assert_eq!(key("service.external", &serde_json::json!({"pdf": false})), "service.external");
         assert_eq!(key("mailings.next", &serde_json::json!({})), "mailings.next");
+        assert_eq!(key("insert.header", &serde_json::json!({"preset": "title"})), "insert.header:title");
+        assert_eq!(key("para.bullets", &serde_json::json!({"off": true})), "para.bullets:off");
+        assert_eq!(key("ui.dialog", &serde_json::json!({"name": "goto"})), "ui.dialog:goto");
+        // A variant without its own picture falls back to the command's.
+        assert!(ui_kit::entry("para.borders:bottom").is_some());
+        assert!(ui_kit::entry("no.such:thing").is_none());
     }
 
     /// "Check every button": every control of every ribbon tab runs on an Arabic service

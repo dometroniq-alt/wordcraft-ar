@@ -341,7 +341,7 @@ impl Draw<'_> {
 
     /// A pen stroke over the text fades out.
     fn rev_hide_ink(&self) {
-        let stroke = |d: &Self, a: Rect, c: Color32| {
+        let stroke = |d: &Draw<'_>, a: Rect, c: Color32| {
             let n = 24;
             let pts: Vec<_> = (0..=n)
                 .map(|i| {

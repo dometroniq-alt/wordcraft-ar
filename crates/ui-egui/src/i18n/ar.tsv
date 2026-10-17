@@ -2658,19 +2658,6 @@
 	New documents	المستندات الجديدة
 	Arabic documents (right-to-left, Times New Roman 14 pt)	مستندات عربية (من اليمين إلى اليسار، Times New Roman 14 pt)
 	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	مفعّل: المستند الفارغ الجديد يبدأ من اليمين إلى اليسار بخط عربي أيًّا كانت لغة الواجهة. معطّل: مستند WordCraft المعتاد بخط Aptos من اليسار إلى اليمين.
-	Reads the markers you typed (١. أ. أولاً. (١)) and renumbers every item by the service cycle, level by level, with hanging indents.	يقرأ العلامات المكتوبة يدويًا ويعيد ترقيم كل البنود بدورة كتابات الخدمة، مستوى بعد مستوى، مع مسافات معلّقة.
-	Renumbers only the selected paragraphs by the service cycle; the rest of the document is untouched.	يعيد ترقيم الفقرات المحددة فقط بدورة الخدمة؛ بقية المستند لا تُمَسّ.
-	Turns the typed markers into a real Word multilevel list that keeps numbering itself as you add items.	يحوّل العلامات المكتوبة إلى قائمة متعددة المستويات حقيقية تُرقِّم نفسها كلما أضفت بندًا.
-	Puts a full stop at the end of every item that lacks one.	يضع نقطة في نهاية كل بند ينقصه ذلك.
-	Stamps the classification word (محدود، سري…) in the header and footer of every page.	يختم كلمة درجة الكتمان، مثل محدود أو سري، في رأس كل صفحة وتذييلها.
-	Writes ( page - total ) in Arabic-Indic digits at the bottom of every page.	يكتب رقم الصفحة ومجموع الصفحات بين قوسين بالأرقام الهندية أسفل كل صفحة.
-	Justifies by widening the spaces only; the last line of a paragraph stays short.	يضبط السطر بتوسيع المسافات فقط؛ السطر الأخير من الفقرة يبقى قصيرًا.
-	Justifies by stretching one letter joint per word a little, then the spaces.	يضبط السطر بمدّ وصلة حرف واحدة في كل كلمة مدًّا خفيفًا، ثم بالمسافات.
-	Justifies by stretching the letter joints more, before the spaces.	يضبط السطر بمدّ وصلات الحروف أكثر، قبل المسافات.
-	Justifies mostly by stretching the letter joints; spaces barely widen.	يضبط السطر بمدّ وصلات الحروف في الغالب؛ المسافات تكاد لا تتسع.
-	Stretches every line to both margins, the last line of each paragraph too.	يمدّ كل سطر إلى الهامشين، حتى السطر الأخير من كل فقرة.
-	Sends the document to the ServiceWord-AR engine, which measures the real fonts and writes the kashida into the text, and opens the result.	يرسل المستند إلى محرك التنسيق الخارجي الذي يقيس الخطوط الحقيقية ويكتب الكشيدة داخل النص، ثم يفتح النتيجة.
-	Formats with ServiceWord-AR and also makes the stamped print PDF beside the document.	ينسّق بالمحرك الخارجي ويُنتج أيضًا نسخة للطباعة مختومة بجانب المستند.
 	Makes an envelope page with the delivery and return addresses, ready to print.	ينشئ صفحة ظرف بعنوان المرسَل إليه وعنوان المرسِل، جاهزة للطباعة.
 	Makes a sheet of address labels, the same address on each or one per recipient.	ينشئ ورقة ملصقات عناوين: العنوان نفسه على كل ملصق أو ملصق لكل مستلم.
 	Starts a mail merge: one letter, envelope or label design that is filled in for every person in a list.	يبدأ دمج المراسلات: تصميم واحد لرسالة أو ظرف أو ملصق يُملأ لكل شخص في قائمة.
@@ -2918,3 +2905,16 @@
 	{n} commands in the registry	{n} أمرًا في السجل
 	{n} Arabic interface strings	{n} نصًّا في الواجهة العربية
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	لإضافة أمر: أيقونته في icons.rs، ومدخل واحد في ui_kit/<tab>.rs، وسطر واحد في i18n/ar.tsv — انظر docs/ar-ui-kit.md.
+	Renumbers every item by the service cycle (١. then أ. then أولاً. then (١)…), level by level, with hanging indents. Example: «1- المهمة» and «a- الواجبات» typed any way become «١.» and «أ.», each level stepped in.	يعيد ترقيم كل البنود بدورة كتابات الخدمة (١. ثم أ. ثم أولاً. ثم (١)…) مستوى بعد مستوى، مع مسافات معلّقة. مثال: تكتب «1- المهمة» و«a- الواجبات» بأي شكل فتصير «١.» و«أ.»، وكل مستوى داخل عن الذي قبله.
+	Renumbers only the paragraphs you selected by the service cycle; the rest of the document stays as it is. Example: select one section and fix its numbering alone.	يعيد ترقيم الفقرات التي حدّدتها فقط بدورة الخدمة؛ بقية المستند تبقى كما هي. مثال: حدّد فقرة واحدة وأصلح ترقيمها وحدها.
+	Turns the typed markers into a real Word multilevel list that numbers itself: add or delete an item and the rest renumber. Example: insert a new «ب.» and «جـ.» becomes «د.» on its own.	يحوّل العلامات المكتوبة يدويًا إلى قائمة Word متعددة المستويات تُرقِّم نفسها: أضف بندًا أو احذفه فتتغير أرقام الباقي تلقائيًا. مثال: أدخل «ب.» جديدة فتصير «جـ.» القديمة «د.» من تلقاء نفسها.
+	Puts a full stop at the end of every item that lacks one, as service writing requires. Example: «فحص المرضى» becomes «فحص المرضى.».	يضع نقطة في نهاية كل بند لا نقطة له، كما تشترط كتابات الخدمة. مثال: «فحص المرضى» تصير «فحص المرضى.».
+	Stamps the classification word in the header and footer of every page, centred. Example: pick «محدود» and every page is marked محدود top and bottom.	يختم كلمة درجة الكتمان في رأس كل صفحة وتذييلها، في الوسط. مثال: اختر «محدود» فتُختم كل صفحة بكلمة محدود أعلاها وأسفلها.
+	Writes ( page - total ) in Arabic-Indic digits at the bottom of every page, and it updates itself. Example: the third of seven pages reads ( ٣ - ٧ ).	يكتب ( رقم الصفحة - المجموع ) بالأرقام الهندية أسفل كل صفحة، ويتحدّث تلقائيًا. مثال: الصفحة الثالثة من سبع تُكتب ( ٣ - ٧ ).
+	Justifies by widening the spaces only; letters keep their shape and the last line of a paragraph stays short.	يضبط السطر بتوسيع المسافات فقط؛ الحروف تبقى على شكلها، والسطر الأخير من الفقرة يبقى قصيرًا.
+	Justifies by stretching one letter joint per word a little (ـ), then widening the spaces. Example: «فحص» becomes «فحـص».	يضبط السطر بمدّ وصلة حرف واحدة في كل كلمة قليلًا (ـ)، ثم بتوسيع المسافات. مثال: «فحص» تصير «فحـص».
+	Justifies by stretching the letter joints more before the spaces widen: the usual look of a typed service letter.	يضبط السطر بمدّ وصلات الحروف أكثر قبل توسيع المسافات: الشكل المعتاد لكتاب الخدمة المطبوع.
+	Justifies mostly by stretching the letter joints; the spaces barely widen. Example: «فحص» becomes «فحــــص».	يضبط السطر بمدّ وصلات الحروف في الغالب؛ المسافات لا تكاد تتسع. مثال: «فحص» تصير «فحــــص».
+	Stretches every line to both margins, the last line of each paragraph too, like a signature block or a title.	يمدّ كل سطر إلى الهامشين، حتى السطر الأخير من كل فقرة، كما في كتلة التوقيع أو العنوان.
+	Sends the document to the ServiceWord-AR engine, which measures the real fonts and writes the kashida into the text itself, then opens the result beside the original.	يرسل المستند إلى محرك ServiceWord-AR الذي يقيس الخطوط الحقيقية ويكتب الكشيدة داخل النص نفسه، ثم يفتح النتيجة بجانب الأصل.
+	Formats with ServiceWord-AR and also makes the stamped print PDF beside the document, ready for the printer.	ينسّق بمحرك ServiceWord-AR ويصنع أيضًا نسخة PDF المختومة للطباعة بجانب المستند، جاهزة للطابعة.
