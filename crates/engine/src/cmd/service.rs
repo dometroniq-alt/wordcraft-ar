@@ -612,7 +612,9 @@ fn run_python(given: Option<&str>, tail: &[String]) -> Result<std::process::Outp
     let cands = python_candidates(given);
     let mut last_err = String::from("no Python interpreter found (install Python 3 from python.org)");
     for (prog, args) in &cands {
-        match std::process::Command::new(prog).args(args).args(tail).output() {
+        // The engine prints Arabic (file names, progress); a Windows console defaults to a legacy
+        // code page that cannot encode it, which would make Python fail instead of formatting.
+        match std::process::Command::new(prog).args(args).args(tail).env("PYTHONUTF8", "1").env("PYTHONIOENCODING", "utf-8").output() {
             Ok(out) => return Ok(out),
             Err(e) => last_err = format!("cannot run {prog}: {e}"),
         }
