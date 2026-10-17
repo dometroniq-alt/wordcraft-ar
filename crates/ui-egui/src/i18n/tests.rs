@@ -104,8 +104,10 @@ fn placeholders_fill_without_reinterpreting_values() {
 
 #[test]
 fn malformed_catalog_lines_are_skipped_not_fatal() {
-    let (c, errors) =
-        Catalog::parse("# c\n\tHello\t你好\nctx\tA\tB\n\tOpen…\t打开\n\tPage {n}\t第 {m} 页\nno tabs\n\tHello\t重复\n\tLine\\nTwo\t一\\n二\n");
+    let (c, errors) = Catalog::parse_with(
+        "# c\n\tHello\t你好\nctx\tA\tB\n\tOpen…\t打开\n\tPage {n}\t第 {m} 页\nno tabs\n\tHello\t重复\n\tLine\\nTwo\t一\\n二\n",
+        false,
+    );
     assert_eq!(errors.len(), 5, "{errors:?}");
     assert_eq!(c.plain("Hello"), Some("你好"), "the first entry wins");
     assert_eq!(c.plain("Line\nTwo"), Some("一\n二"));
@@ -669,7 +671,7 @@ fn spanish_built_in_style_names_are_translated() {
 
 #[test]
 fn context_entries_override_only_their_context_and_unknown_contexts_are_rejected() {
-    let (c, errors) = Catalog::parse("\tTitle\tЗаголовок\npreview\tTitle\tТитул\n\tFont\tШрифт\nnope\tFont\tX\n");
+    let (c, errors) = Catalog::parse_with("\tTitle\tЗаголовок\npreview\tTitle\tТитул\n\tFont\tШрифт\nnope\tFont\tX\n", false);
     assert_eq!(errors.len(), 1, "{errors:?}");
     assert!(errors[0].contains("unknown context"));
     assert_eq!(c.plain("Title"), Some("Заголовок"));
@@ -989,7 +991,8 @@ fn polish_covers_every_key_of_every_other_catalog() {
     let polish = keys(lang("pl").0.source);
     // Italian and Hungarian still carry "Style: APA", which the interface no longer shows;
     // Hungarian and Bulgarian also name the citation styles, and Bulgarian has a few one-line
-    for other in Lang::all().filter(|l| *l != Lang::EN && !matches!(l.code(), "pl" | "it" | "hu" | "bg" | "vi" | "sv" | "hr")) {
+    // extras. Arabic (WordCraft AR) covers the union of every catalog, extras included.
+    for other in Lang::all().filter(|l| *l != Lang::EN && !matches!(l.code(), "pl" | "it" | "hu" | "bg" | "vi" | "sv" | "hr" | "ar")) {
         let mut missing: Vec<String> = keys(other.0.source).difference(&polish).cloned().collect();
         missing.sort();
         assert!(missing.is_empty(), "pl lacks {}'s {missing:?}", other.code());
@@ -1550,4 +1553,79 @@ fn bundled_interface_fonts_cover_vietnamese_letters() {
         }
     }
     assert!(!lang("vi").uses_cjk());
+}
+
+/// WordCraft AR: Arabic covers everything the other catalogs cover, is the fork's interface on a
+/// system without another translated language, and ribbon labels read as Arabic.
+#[test]
+fn arabic_covers_the_entire_existing_interface_catalog() {
+    use std::collections::HashSet;
+    let keys = |source| parse_entries(source).0.into_iter().map(|e| e.source).collect::<HashSet<_>>();
+    let ar = lang("ar");
+    for other in Lang::all().filter(|l| *l != Lang::EN) {
+        let missing: Vec<String> = keys(other.0.source).difference(&keys(ar.0.source)).cloned().collect();
+        assert!(missing.is_empty(), "Arabic lacks {} entries of {}: {missing:?}", missing.len(), other.code());
+    }
+    assert_eq!(tr(ar, "Home"), "الرئيسية");
+    assert_eq!(tr(ar, "Service"), "الخدمة");
+    assert_eq!(tr(ar, "Classification"), "درجة الكتمان");
+    assert_eq!(tr(ar, "unknown future label"), "unknown future label");
+    assert!(ar.is_arabic());
+    assert!(!lang("de").is_arabic());
+    assert_eq!(lang_from_tag("ar_IQ.UTF-8"), Some(ar));
+    assert_eq!(lang_from_tag("ar-SA"), Some(ar));
+}
+
+/// Every Arabic letter, mark and digit of the catalog is in the bundled Arabic interface face, so
+/// the Arabic interface never falls back to a system font.
+#[test]
+fn bundled_interface_fonts_cover_arabic_without_system_fallbacks() {
+    // The interface faces are not in the document font list; load them into a private database.
+    let db = wordcraft_fonts::FontDb::with_font_dirs(Vec::new());
+    for bytes in [
+        &include_bytes!("../../../../assets/fonts/NotoSansArabic-Regular.ttf")[..],
+        &include_bytes!("../../../../assets/fonts/NotoSansArabic-Medium.ttf")[..],
+        &include_bytes!("../../../../assets/fonts/NotoSansArabic-SemiBold.ttf")[..],
+    ] {
+        assert!(db.add_font(bytes.to_vec()) > 0);
+    }
+    let (entries, errors) = parse_entries(lang("ar").0.source);
+    assert!(errors.is_empty());
+    let arabic = |c: &char| ('\u{0600}'..='\u{06ff}').contains(c) || ('\u{FB50}'..='\u{FDFF}').contains(c) || ('\u{FE70}'..='\u{FEFF}').contains(c);
+    let chars: std::collections::HashSet<char> = entries.iter().flat_map(|e| e.translation.chars()).filter(arabic).collect();
+    assert!(chars.len() > 30, "the catalog is Arabic");
+    for style in ["Regular", "Medium", "SemiBold"] {
+        let face = db.face("Noto Sans Arabic", style);
+        assert_eq!(face.family, "Noto Sans Arabic", "must use the bundled Arabic face");
+        for ch in &chars {
+            assert_ne!(face.glyph_for(*ch), 0, "Noto Sans Arabic {style} lacks {ch:?}");
+        }
+    }
+    // The document fallback for Arabic script is the bundled Naskh face, in the document list.
+    let docs = wordcraft_fonts::FontDb::with_font_dirs(Vec::new());
+    for style in ["Regular", "Bold"] {
+        let face = docs.face("Noto Naskh Arabic", style);
+        assert_eq!(face.family, "Noto Naskh Arabic", "{style}: bundled Arabic document fallback");
+        assert_ne!(face.glyph_for('ش'), 0);
+    }
+}
+
+/// WordCraft AR: labels mixing Arabic with numbers or Latin come out in the run order egui
+/// draws right-to-left text correctly (UAX #9 L2 over runs; the shaper orders within a run).
+#[test]
+fn arabic_labels_are_reordered_for_egui_by_run() {
+    assert_eq!(rtl_display("الصفحة 1 من 2"), "2 من 1الصفحة ");
+    assert_eq!(rtl_display("220 كلمة"), " كلمة220");
+    assert_eq!(rtl_display("درجة الكتمان"), "درجة الكتمان");
+    assert_eq!(rtl_display("تصدير PDF"), "PDFتصدير ");
+    assert_eq!(rtl_display("إعادة ترقيم\nالدورة"), "إعادة ترقيم\nالدورة");
+    assert_eq!(rtl_display("Save"), "Save");
+    assert_eq!(rtl_display(""), "");
+    // Filled placeholders are reordered when the interface is Arabic, as stored entries are.
+    let ar = lang("ar");
+    let before = current();
+    set_current(ar);
+    assert_eq!(fmt(tr(ar, "Page {page} of {pages}"), &[("page", "1"), ("pages", "2")]), "2 من 1الصفحة ");
+    set_current(before);
+    assert_eq!(fmt("Page {page} of {pages}", &[("page", "1"), ("pages", "2")]), "Page 1 of 2");
 }

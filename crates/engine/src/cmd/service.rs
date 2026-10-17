@@ -588,11 +588,11 @@ fn python_candidates(given: Option<&str>) -> Vec<(String, Vec<String>)> {
             if launcher.exists() {
                 c.push((launcher.to_string_lossy().into_owned(), vec!["-3".into()]));
             }
-            if let Ok(rd) = std::fs::read_dir(&programs) {
-                let mut dirs: Vec<std::path::PathBuf> = rd.flatten().map(|e| e.path()).filter(|p| p.join("python.exe").exists()).collect();
-                dirs.sort();
-                for d in dirs.into_iter().rev() {
-                    c.push((d.join("python.exe").to_string_lossy().into_owned(), Vec::new()));
+            // Newest first; the installer names the folder after the version.
+            for v in ["Python314", "Python313", "Python312", "Python311", "Python310", "Python39"] {
+                let exe = programs.join(v).join("python.exe");
+                if exe.exists() {
+                    c.push((exe.to_string_lossy().into_owned(), Vec::new()));
                 }
             }
         }

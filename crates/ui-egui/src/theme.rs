@@ -480,15 +480,37 @@ pub fn font_definitions_language(prefer_hans: bool, prefer_korean: bool, system_
     add(&mut fonts, "InterSemiBold", include_bytes!("../../../assets/fonts/Inter-SemiBold.ttf"));
     add(&mut fonts, "SourceSans", include_bytes!("../../../assets/fonts/SourceSans3-Regular.ttf"));
     add(&mut fonts, "Mono", include_bytes!("../../../assets/fonts/JetBrainsMono-Regular.ttf"));
+    // WordCraft AR: the Arabic interface face, right after Inter so Arabic letters (which Inter
+    // lacks) are shaped by one Arabic font and join correctly (epaint shapes each run with
+    // harfrust; a run of Arabic letters is laid out right to left).
+    add(&mut fonts, "Arabic", include_bytes!("../../../assets/fonts/NotoSansArabic-Regular.ttf"));
+    add(&mut fonts, "ArabicMedium", include_bytes!("../../../assets/fonts/NotoSansArabic-Medium.ttf"));
+    add(&mut fonts, "ArabicSemiBold", include_bytes!("../../../assets/fonts/NotoSansArabic-SemiBold.ttf"));
+    // With an Arabic interface the Arabic face comes first: it has no Latin letters or digits
+    // (the bundled copy's ASCII digit mappings are removed and its vertical metrics match
+    // Inter's, so rows keep their height; see ATTRIBUTION.md), so those still
+    // come from Inter in reading order, while the colon, the full stop and the space it does have
+    // stay in the Arabic run, placed right to left with the words ("الحجم:" keeps its colon on
+    // the left). Other interfaces keep Inter first and use the Arabic face only for Arabic.
+    let arabic_ui = crate::i18n::current().is_arabic();
+    let order =
+        |latin: &str, arabic: &str| -> Vec<String> { if arabic_ui { vec![arabic.into(), latin.into()] } else { vec![latin.into(), arabic.into()] } };
     if let Some(prop) = fonts.families.get_mut(&FontFamily::Proportional) {
-        prop.insert(0, "Inter".into());
+        for (i, n) in order("Inter", "Arabic").into_iter().enumerate() {
+            prop.insert(i, n);
+        }
         prop.push("SourceSans".into());
     }
     if let Some(m) = fonts.families.get_mut(&FontFamily::Monospace) {
         m.insert(0, "Mono".into());
+        m.insert(1, "Arabic".into());
     }
-    fonts.families.insert(FontFamily::Name("medium".into()), vec!["InterMedium".into(), "Inter".into(), "SourceSans".into()]);
-    fonts.families.insert(FontFamily::Name("semibold".into()), vec!["InterSemiBold".into(), "Inter".into(), "SourceSans".into()]);
+    let mut medium = order("InterMedium", "ArabicMedium");
+    medium.extend(["Inter".to_string(), "SourceSans".to_string()]);
+    fonts.families.insert(FontFamily::Name("medium".into()), medium);
+    let mut semibold = order("InterSemiBold", "ArabicSemiBold");
+    semibold.extend(["Inter".to_string(), "SourceSans".to_string()]);
+    fonts.families.insert(FontFamily::Name("semibold".into()), semibold);
     let add_cjk = |fonts: &mut FontDefinitions, name: String, data: FontData| {
         fonts.font_data.insert(name.clone(), Arc::new(data));
         for fam in [FontFamily::Proportional, FontFamily::Name("medium".into()), FontFamily::Name("semibold".into())] {

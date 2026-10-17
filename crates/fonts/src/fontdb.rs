@@ -38,6 +38,12 @@ static BUNDLED: &[&[u8]] = &[
     include_bytes!("../../../assets/fonts/Inter-Medium.ttf"),
     include_bytes!("../../../assets/fonts/Inter-SemiBold.ttf"),
     include_bytes!("../../../assets/fonts/JetBrainsMono-Regular.ttf"),
+    // WordCraft AR: a Naskh face as the document fallback for Arabic script when the document's
+    // font isn't installed (a bare machine, the web build): most Arabic documents are set in
+    // Naskh-style fonts, so the fallback keeps their look. The interface uses Noto Sans Arabic
+    // (`ui-egui`), which stays out of the document font list.
+    include_bytes!("../../../assets/fonts/NotoNaskhArabic-Regular.ttf"),
+    include_bytes!("../../../assets/fonts/NotoNaskhArabic-Bold.ttf"),
 ];
 
 #[derive(Clone)]

@@ -118,14 +118,18 @@ pub fn parse_entries(text: &str) -> (Vec<Entry>, Vec<String>) {
 
 impl Catalog {
     /// Build a catalog from its valid entries; the errors of the skipped lines come back too.
-    pub fn parse(text: &str) -> (Catalog, Vec<String>) {
+    /// With `rtl`, each translation without placeholders is stored in the run order egui draws
+    /// right-to-left text in ([`super::rtl_display`]); entries with placeholders are reordered by
+    /// [`super::fmt`] once they are filled.
+    pub fn parse_with(text: &str, rtl: bool) -> (Catalog, Vec<String>) {
         let (entries, errors) = parse_entries(text);
         let mut catalog = Catalog::default();
         for e in entries {
+            let translation = if rtl && placeholders(&e.translation).is_empty() { super::rtl_display(&e.translation) } else { e.translation };
             if e.context.is_empty() {
-                catalog.plain.insert(e.source, e.translation);
+                catalog.plain.insert(e.source, translation);
             } else {
-                catalog.contextual.insert((e.context, e.source), e.translation);
+                catalog.contextual.insert((e.context, e.source), translation);
             }
         }
         (catalog, errors)

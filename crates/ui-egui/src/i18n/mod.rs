@@ -52,8 +52,10 @@ pub struct LangInfo {
 }
 
 /// The registry. English first: it is the fallback and the source language.
-pub static LANGUAGES: [LangInfo; 23] = [
+pub static LANGUAGES: [LangInfo; 24] = [
     LangInfo { code: "en", name: "English", source: "", prefer_hans: false, editing_lang: None, catalog: OnceLock::new() },
+    // WordCraft AR: Arabic, the fork's default interface (see `detect_system_lang`).
+    LangInfo { code: "ar", name: "العربية", source: include_str!("ar.tsv"), prefer_hans: false, editing_lang: None, catalog: OnceLock::new() },
     // Simplified Chinese; `zh`, `zh-CN`, `zh-SG` and `zh-Hans-*` resolve here (see `candidates`).
     LangInfo {
         code: "zh-hans",
@@ -170,7 +172,7 @@ pub static LANGUAGES: [LangInfo; 23] = [
 impl LangInfo {
     fn catalog(&self) -> &Catalog {
         self.catalog.get_or_init(|| {
-            let (catalog, errors) = Catalog::parse(self.source);
+            let (catalog, errors) = Catalog::parse_with(self.source, self.code == "ar");
             for error in errors {
                 log::warn!("{} interface catalog: {error}; that entry shows in English", self.code);
             }
@@ -214,6 +216,11 @@ impl Lang {
 
     pub fn prefers_korean(self) -> bool {
         self.0.code == "ko"
+    }
+
+    /// WordCraft AR: the Arabic interface (its font order puts the Arabic face first).
+    pub fn is_arabic(self) -> bool {
+        self.0.code == "ar"
     }
 
     /// The language new blank documents are written in with this interface ([`LangInfo::editing_lang`]).
@@ -320,7 +327,9 @@ fn detect_system_lang() -> Lang {
         return l;
     }
     let tags: Vec<String> = sys_locale::get_locales().take(16).collect();
-    first_supported(tags.iter().map(String::as_str)).unwrap_or(Lang::EN)
+    // WordCraft AR: Arabic is the interface unless the system asks for another translated
+    // language; an English system gets Arabic too (File › Options › Interface language changes it).
+    first_supported(tags.iter().map(String::as_str)).filter(|l| *l != Lang::EN).or_else(|| Lang::from_code("ar")).unwrap_or(Lang::EN)
 }
 
 /// The system region (#838): it picks the paper File › New starts on, the default measurement
@@ -445,6 +454,63 @@ pub fn prefixed(prefix: &str, rest: &str) -> String {
 /// Fill `{name}` placeholders in one pass. Unknown placeholders stay as written, and inserted
 /// values are never read as templates again, so a file name containing `{n}` stays intact.
 pub fn fmt(template: &str, args: &[(&str, &str)]) -> String {
+    let out = fill(template, args);
+    if current().is_arabic() { rtl_display(&out) } else { out }
+}
+
+/// WordCraft AR: `s` with its runs in the order egui draws a right-to-left label correctly.
+///
+/// egui places a label's font runs left to right in logical order and shapes each run on its
+/// own, so an Arabic run comes out right to left while a number or Latin word next to it stays
+/// where it was: "الصفحة 1 من 2" would show the words right to left but the sequence
+/// *word, 1, word, 2* read left to right. UAX #9's rule L2 gives the visual order; applied to
+/// the runs of one embedding level (not to characters, which the shaper orders within a run)
+/// it yields a string that egui draws as the bidi algorithm would. Each line of a multi-line
+/// label is a paragraph of its own. Strings of one run come back unchanged.
+pub fn rtl_display(s: &str) -> String {
+    if !s.chars().any(wordcraft_fonts::is_rtl) {
+        return s.to_string();
+    }
+    let mut out = String::with_capacity(s.len());
+    for (i, line) in s.split('\n').enumerate() {
+        if i > 0 {
+            out.push('\n');
+        }
+        out.push_str(&rtl_display_line(line));
+    }
+    out
+}
+
+fn rtl_display_line(line: &str) -> String {
+    let levels = wordcraft_layout::para::bidi_levels(line, true);
+    if levels.len() != line.len() {
+        return line.to_string();
+    }
+    // Runs of one level, as (start byte, level).
+    let mut runs: Vec<(usize, u8)> = Vec::new();
+    for (i, _) in line.char_indices() {
+        let level = levels.get(i).copied().unwrap_or(1);
+        if runs.last().is_none_or(|last| last.1 != level) {
+            runs.push((i, level));
+        }
+    }
+    if runs.len() < 2 {
+        return line.to_string();
+    }
+    let run_levels: Vec<u8> = runs.iter().map(|r| r.1).collect();
+    let mut out = String::with_capacity(line.len());
+    for k in wordcraft_layout::para::visual_order(&run_levels) {
+        let Some(&(start, _)) = runs.get(k) else { continue };
+        let end = runs.get(k + 1).map(|r| r.0).unwrap_or(line.len());
+        if let Some(piece) = line.get(start..end) {
+            out.push_str(piece);
+        }
+    }
+    out
+}
+
+/// Fill `{name}` placeholders of `template` from `args`; unknown names stay as written.
+fn fill(template: &str, args: &[(&str, &str)]) -> String {
     let mut out = String::with_capacity(template.len());
     let mut rest = template;
     while let Some((before, after_open)) = rest.split_once('{') {
