@@ -1773,13 +1773,12 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
         // WordCraft AR — the Service tab (right-to-left artwork: markers on the right, lines
         // running left from them).
         "serviceRenumber" => {
-            // The cycle's first three markers, each level stepping in from the right.
-            pen.text(16.5, 4.5, 8.0, "١", a, true);
-            pen.line(&[(2.5, 4.5), (12.5, 4.5)]);
-            pen.text(13.0, 10.0, 8.0, "أ", c, true);
-            pen.line(&[(2.5, 10.0), (9.5, 10.0)]);
-            pen.text(11.0, 15.5, 6.0, "(١)", c, true);
-            pen.line(&[(2.5, 15.5), (6.0, 15.5)]);
+            // Three levels stepping in from the right, each with its marker (the first in accent).
+            for (i, (y, indent)) in [(5.0, 0.0), (10.0, 3.0), (15.0, 6.0)].iter().enumerate() {
+                let x = 17.0 - indent;
+                pen.frect(x - 2.5, y - 1.5, x, y + 1.5, if i == 0 { a } else { c });
+                pen.line(&[(3.0, *y), (x - 4.0, *y)]);
+            }
         }
         "serviceList" => {
             // A multilevel list from the right, markers in boxes (a Word list, not typed text).
@@ -1814,27 +1813,28 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.text(10.0, 15.0, 5.5, "(١-٥)", a, true);
         }
         // Kashida levels: a word of two strokes whose joining stroke (the accent) lengthens.
+        // Kashida levels: two ordinary lines and, between them, a right-to-left word whose
+        // joint (the accent bar) is stretched by the level — readable at 17 pt, where letter
+        // shapes are not. The "word" is two blocks either side of the stretched joint.
         "kashidaOff" | "kashidaLow" | "kashidaMedium" | "kashidaHigh" => {
             let ext = match name {
-                "kashidaLow" => 2.0,
-                "kashidaMedium" => 4.5,
-                "kashidaHigh" => 7.0,
+                "kashidaLow" => 3.0,
+                "kashidaMedium" => 6.0,
+                "kashidaHigh" => 9.0,
                 _ => 0.0,
             };
             pen.lines(3.0, 17.0, &[4.0, 16.0]);
-            // Right "letter": a tooth; left "letter": a bowl; the kashida between them.
-            let x = 17.0;
-            pen.line(&[(x, 11.0), (x, 8.0), (x - 2.0, 8.0), (x - 2.0, 11.0)]);
-            let k0 = x - 2.0;
-            let k1 = k0 - 1.5 - ext;
+            // Right block (the first letters, Arabic reads from the right), the joint, the left block.
+            pen.frect(13.5, 8.0, 17.0, 12.0, c);
+            let k1 = 13.5 - 1.5 - ext;
             if ext > 0.0 {
-                pen.line_c(&[(k0, 11.0), (k1, 11.0)], a);
-            } else {
-                pen.line(&[(k0, 11.0), (k1, 11.0)]);
+                pen.p.rect_filled(Rect::from_min_max(pen.pt(k1, 9.0), pen.pt(13.5, 11.0)), 0.0, a);
             }
-            pen.line(&[(k1, 11.0), (k1 - 1.5, 11.0), (k1 - 2.5, 9.5), (k1 - 1.5, 8.0)]);
+            let left = k1.min(12.0);
+            pen.frect((left - 3.5).max(3.0), 8.0, left, 12.0, c);
             if ext == 0.0 {
-                pen.line(&[(3.0, 11.0), (k1 - 4.0, 11.0)]);
+                // Justify by spaces only: the gap widens, nothing is stretched.
+                pen.frect(3.0, 8.0, 6.0, 12.0, c);
             }
         }
         "distribute" => {

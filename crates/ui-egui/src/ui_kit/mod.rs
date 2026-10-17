@@ -87,45 +87,122 @@ pub fn key(id: &str, params: &Value) -> String {
     }
 }
 
-/// The icon a command's button shows outside its own ribbon group (custom groups, the Quick
-/// Access Toolbar, the kit gallery): the one its ribbon button uses, which is usually named
-/// after the id's last part. Names the icon set doesn't have draw a lettered tile
-/// ([`crate::icons::paint`]).
-pub fn icon_for(id: &str) -> &str {
+/// The icon a command's button shows (custom groups, the Quick Access Toolbar, the kit
+/// gallery): the one its ribbon button uses. Usually that is the id's last part (`format.bold`
+/// → `bold`); this table holds every button whose icon is named differently, and the dialog
+/// buttons by key (`ui.dialog:replace`). `tests::every_entry_has_a_drawn_icon` keeps it complete:
+/// a command not here and without an icon of its own name would draw a lettered tile.
+pub fn icon_for(key: &str) -> &str {
     const ICONS: &[(&str, &str)] = &[
         ("arrange.wrap", "wrapText"),
+        ("chart.editData", "chartData"),
+        ("chart.type", "changeChartType"),
+        ("design.effects", "effectsDesign"),
+        ("design.theme", "themes"),
+        ("design.paragraphSpacing", "paraSpacing"),
+        ("design.themeColors", "colors"),
+        ("design.themeFonts", "fonts"),
+        ("developer.buildingBlock", "ccGallery"),
+        ("developer.checkBox", "ccCheckBox"),
+        ("developer.comboBox", "ccComboBox"),
+        ("developer.datePicker", "ccDate"),
+        ("developer.dropDown", "ccDropDown"),
+        ("developer.picture", "ccPicture"),
+        ("developer.plainText", "ccPlainText"),
+        ("developer.repeatingSection", "ccRepeat"),
+        ("developer.richText", "ccRichText"),
         ("draw.highlighter", "highlight"),
+        ("edit.formatPainter", "painter"),
+        ("edit.repeat", "redo"),
+        ("file.new", "blankPage"),
         ("format.border", "charborder"),
+        ("format.changeCase", "case"),
         ("format.color", "fontcolor"),
         ("format.growFont", "grow"),
         ("format.shrinkFont", "shrink"),
         ("format.strikethrough", "strike"),
-        ("format.highlight", "highlight"),
+        ("insert.crossReference", "crossRef"),
+        ("insert.icon", "icons"),
+        ("insert.shape", "shapes"),
         ("insert.signatureLine", "signature"),
+        ("layout.break", "breaks"),
         ("mailings.envelopes", "envelope"),
+        ("mailings.findRecipient", "find"),
         ("mailings.insertField", "mergeField"),
+        ("mailings.start", "mailMerge"),
+        ("outline.close", "closeOutline"),
+        ("outline.collapse", "outlineCollapse"),
+        ("outline.demote", "outlineDemote"),
+        ("outline.demoteToBody", "outlineBody"),
+        ("outline.expand", "outlineExpand"),
+        ("outline.moveDown", "outlineDown"),
+        ("outline.moveUp", "outlineUp"),
+        ("outline.promote", "outlinePromote"),
         ("para.ltr", "textLtr"),
         ("para.rtl", "textRtl"),
-        ("para.bullets", "bullets"),
-        ("para.numbering", "numbering"),
-        ("table.insertRowAbove", "insertAbove"),
-        ("view.commentsPane", "showComments"),
-        ("view.marks", "pilcrow"),
-        ("edit.repeat", "redo"),
-        ("file.new", "blankPage"),
-        ("tools.customizeRibbon", "more"),
-        ("service.renumber", "serviceRenumber"),
+        ("picture.border", "picture"),
+        ("picture.color", "picture"),
+        ("picture.corrections", "picture"),
+        ("picture.iconColor", "icons"),
+        ("picture.reset", "picture"),
+        ("picture.style", "picture"),
+        ("picture.transparency", "picture"),
+        ("references.citationStyle", "citation"),
+        ("references.notes", "showNotes"),
+        ("references.updateAuthorities", "update"),
+        ("references.updateFigures", "update"),
+        ("references.updateIndex", "update"),
+        ("references.updateToc", "updateTable"),
+        ("review.changes", "reviewingPane"),
+        ("review.previousChange", "prevChange"),
+        ("review.previousComment", "prevComment"),
+        ("select.all", "select"),
         ("service.applyList", "serviceList"),
-        ("service.pageNumbers", "servicePages"),
         ("service.external", "serviceEngine"),
         ("service.kashida", "kashidaMedium"),
+        ("service.pageNumbers", "servicePages"),
+        ("service.renumber", "serviceRenumber"),
+        ("shape.breakLink", "textBoxUnlink"),
+        ("shape.effects", "shapeEffects"),
+        ("shape.fill", "shading"),
+        ("shape.outline", "pen"),
+        ("table.deleteCells", "deleteTable"),
+        ("table.distributeColumns", "distributeCols"),
+        ("table.draw", "drawTable"),
+        ("table.insertColumnLeft", "insertLeft"),
+        ("table.insertColumnRight", "insertRight"),
+        ("table.insertRowAbove", "insertAbove"),
+        ("table.insertRowBelow", "insertBelow"),
+        ("table.selectCell", "selectTable"),
+        ("table.split", "splitCells"),
+        ("table.style", "styles"),
+        ("table.viewGridlines", "gridlines"),
+        ("tools.customizeRibbon", "more"),
+        ("tools.templates", "documentTemplate"),
+        ("ui.changePicture", "picture"),
+        ("ui.dialog:about", "help"),
+        ("ui.dialog:commands", "macros"),
+        ("ui.linkTextBox", "textBoxLink"),
+        ("ui.zotero.addEditBibliography", "bibliography"),
+        ("ui.zotero.addEditCitation", "citation"),
+        ("ui.zotero.refresh", "update"),
+        ("ui.zotero.removeCodes", "unlinkCitations"),
+        ("ui.zotero.setDocPrefs", "docPrefs"),
+        ("view.altTextPane", "altText"),
+        ("view.commentsPane", "showComments"),
+        ("view.marks", "pilcrow"),
     ];
+    if let Some((_, icon)) = ICONS.iter().find(|(c, _)| *c == key) {
+        return icon;
+    }
+    // A dialog button is named after its dialog (`ui.dialog:replace` → `replace`).
+    if let Some(("ui.dialog", name)) = key.split_once(':') {
+        return name;
+    }
+    let id = key.split(':').next().unwrap_or(key);
     ICONS.iter().find(|(c, _)| *c == id).map_or_else(|| id.rsplit('.').next().unwrap_or(id), |(_, icon)| *icon)
 }
 
-/// Whether `id` names something a ribbon button can run: a registered command, an interface
-/// command (`ui.*`), or a Word feature the parity catalog lists that has a button but no command
-/// yet (Dictate, Translate…).
 #[cfg(test)]
 pub fn is_button_id(id: &str) -> bool {
     id.starts_with("ui.")
@@ -146,5 +223,19 @@ mod tests {
             assert!(is_button_id(id), "{}: unknown command", e.key);
             assert!(e.explain.ends_with('.') && e.explain.split_whitespace().count() >= 4, "{}: one full sentence", e.key);
         }
+    }
+
+    /// Every entry's command maps to an icon the set draws (no lettered tiles in the gallery, the
+    /// Quick Access Toolbar or a custom group).
+    #[test]
+    fn every_entry_has_a_drawn_icon() {
+        let mut missing = Vec::new();
+        for e in entries() {
+            let icon = icon_for(e.key);
+            if !crate::icons::known(icon) {
+                missing.push(format!("{} → {icon}", e.key));
+            }
+        }
+        assert!(missing.is_empty(), "entries without an icon:\n{}", missing.join("\n"));
     }
 }

@@ -177,8 +177,7 @@ fn kit_gallery(ui: &mut Ui, t: &Tokens, filter: &str) {
     let ar = crate::i18n::Lang::from_code("ar");
     let mut shown = 0;
     for e in crate::ui_kit::entries() {
-        let id = e.key.split(':').next().unwrap_or(e.key);
-        let icon = crate::ui_kit::icon_for(id);
+        let icon = crate::ui_kit::icon_for(e.key);
         let arabic = ar.map(|ar| crate::i18n::explain(ar, e.explain)).unwrap_or(e.explain);
         if !matches(filter, &[e.key, e.explain, arabic, icon]) {
             continue;

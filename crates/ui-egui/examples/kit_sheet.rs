@@ -27,6 +27,7 @@ fn main() {
         frame += 1;
         if frame == 1 {
             ui.ctx().set_fonts(wordcraft_ui_egui::theme::font_definitions(false, false));
+            ui.ctx().set_theme(egui::Theme::Light);
             return;
         }
         let t = Tokens::get(ui.ctx());
@@ -50,9 +51,8 @@ fn main() {
             ui.painter().rect_filled(r, 4.0, t.panel);
             ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
             (e.draw)(&ui_kit::Draw::new(ui.painter(), r, &t));
-            let id = e.key.split(':').next().unwrap_or(e.key);
             let ic = Rect::from_min_size(origin + vec2(0.0, ui_kit::SIZE.y + 4.0), vec2(20.0, 20.0));
-            icons::paint(ui.painter(), ic, ui_kit::icon_for(id), t.icon, t.accent);
+            icons::paint(ui.painter(), ic, ui_kit::icon_for(e.key), t.icon, t.accent);
             ui.painter().text(origin + vec2(24.0, ui_kit::SIZE.y + 14.0), egui::Align2::LEFT_CENTER, e.key, egui::FontId::proportional(9.5), t.text);
             let _ = ui.allocate_rect(r, Sense::hover());
         }
