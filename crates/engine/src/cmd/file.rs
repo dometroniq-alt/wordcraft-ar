@@ -197,6 +197,9 @@ fn normal_document(s: &Session) -> Document {
     if let Some(lang) = &s.editing_lang {
         d.styles.default_chr.lang = Some(lang.clone());
     }
+    if s.prefs.arabic_documents {
+        crate::session::make_arabic(&mut d);
+    }
     d
 }
 

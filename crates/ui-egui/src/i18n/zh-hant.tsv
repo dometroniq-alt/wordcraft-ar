@@ -2264,3 +2264,8 @@
 	Abjad a. b. c.	阿布賈德 a. b. c.
 	Service Cycle 1. a. (1).	公務循環 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	找不到 ServiceWord-AR 引擎（請將 servicewordar 資料夾放在程式旁邊）
+	New documents	新文件
+	Arabic documents (right-to-left, Times New Roman 14 pt)	阿拉伯文文件（從右至左，Times New Roman 14 pt）
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	開：新的空白文件從右至左並使用阿拉伯文字型，與介面語言無關。關：使用 WordCraft 的 Aptos 字型、從左至右的文件。
+	Explain buttons in Arabic too (visual help tooltips)	也以阿拉伯文說明按鈕（視覺化說明工具提示）
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	「公務」和「郵件」索引標籤中的按鈕會顯示其功能的縮圖和一句介面語言的說明；開啟後，當介面不是阿拉伯文時會加上阿拉伯文的說明。

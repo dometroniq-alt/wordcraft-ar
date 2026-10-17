@@ -2660,3 +2660,8 @@ preview	Title	Пример
 	Abjad a. b. c.	Абджад а. б. в.
 	Service Cycle 1. a. (1).	Служебный цикл 1. а. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Движок ServiceWord-AR не найден (положите папку servicewordar рядом с программой)
+	New documents	Новые документы
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Арабские документы (справа налево, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Вкл.: новый пустой документ идёт справа налево с арабским шрифтом, независимо от языка интерфейса. Выкл.: документ слева направо со шрифтом Aptos от WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Пояснять кнопки и по-арабски (наглядная справка в подсказках)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Кнопки вкладок «Служба» и «Рассылки» показывают миниатюру своего действия и фразу на языке интерфейса; если включено, добавляется арабская фраза, когда интерфейс не арабский.

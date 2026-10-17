@@ -2655,3 +2655,38 @@
 	✓ None	✓ بلا
 	➕ New comment	➕ تعليق جديد
 	📂  Browse…	📂  استعراض…
+	New documents	المستندات الجديدة
+	Arabic documents (right-to-left, Times New Roman 14 pt)	مستندات عربية (من اليمين إلى اليسار، Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	مفعّل: المستند الفارغ الجديد يبدأ من اليمين إلى اليسار بخط عربي أيًّا كانت لغة الواجهة. معطّل: مستند WordCraft المعتاد بخط Aptos من اليسار إلى اليمين.
+	Reads the markers you typed (١. أ. أولاً. (١)) and renumbers every item by the service cycle, level by level, with hanging indents.	يقرأ العلامات المكتوبة يدويًا ويعيد ترقيم كل البنود بدورة كتابات الخدمة، مستوى بعد مستوى، مع مسافات معلّقة.
+	Renumbers only the selected paragraphs by the service cycle; the rest of the document is untouched.	يعيد ترقيم الفقرات المحددة فقط بدورة الخدمة؛ بقية المستند لا تُمَسّ.
+	Turns the typed markers into a real Word multilevel list that keeps numbering itself as you add items.	يحوّل العلامات المكتوبة إلى قائمة متعددة المستويات حقيقية تُرقِّم نفسها كلما أضفت بندًا.
+	Puts a full stop at the end of every item that lacks one.	يضع نقطة في نهاية كل بند ينقصه ذلك.
+	Stamps the classification word (محدود، سري…) in the header and footer of every page.	يختم كلمة درجة الكتمان، مثل محدود أو سري، في رأس كل صفحة وتذييلها.
+	Writes ( page - total ) in Arabic-Indic digits at the bottom of every page.	يكتب رقم الصفحة ومجموع الصفحات بين قوسين بالأرقام الهندية أسفل كل صفحة.
+	Justifies by widening the spaces only; the last line of a paragraph stays short.	يضبط السطر بتوسيع المسافات فقط؛ السطر الأخير من الفقرة يبقى قصيرًا.
+	Justifies by stretching one letter joint per word a little, then the spaces.	يضبط السطر بمدّ وصلة حرف واحدة في كل كلمة مدًّا خفيفًا، ثم بالمسافات.
+	Justifies by stretching the letter joints more, before the spaces.	يضبط السطر بمدّ وصلات الحروف أكثر، قبل المسافات.
+	Justifies mostly by stretching the letter joints; spaces barely widen.	يضبط السطر بمدّ وصلات الحروف في الغالب؛ المسافات تكاد لا تتسع.
+	Stretches every line to both margins, the last line of each paragraph too.	يمدّ كل سطر إلى الهامشين، حتى السطر الأخير من كل فقرة.
+	Sends the document to the ServiceWord-AR engine, which measures the real fonts and writes the kashida into the text, and opens the result.	يرسل المستند إلى محرك التنسيق الخارجي الذي يقيس الخطوط الحقيقية ويكتب الكشيدة داخل النص، ثم يفتح النتيجة.
+	Formats with ServiceWord-AR and also makes the stamped print PDF beside the document.	ينسّق بالمحرك الخارجي ويُنتج أيضًا نسخة للطباعة مختومة بجانب المستند.
+	Makes an envelope page with the delivery and return addresses, ready to print.	ينشئ صفحة ظرف بعنوان المرسَل إليه وعنوان المرسِل، جاهزة للطباعة.
+	Makes a sheet of address labels, the same address on each or one per recipient.	ينشئ ورقة ملصقات عناوين: العنوان نفسه على كل ملصق أو ملصق لكل مستلم.
+	Starts a mail merge: one letter, envelope or label design that is filled in for every person in a list.	يبدأ دمج المراسلات: تصميم واحد لرسالة أو ظرف أو ملصق يُملأ لكل شخص في قائمة.
+	Picks the list of people to merge: a table you type, or a spreadsheet or CSV file.	يختار قائمة الأشخاص للدمج: جدول تكتبه، أو ملف جدول بيانات، أو ملف نصي مفصول بفواصل.
+	Shows the recipient list so you can tick who is included, sort it or filter it.	يعرض قائمة المستلمين لتحدد من يُشمل، أو لترتيبها أو تصفيتها.
+	Shades every merge field in the document so you can see where the names and addresses will go.	يظلّل كل حقل دمج في المستند لترى أين ستوضع الأسماء والعناوين.
+	Inserts a complete address (name, street, city) as one field, laid out like on an envelope.	يدرج عنوانًا كاملًا بالاسم والشارع والمدينة كحقل واحد مرتّب كما على الظرف.
+	Inserts the opening line (Dear …,) as a field that takes each recipient's name.	يدرج سطر الافتتاح، مثل عزيزي فلان، كحقل يأخذ اسم كل مستلم.
+	Inserts one column of the list (first name, rank, unit…) at the caret as a «field».	يدرج عمودًا واحدًا من القائمة، مثل الاسم أو الرتبة أو الوحدة، عند المؤشر كحقل.
+	Adds conditions: if a field has a certain value, write one text, otherwise another.	يضيف شروطًا: إذا كانت قيمة حقل ما كذا، يُكتب نص، وإلا يُكتب نص آخر.
+	Pairs the columns of your list with the parts of an address or greeting when the names differ.	يطابق أعمدة قائمتك مع أجزاء العنوان أو التحية عندما تختلف الأسماء.
+	Replaces the «fields» with one recipient's real data so you see the finished letter.	يستبدل الحقول ببيانات مستلم واحد الحقيقية لترى الرسالة النهائية.
+	Shows the previous recipient's letter in the preview.	يعرض رسالة المستلم السابق في المعاينة.
+	Shows the next recipient's letter in the preview.	يعرض رسالة المستلم التالي في المعاينة.
+	Finds a recipient by name or any value and previews that letter.	يبحث عن مستلم بالاسم أو بأي قيمة ويعاين رسالته.
+	Checks every merged letter for missing fields or data before you print.	يفحص كل رسالة مدمجة بحثًا عن حقول أو بيانات ناقصة قبل الطباعة.
+	Produces the merged letters: one document with every letter, or straight to the printer.	يُنتج الرسائل المدمجة: مستند واحد يضم كل الرسائل، أو إلى الطابعة مباشرة.
+	Explain buttons in Arabic too (visual help tooltips)	اشرح الأزرار بالعربية أيضًا (تلميحات مصوّرة)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	أزرار تبويبي الخدمة والمراسلات تعرض صورة مصغّرة لما تفعله وجملة بلغة الواجهة؛ عند التفعيل تُضاف الجملة العربية حين لا تكون الواجهة عربية.

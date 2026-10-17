@@ -2658,3 +2658,8 @@
 	Abjad a. b. c.	Abdzsad a. b. c.
 	Service Cycle 1. a. (1).	Szolgálati ciklus 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	A ServiceWord-AR motor nem található (tegye a servicewordar mappát a program mellé)
+	New documents	Új dokumentumok
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Arab dokumentumok (jobbról balra, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Be: az új üres dokumentum jobbról balra halad, arab betűtípussal, a felület nyelvétől függetlenül. Ki: balról jobbra haladó dokumentum a WordCraft Aptos betűtípusával.
+	Explain buttons in Arabic too (visual help tooltips)	Gombok magyarázata arabul is (vizuális súgó az elemleírásokban)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	A Szolgálat és a Levelezés lap gombjai bélyegképet mutatnak arról, amit tesznek, és egy mondatot a felület nyelvén; bekapcsolva az arab mondat is megjelenik, ha a felület nem arab.

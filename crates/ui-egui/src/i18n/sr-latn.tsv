@@ -2273,3 +2273,8 @@
 	Abjad a. b. c.	Abdžad a. b. v.
 	Service Cycle 1. a. (1).	Službeni ciklus 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR motor nije pronađen (stavite fasciklu servicewordar pored programa)
+	New documents	Novi dokumenti
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Arapski dokumenti (sa desna na levo, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Uključeno: novi prazan dokument ide sa desna na levo sa arapskim fontom, bez obzira na jezik interfejsa. Isključeno: dokument sa leva na desno sa WordCraft-ovim fontom Aptos.
+	Explain buttons in Arabic too (visual help tooltips)	Objasni dugmad i na arapskom (vizuelna pomoć u opisima alatki)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Dugmad na karticama Služba i Pisma prikazuju sličicu onoga što rade i rečenicu na jeziku interfejsa; kada je uključeno, dodaje se arapska rečenica ako interfejs nije arapski.

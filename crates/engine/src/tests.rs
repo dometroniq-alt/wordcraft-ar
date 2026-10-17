@@ -7232,3 +7232,35 @@ fn vertical_align_command_sets_justified() {
         assert_eq!(serde_json::to_value(crate::cmd::page::sect(&s)).unwrap()["valign"], json!(name));
     }
 }
+
+/// WordCraft AR: new blank documents are Arabic (right-to-left, Times New Roman 14 pt, ar-IQ)
+/// by default; File › Options › arabicDocuments turns that off and on, and templates and opened
+/// files are untouched.
+#[test]
+fn new_documents_are_arabic_unless_the_preference_is_off() {
+    let mut s = s();
+    assert!(s.prefs.arabic_documents, "on by default");
+    run(&mut s, "file.new", json!({}));
+    let d = &s.doc;
+    assert_eq!(d.styles.default_para.bidi, Some(true));
+    assert_eq!(d.styles.default_chr.font.as_deref(), Some("Times New Roman"));
+    assert_eq!(d.styles.default_chr.font_cs.as_deref(), Some("Times New Roman"));
+    assert_eq!(d.styles.default_chr.size_cs, Some(14.0));
+    assert_eq!(d.styles.default_chr.lang_bidi.as_deref(), Some("ar-IQ"));
+    // Typing lands in a right-to-left paragraph with the Arabic defaults resolved.
+    run(&mut s, "text.insert", json!({"text": "شعبة الأسنان"}));
+    let rp = s.doc.para_at(&s.sel.focus).map(|p| s.doc.styles.resolve_para(&p.props)).unwrap();
+    assert!(rp.bidi);
+    // Templates keep their own design.
+    run(&mut s, "file.new", json!({"template": "letter"}));
+    assert_ne!(s.doc.styles.default_para.bidi, Some(true));
+    // Off: WordCraft's blank document.
+    assert_eq!(run(&mut s, "file.options", json!({"arabicDocuments": false}))["arabicDocuments"], json!(false));
+    assert!(!s.prefs.arabic_documents);
+    run(&mut s, "file.new", json!({}));
+    assert_eq!(s.doc.styles.default_para.bidi, None);
+    assert_eq!(s.doc.styles.default_chr.font.as_deref(), Some(wordcraft_doc::styles::BODY_FONT));
+    assert_eq!(run(&mut s, "file.options", json!({"arabicDocuments": true}))["arabicDocuments"], json!(true));
+    run(&mut s, "file.new", json!({}));
+    assert_eq!(s.doc.styles.default_para.bidi, Some(true));
+}

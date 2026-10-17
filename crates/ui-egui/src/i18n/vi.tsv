@@ -2702,3 +2702,8 @@ template	Letter	Thư
 	Abjad a. b. c.	Abjad a. b. c.
 	Service Cycle 1. a. (1).	Chu trình công vụ 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Không tìm thấy bộ máy ServiceWord-AR (đặt thư mục servicewordar cạnh chương trình)
+	New documents	Tài liệu mới
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Tài liệu tiếng Ả Rập (từ phải sang trái, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Bật: tài liệu trống mới đi từ phải sang trái với phông chữ Ả Rập, bất kể ngôn ngữ giao diện. Tắt: tài liệu từ trái sang phải với phông Aptos của WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Giải thích các nút bằng cả tiếng Ả Rập (chú giải trợ giúp trực quan)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Các nút trên thẻ Công vụ và Gửi thư hiển thị hình thu nhỏ về việc chúng làm và một câu bằng ngôn ngữ giao diện; khi bật, câu tiếng Ả Rập được thêm vào khi giao diện không phải tiếng Ả Rập.

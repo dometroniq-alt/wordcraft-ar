@@ -2652,3 +2652,8 @@ preview	Title	Tytuł
 	Abjad a. b. c.	Abdżad a. b. c.
 	Service Cycle 1. a. (1).	Cykl służbowy 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Nie znaleziono silnika ServiceWord-AR (umieść folder servicewordar obok programu)
+	New documents	Nowe dokumenty
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Dokumenty arabskie (od prawej do lewej, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Włączone: nowy pusty dokument jest od prawej do lewej z czcionką arabską, niezależnie od języka interfejsu. Wyłączone: dokument od lewej do prawej z czcionką Aptos programu WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Objaśniaj przyciski także po arabsku (podpowiedzi z pomocą wizualną)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Przyciski na kartach Służba i Korespondencja pokazują miniaturę tego, co robią, oraz zdanie w języku interfejsu; po włączeniu dodawane jest zdanie po arabsku, gdy interfejs nie jest arabski.

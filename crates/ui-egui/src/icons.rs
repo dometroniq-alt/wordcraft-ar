@@ -1434,6 +1434,95 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.line_c(&[(4.0, 12.0), (8.0, 16.0)], a);
             pen.line(&[(7.0, 13.0), (7.0, 12.0)]);
         }
+        // WordCraft AR — the Service tab (right-to-left artwork: markers on the right, lines
+        // running left from them).
+        "serviceRenumber" => {
+            // The cycle's first three markers, each level stepping in from the right.
+            pen.text(16.5, 4.5, 8.0, "١", a, true);
+            pen.line(&[(2.5, 4.5), (12.5, 4.5)]);
+            pen.text(13.0, 10.0, 8.0, "أ", c, true);
+            pen.line(&[(2.5, 10.0), (9.5, 10.0)]);
+            pen.text(11.0, 15.5, 6.0, "(١)", c, true);
+            pen.line(&[(2.5, 15.5), (6.0, 15.5)]);
+        }
+        "serviceList" => {
+            // A multilevel list from the right, markers in boxes (a Word list, not typed text).
+            for (i, (x, y)) in [(15.5, 4.5), (12.5, 10.0), (9.5, 15.5)].iter().enumerate() {
+                pen.rect(x - 1.8, y - 1.8, x + 1.8, y + 1.8, if i == 0 { a } else { c });
+                pen.line(&[(3.0, *y), (x - 3.5, *y)]);
+            }
+        }
+        "finalDot" => {
+            pen.lines(6.0, 17.0, &[5.0, 10.0]);
+            pen.line(&[(9.0, 15.0), (17.0, 15.0)]);
+            for y in [5.0, 10.0, 15.0] {
+                pen.fcircle(3.5, y, 1.4, a);
+            }
+        }
+        "serviceSelection" => {
+            pen.lines(3.0, 17.0, &[4.0, 16.0]);
+            pen.frect(2.0, 7.0, 18.0, 13.0, a.linear_multiply(0.25));
+            pen.line_c(&[(3.0, 8.5), (17.0, 8.5)], a);
+            pen.line_c(&[(3.0, 11.5), (17.0, 11.5)], a);
+        }
+        "classification" => {
+            // A page with the classification word stamped top and bottom.
+            pen.page(4.0, 2.0, 16.0, 18.0);
+            pen.frect(7.0, 4.5, 13.0, 6.5, a);
+            pen.frect(7.0, 13.5, 13.0, 15.5, a);
+            pen.lines(6.5, 13.5, &[9.0, 11.0]);
+        }
+        "servicePages" => {
+            pen.page(4.0, 2.0, 16.0, 18.0);
+            pen.lines(6.5, 13.5, &[6.0, 8.5, 11.0]);
+            pen.text(10.0, 15.0, 5.5, "(١-٥)", a, true);
+        }
+        // Kashida levels: a word of two strokes whose joining stroke (the accent) lengthens.
+        "kashidaOff" | "kashidaLow" | "kashidaMedium" | "kashidaHigh" => {
+            let ext = match name {
+                "kashidaLow" => 2.0,
+                "kashidaMedium" => 4.5,
+                "kashidaHigh" => 7.0,
+                _ => 0.0,
+            };
+            pen.lines(3.0, 17.0, &[4.0, 16.0]);
+            // Right "letter": a tooth; left "letter": a bowl; the kashida between them.
+            let x = 17.0;
+            pen.line(&[(x, 11.0), (x, 8.0), (x - 2.0, 8.0), (x - 2.0, 11.0)]);
+            let k0 = x - 2.0;
+            let k1 = k0 - 1.5 - ext;
+            if ext > 0.0 {
+                pen.line_c(&[(k0, 11.0), (k1, 11.0)], a);
+            } else {
+                pen.line(&[(k0, 11.0), (k1, 11.0)]);
+            }
+            pen.line(&[(k1, 11.0), (k1 - 1.5, 11.0), (k1 - 2.5, 9.5), (k1 - 1.5, 8.0)]);
+            if ext == 0.0 {
+                pen.line(&[(3.0, 11.0), (k1 - 4.0, 11.0)]);
+            }
+        }
+        "distribute" => {
+            pen.lines(3.0, 17.0, &[4.0, 8.0, 12.0, 16.0]);
+            pen.line_c(&[(3.0, 10.0), (17.0, 10.0)], a);
+            pen.line_c(&[(5.5, 8.0), (3.0, 10.0), (5.5, 12.0)], a);
+            pen.line_c(&[(14.5, 8.0), (17.0, 10.0), (14.5, 12.0)], a);
+        }
+        "serviceEngine" => {
+            // A page handed to a gear (the Python engine) and back.
+            pen.page(2.5, 3.0, 11.5, 17.0);
+            pen.lines(4.5, 9.5, &[8.0, 10.5, 13.0]);
+            pen.circle(15.0, 10.0, 2.2, a);
+            for i in 0..8 {
+                let ang = i as f32 * std::f32::consts::FRAC_PI_4;
+                let (sx, sy) = (ang.cos(), ang.sin());
+                pen.line_c(&[(15.0 + 2.8 * sx, 10.0 + 2.8 * sy), (15.0 + 4.0 * sx, 10.0 + 4.0 * sy)], a);
+            }
+        }
+        "serviceEnginePdf" => {
+            pen.page(4.0, 2.0, 16.0, 18.0);
+            pen.frect(5.5, 10.0, 14.5, 14.5, a);
+            pen.text(10.0, 12.2, 4.5, "PDF", Color32::WHITE, true);
+        }
         _ => {
             // Fallback: a rounded tile with the first letter.
             p.rect_stroke(r.shrink(r.width() * 0.12), 3.0, Stroke::new(1.0, c), egui::StrokeKind::Middle);

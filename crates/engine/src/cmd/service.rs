@@ -28,7 +28,7 @@ pub fn specs() -> Vec<CommandSpec> {
         CommandSpec::new("service.applyList", "Service Multilevel List", "Service › Numbering", apply_list)
             .params(r#"{"scope"?: "document|selection"} — typed markers become real list levels (١. أ. أولاً. …)"#),
         CommandSpec::new("service.classification", "Classification", "Service › Page", classification)
-            .params(r#"{"value": "عام|محدود|سري|سري وشخصي|سري للغاية", "pageNumbers"?: bool (default true), "start"?: n, "end"?: n}"#),
+            .params(r#"{"value"?: "عام|محدود|سري|سري وشخصي|سري للغاية" (default محدود), "pageNumbers"?: bool (default true), "start"?: n, "end"?: n}"#),
         CommandSpec::new("service.pageNumbers", "Page Numbers ( n - N )", "Service › Page", page_numbers)
             .params(r#"{"start"?: n (default 1), "end"?: n (default: the section's page count)}"#),
         CommandSpec::new("service.kashida", "Kashida Justification", "Service › Text", kashida)
@@ -451,7 +451,8 @@ fn page_line(start: u32, end: Option<u32>) -> Result<Paragraph, CmdError> {
 /// `service.classification`: the classification word centred in the header, and in the footer
 /// under the page line.
 fn classification(s: &mut Session, v: &Value) -> CmdResult {
-    let value = p::req_str(v, "value")?.trim().to_string();
+    // Without a value: «محدود», the classification of ordinary service writing.
+    let value = p::str(v, "value").unwrap_or("محدود").trim().to_string();
     if !CLASSIFICATIONS.contains(&value.as_str()) {
         return Err(CmdError::Params(format!("unknown classification `{value}` (عام | محدود | سري | سري وشخصي | سري للغاية)")));
     }

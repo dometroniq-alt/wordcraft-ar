@@ -39,17 +39,41 @@ pub fn key_text(sc: &str) -> String {
     }
 }
 
-/// `label` is already in the interface language.
-fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str) -> Response {
+/// `label` is already in the interface language. WordCraft AR: commands with visual help
+/// ([`crate::previews`]) show a thumbnail of what they do and a one-sentence explanation — in
+/// the interface language, and in Arabic as well when the interface is another language and
+/// the "explain in Arabic too" option is on.
+fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value) -> Response {
     let sc = shortcut_text(app, id);
     let desc = app.session.registry.get(id).map(|s| crate::i18n::location(s.location)).unwrap_or_default();
     let enabled = app.session.registry.get(id).map(|s| (s.enabled)(&app.session).is_none()).unwrap_or(true);
+    let key = crate::visual_help::key(id, params);
+    let explanation = crate::visual_help::explanation(&key);
+    let bilingual = app.ui.bilingual_tips && !crate::i18n::current().is_arabic();
     resp.on_hover_ui(|ui| {
-        ui.set_max_width(260.0);
+        ui.set_max_width(if explanation.is_some() { crate::visual_help::SIZE.x + 16.0 } else { 260.0 });
         if sc.is_empty() {
             ui.label(egui::RichText::new(label).font(crate::theme::semibold(12.0)));
         } else {
             ui.label(egui::RichText::new(format!("{label} ({sc})")).font(crate::theme::semibold(12.0)));
+        }
+        if let Some(text) = explanation {
+            let t = Tokens::get(ui.ctx());
+            let (r, _) = ui.allocate_exact_size(crate::visual_help::SIZE, Sense::hover());
+            ui.painter().rect_filled(r, 4.0, t.panel);
+            ui.painter().rect_stroke(r, 4.0, Stroke::new(1.0, t.border), egui::StrokeKind::Inside);
+            crate::visual_help::thumbnail(ui.painter(), r, &key, &t);
+            ui.add_space(4.0);
+            ui.label(egui::RichText::new(tl!(text)).size(11.5));
+            if bilingual && let Some(ar) = crate::i18n::Lang::from_code("ar") {
+                // Plain Arabic prose (the catalog keeps these sentences free of Latin words and
+                // brackets): egui wraps it correctly as it is, right-aligned.
+                let arabic = crate::i18n::tr(ar, text);
+                if arabic != text {
+                    ui.add_space(2.0);
+                    ui.add(egui::Label::new(egui::RichText::new(arabic).size(11.5).color(t.text_dim)).halign(egui::Align::RIGHT));
+                }
+            }
         }
         if !desc.is_empty() {
             ui.label(egui::RichText::new(desc).small().weak());
@@ -178,7 +202,7 @@ fn big_button(ui: &mut Ui, app: &mut WordApp, icon: &str, label: &str, id: &str,
         label_line(ui, r.center().x, y, l, regular(11.5), if on { t.text } else { t.text_disabled }, menu && i + 1 == lines.len());
         y += LABEL_PITCH;
     }
-    let resp = tooltip(app, resp, &label.replace('\n', " "), id);
+    let resp = tooltip(app, resp, &label.replace('\n', " "), id, &params);
     command_menu(&resp, app, id);
     if resp.clicked() && on && !menu {
         run_from_ribbon(app, id, params);
@@ -201,7 +225,7 @@ pub fn small(ui: &mut Ui, app: &mut WordApp, icon: &str, label: Option<&str>, ti
     if let Some(l) = label {
         ui.painter().text(pos2(r.min.x + 24.0, r.center().y), Align2::LEFT_CENTER, l, regular(11.5), if on { t.text } else { t.text_disabled });
     }
-    let resp = tooltip(app, resp, tip, id);
+    let resp = tooltip(app, resp, tip, id, &params);
     command_menu(&resp, app, id);
     if resp.clicked() && on {
         run_from_ribbon(app, id, params);
@@ -235,7 +259,7 @@ pub fn split(
         ui.painter().rect_filled(Rect::from_min_max(pos2(r.min.x + 4.0, r.max.y - 5.0), pos2(r.max.x - 4.0, r.max.y - 2.0)), 0.0, sw);
     }
     icons::paint(ui.painter(), Rect::from_center_size(ar.center(), vec2(DROPDOWN, DROPDOWN)), "dropdown", t.icon, t.accent);
-    let resp = tooltip(app, resp, tip, id);
+    let resp = tooltip(app, resp, tip, id, &params);
     command_menu(&resp, app, id);
     if resp.clicked() {
         run_from_ribbon(app, id, params);

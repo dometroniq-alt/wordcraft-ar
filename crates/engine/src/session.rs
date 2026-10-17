@@ -526,6 +526,10 @@ pub struct Prefs {
     /// in Word). A damaged saved value reads as the defaults.
     #[serde(deserialize_with = "crate::cmd::tools::lenient_autocorrect")]
     pub autocorrect: crate::cmd::tools::AutoCorrectPrefs,
+    /// WordCraft AR: new blank documents are Arabic — right-to-left paragraphs, Times New Roman
+    /// 14 pt for both scripts, Arabic (Iraq) as the complex-script language — whatever the
+    /// interface language. Off, new documents are WordCraft's (Aptos, left to right).
+    pub arabic_documents: bool,
 }
 
 impl Default for Prefs {
@@ -547,6 +551,7 @@ impl Default for Prefs {
             ignore_internet: true,
             detect_language: true,
             autocorrect: Default::default(),
+            arabic_documents: true,
         }
     }
 }
@@ -1354,4 +1359,23 @@ pub fn blank_document(region: &wordcraft_geom::Region) -> Document {
     d.last_section.page_w = w;
     d.last_section.page_h = h;
     d
+}
+
+/// The font Arabic documents start in: a Naskh-style face every Windows has, the one service
+/// writing is set in.
+pub const ARABIC_DOCUMENT_FONT: &str = "Times New Roman";
+
+/// WordCraft AR: make a blank document Arabic ([`Prefs::arabic_documents`]): the document
+/// defaults turn right to left with Times New Roman 14 pt in both scripts and Arabic (Iraq) as
+/// the complex-script language, so typing starts at the right margin in an Arabic face and the
+/// Service tab's numbering and kashida apply from the first paragraph. The styles' own fonts
+/// (headings) are left to the style set.
+pub fn make_arabic(d: &mut Document) {
+    let chr = &mut d.styles.default_chr;
+    chr.font = Some(ARABIC_DOCUMENT_FONT.into());
+    chr.font_cs = Some(ARABIC_DOCUMENT_FONT.into());
+    chr.size = Some(14.0);
+    chr.size_cs = Some(14.0);
+    chr.lang_bidi = Some("ar-IQ".into());
+    d.styles.default_para.bidi = Some(true);
 }

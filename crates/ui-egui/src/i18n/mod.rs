@@ -54,7 +54,7 @@ pub struct LangInfo {
 /// The registry. English first: it is the fallback and the source language.
 pub static LANGUAGES: [LangInfo; 24] = [
     LangInfo { code: "en", name: "English", source: "", prefer_hans: false, editing_lang: None, catalog: OnceLock::new() },
-    // WordCraft AR: Arabic, the fork's default interface (see `detect_system_lang`).
+    // WordCraft AR: Arabic interface, picked by an Arabic system language or in Options.
     LangInfo { code: "ar", name: "العربية", source: include_str!("ar.tsv"), prefer_hans: false, editing_lang: None, catalog: OnceLock::new() },
     // Simplified Chinese; `zh`, `zh-CN`, `zh-SG` and `zh-Hans-*` resolve here (see `candidates`).
     LangInfo {
@@ -327,9 +327,11 @@ fn detect_system_lang() -> Lang {
         return l;
     }
     let tags: Vec<String> = sys_locale::get_locales().take(16).collect();
-    // WordCraft AR: Arabic is the interface unless the system asks for another translated
-    // language; an English system gets Arabic too (File › Options › Interface language changes it).
-    first_supported(tags.iter().map(String::as_str)).filter(|l| *l != Lang::EN).or_else(|| Lang::from_code("ar")).unwrap_or(Lang::EN)
+    // WordCraft AR: the interface follows the system language (an English Windows keeps the
+    // English interface, as its owner prefers; an Arabic Windows gets the Arabic one). The
+    // document's text, numerals and kashida are Arabic regardless. File › Options › Interface
+    // language switches at any time.
+    first_supported(tags.iter().map(String::as_str)).unwrap_or(Lang::EN)
 }
 
 /// The system region (#838): it picks the paper File › New starts on, the default measurement

@@ -425,9 +425,12 @@ fn main() -> eframe::Result {
             load_prefs(&mut app);
             load_user_dictionary(&mut app);
             // A region chosen in File › Options replaces the system's for the first blank
-            // document too (#838).
-            if !sample && app.session.prefs.region.is_some() {
-                let doc = app.session.blank_document();
+            // document too (#838); so does WordCraft AR's Arabic-documents preference.
+            if !sample && (app.session.prefs.region.is_some() || app.session.prefs.arabic_documents) {
+                let mut doc = app.session.blank_document();
+                if app.session.prefs.arabic_documents {
+                    wordcraft_engine::make_arabic(&mut doc);
+                }
                 app.session.set_document(doc);
             }
             app.watch_desktop_theme(&cc.egui_ctx);

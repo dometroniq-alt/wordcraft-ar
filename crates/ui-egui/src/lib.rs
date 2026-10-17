@@ -79,6 +79,7 @@ pub mod table_pen;
 pub mod table_resize;
 pub mod table_ruler;
 pub mod theme;
+pub mod visual_help;
 pub mod widgets;
 pub mod window_geometry;
 pub mod wordart_menus;
@@ -317,6 +318,9 @@ pub struct UiState {
     /// File › Options › General: start on File › Home (Blank document, templates, Recent) when
     /// the app opens without a document (#766); on, as in Word. See [`WordApp::start_screen`].
     pub start_screen: bool,
+    /// WordCraft AR, File › Options › General: a button's visual help (thumbnail and
+    /// explanation) also shows its Arabic explanation when the interface is another language.
+    pub bilingual_tips: bool,
     /// File › Options › Display: print the page colour (off, as in Word).
     pub print_backgrounds: bool,
     /// File › Options › Display: update fields (dates, page numbers, SEQ…) before printing.
@@ -375,6 +379,7 @@ impl Default for UiState {
             mini_toolbar: true,
             alignment_guides: true,
             start_screen: true,
+            bilingual_tips: true,
             print_backgrounds: false,
             update_fields_before_print: false,
             dictionary: Vec::new(),

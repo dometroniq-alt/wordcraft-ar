@@ -2270,3 +2270,8 @@
 	Abjad a. b. c.	Abjad a. b. c.
 	Service Cycle 1. a. (1).	Cycle de service 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Moteur ServiceWord-AR introuvable (placez le dossier servicewordar à côté du programme)
+	New documents	Nouveaux documents
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Documents arabes (de droite à gauche, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Activé : un nouveau document vierge va de droite à gauche avec une police arabe, quelle que soit la langue de l’interface. Désactivé : document de gauche à droite avec l’Aptos de WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Expliquer aussi les boutons en arabe (infobulles d’aide visuelle)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Les boutons des onglets Service et Publipostage affichent une vignette de ce qu’ils font et une phrase dans la langue de l’interface ; si activé, la phrase en arabe est ajoutée quand l’interface n’est pas en arabe.

@@ -2677,3 +2677,8 @@ preview	Title	Titel
 	Abjad a. b. c.	Abjad a. b. c.
 	Service Cycle 1. a. (1).	Tjänstecykel 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR-motorn hittades inte (lägg mappen servicewordar bredvid programmet)
+	New documents	Nya dokument
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Arabiska dokument (höger till vänster, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	På: ett nytt tomt dokument går från höger till vänster med ett arabiskt teckensnitt, oavsett gränssnittsspråk. Av: dokument från vänster till höger med WordCrafts Aptos.
+	Explain buttons in Arabic too (visual help tooltips)	Förklara knapparna även på arabiska (visuell hjälp i verktygstipsen)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Knapparna på flikarna Tjänst och Utskick visar en miniatyrbild av vad de gör och en mening på gränssnittsspråket; när det är på läggs den arabiska meningen till om gränssnittet inte är arabiskt.

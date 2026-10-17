@@ -67,7 +67,7 @@ impl Target {
 
 /// Word's tab letters, as Word for Windows shows them after Alt (File F, Design G, References S,
 /// Review R, View W, Help Y). File opens the Backstage.
-const TAB_LETTERS: [(&str, &str); 11] = [
+const TAB_LETTERS: [(&str, &str); 12] = [
     ("File", "F"),
     ("Home", "H"),
     ("Insert", "N"),
@@ -79,6 +79,8 @@ const TAB_LETTERS: [(&str, &str); 11] = [
     ("Review", "R"),
     ("View", "W"),
     ("Help", "Y"),
+    // WordCraft AR: the Service tab (كتابات الخدمة).
+    ("Service", "K"),
 ];
 
 /// Word's contextual table tabs take two letters (Alt, J, T and Alt, J, L), shown in a table.
@@ -292,6 +294,21 @@ fn controls(tab: &str) -> Vec<Control> {
             c("Check for Errors", "mailings.checkErrors"),
             c("Finish & Merge", "mailings.finish"),
         ],
+        "Service" => vec![
+            c("Renumber Cycle", "service.renumber"),
+            c("Service List", "service.applyList"),
+            c("Final Dot", "service.finalDot"),
+            p("Selection Only", "service.renumber", serde_json::json!({"scope": "selection"})),
+            m("Classification", "service.classification"),
+            c("Page Number", "service.pageNumbers"),
+            p("Justify", "service.kashida", serde_json::json!({"value": "off"})),
+            p("Low", "service.kashida", serde_json::json!({"value": "low"})),
+            p("Medium", "service.kashida", serde_json::json!({"value": "medium"})),
+            p("High", "service.kashida", serde_json::json!({"value": "high"})),
+            p("Distribute", "service.kashida", serde_json::json!({"value": "distribute"})),
+            c("Format with ServiceWord-AR", "service.external"),
+            p("With PDF", "service.external", serde_json::json!({"pdf": true})),
+        ],
         "Review" => vec![
             c("Spelling & Grammar", "review.spelling"),
             c("Thesaurus", "review.thesaurus"),
@@ -460,6 +477,19 @@ pub struct ControlInfo {
 }
 
 /// A tab's badgeable controls in drawing order, for the widgets to find their own badges.
+/// The commands a tab's controls run, with their parameters (WordCraft AR: the visual-help
+/// test holds every Service and Mailings button to an explanation).
+pub fn controls_public_with_params(tab: &str) -> Vec<(&'static str, serde_json::Value)> {
+    controls(tab)
+        .into_iter()
+        .map(|c| match c.target {
+            Target::Cmd { id, params } => (id, params),
+            Target::Dialog { .. } => ("ui.dialog", serde_json::json!({})),
+            Target::Tab(_) => ("ui.tab", serde_json::json!({})),
+        })
+        .collect()
+}
+
 pub fn controls_public(tab: &str) -> Vec<ControlInfo> {
     controls(tab)
         .into_iter()

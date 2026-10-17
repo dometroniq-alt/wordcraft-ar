@@ -191,7 +191,20 @@ fn general(app: &mut WordApp, ui: &mut Ui) {
         let _ = app.run("view.darkMode", json!({"value": dark_page}));
     }
     ui.checkbox(&mut app.ui.show_discord, tl!("Show the community button in the title bar"));
+    ui.checkbox(&mut app.ui.bilingual_tips, tl!("Explain buttons in Arabic too (visual help tooltips)"))
+        .on_hover_text(tl!("Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic."));
     default_app_button(app, ui);
+    ui.add_space(8.0);
+    section(ui, "New documents");
+    let arabic = app.session.prefs.arabic_documents;
+    let mut v = arabic;
+    if ui
+        .checkbox(&mut v, tl!("Arabic documents (right-to-left, Times New Roman 14 pt)"))
+        .on_hover_text(tl!("On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document."))
+        .changed()
+    {
+        set(app, json!({"arabicDocuments": v}));
+    }
     ui.add_space(8.0);
     section(ui, "Start-up");
     let mut start = app.ui.start_screen;

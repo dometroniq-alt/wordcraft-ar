@@ -2263,3 +2263,8 @@
 	Abjad a. b. c.	アブジャド a. b. c.
 	Service Cycle 1. a. (1).	公務サイクル 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR エンジンが見つかりません (servicewordar フォルダーをプログラムの隣に置いてください)
+	New documents	新しい文書
+	Arabic documents (right-to-left, Times New Roman 14 pt)	アラビア語の文書（右から左、Times New Roman 14 pt）
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	オン：新しい白紙の文書は、表示言語にかかわらず右から左でアラビア語フォントになります。オフ：WordCraft の Aptos による左から右の文書になります。
+	Explain buttons in Arabic too (visual help tooltips)	ボタンの説明をアラビア語でも表示（視覚的なヘルプのツールチップ）
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	「公務」タブと「差し込み文書」タブのボタンには、動作のサムネイルと表示言語の説明文が表示されます。オンにすると、表示言語がアラビア語でない場合にアラビア語の説明文が追加されます。

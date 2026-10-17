@@ -2671,3 +2671,8 @@ preview	Title	Esempio
 	Abjad a. b. c.	Abjad a. b. c.
 	Service Cycle 1. a. (1).	Ciclo di servizio 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	Motore ServiceWord-AR non trovato (metti la cartella servicewordar accanto al programma)
+	New documents	Nuovi documenti
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Documenti arabi (da destra a sinistra, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Attivo: un nuovo documento vuoto va da destra a sinistra con un carattere arabo, qualunque sia la lingua dell'interfaccia. Disattivo: documento da sinistra a destra con l'Aptos di WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Spiega i pulsanti anche in arabo (suggerimenti con aiuto visivo)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	I pulsanti delle schede Servizio e Mail mostrano una miniatura di ciò che fanno e una frase nella lingua dell'interfaccia; se attivo, viene aggiunta la frase in arabo quando l'interfaccia non è in arabo.

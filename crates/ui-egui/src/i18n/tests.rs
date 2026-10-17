@@ -1331,7 +1331,8 @@ fn croatian_covers_the_entire_existing_interface_catalog_and_keeps_count_labels_
     let keys = |source| parse_entries(source).0.into_iter().map(|e| e.source).collect::<HashSet<_>>();
     let hr = lang("hr");
     // Every key of every other catalog, and no catalog errors.
-    for other in Lang::all().filter(|l| *l != Lang::EN && l.code() != "hr") {
+    // Arabic (WordCraft AR) carries the visual-help sentences the other catalogs don't.
+    for other in Lang::all().filter(|l| *l != Lang::EN && !matches!(l.code(), "hr" | "ar")) {
         let mut missing: Vec<String> = keys(other.0.source).difference(&keys(hr.0.source)).cloned().collect();
         missing.sort();
         // Italian and Hungarian still carry "Style: APA", which the interface no longer shows.
@@ -1503,7 +1504,7 @@ fn vietnamese_covers_existing_catalog_keys_with_an_explicit_preview_fallback() {
     assert_eq!(trc(vi, "preview", "Title"), tr(vi, "Title"));
     // Compare complete (context, source) keys so a contextual entry cannot hide a missing plain
     // translation, or silently satisfy another context's key.
-    for other in Lang::all().filter(|l| *l != Lang::EN && l.code() != "vi") {
+    for other in Lang::all().filter(|l| *l != Lang::EN && !matches!(l.code(), "vi" | "ar")) {
         let (entries, errors) = parse_entries(other.0.source);
         assert!(errors.is_empty(), "{}: {errors:?}", other.code());
         let keys: HashSet<_> = entries.into_iter().map(|e| (e.context, e.source)).collect();

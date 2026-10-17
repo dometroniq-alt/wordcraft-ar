@@ -2262,3 +2262,8 @@
 	Abjad a. b. c.	Abdschad a. b. c.
 	Service Cycle 1. a. (1).	Dienstzyklus 1. a. (1).
 	ServiceWord-AR engine not found (put the servicewordar folder beside the program)	ServiceWord-AR-Engine nicht gefunden (den Ordner servicewordar neben das Programm legen)
+	New documents	Neue Dokumente
+	Arabic documents (right-to-left, Times New Roman 14 pt)	Arabische Dokumente (von rechts nach links, Times New Roman 14 pt)
+	On: a new blank document is right-to-left with an Arabic font, whatever the interface language. Off: WordCraft's Aptos, left-to-right document.	Ein: Ein neues leeres Dokument läuft von rechts nach links mit arabischer Schrift, unabhängig von der Sprache der Oberfläche. Aus: Dokument von links nach rechts mit Aptos von WordCraft.
+	Explain buttons in Arabic too (visual help tooltips)	Schaltflächen auch auf Arabisch erklären (visuelle Hilfe in den Tooltips)
+	Buttons of the Service and Mailings tabs show a thumbnail of what they do and a sentence in the interface language; on, the Arabic sentence is added when the interface is not Arabic.	Die Schaltflächen der Registerkarten Dienst und Sendungen zeigen ein Vorschaubild ihrer Wirkung und einen Satz in der Sprache der Oberfläche; wenn eingeschaltet, kommt der arabische Satz hinzu, sobald die Oberfläche nicht arabisch ist.
