@@ -159,6 +159,12 @@ fn table(s: &mut Session, v: &Value) -> CmdResult {
         let id = s.doc.styles.find(st).map(|x| x.id.clone()).ok_or_else(|| CmdError::Params(format!("no table style `{st}`")))?;
         t.props.style = Some(id);
     }
+    // WordCraft AR: a table inserted into a right-to-left paragraph is right-to-left itself
+    // (`w:bidiVisual`, as Word does): its first column stands at the right, where the caret
+    // then goes.
+    if s.doc.para_at(&s.sel.focus).is_some_and(|p| s.doc.styles.resolve_para(&p.props).bidi) {
+        t.props.bidi_visual = true;
+    }
     let story = s.sel.focus.story;
     let path = insert_block_at_caret(s, Block::Table(t))?;
     let mut first = path.0.clone();
@@ -1139,5 +1145,26 @@ mod tests {
         assert_eq!(date_picture(r#"DATE \@ "MMMM d, yyyy" \* MERGEFORMAT"#).as_deref(), Some("MMMM d, yyyy"));
         assert_eq!(date_picture(r#"TIME \@ HH:mm"#).as_deref(), Some("HH:mm"));
         assert_eq!(date_picture("DATE"), None);
+    }
+}
+
+#[cfg(test)]
+mod ar_table_tests {
+    use super::*;
+    use serde_json::json;
+
+    /// A table inserted into a right-to-left paragraph is a right-to-left table (#AR): the
+    /// first column at the right; into a left-to-right paragraph it stays left-to-right.
+    #[test]
+    fn a_table_follows_the_paragraph_direction() {
+        let mut s = Session::new(wordcraft_doc::Document::new());
+        s.run("para.rtl", &json!({})).unwrap();
+        s.run("insert.table", &json!({"rows": 2, "cols": 3})).unwrap();
+        let t = s.doc.table(s.sel.focus.story, &wordcraft_doc::Path(vec![0])).expect("table");
+        assert!(t.props.bidi_visual);
+        let mut s = Session::new(wordcraft_doc::Document::new());
+        s.run("insert.table", &json!({"rows": 2, "cols": 3})).unwrap();
+        let t = s.doc.table(s.sel.focus.story, &wordcraft_doc::Path(vec![0])).expect("table");
+        assert!(!t.props.bidi_visual);
     }
 }
