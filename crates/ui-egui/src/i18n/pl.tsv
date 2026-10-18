@@ -2685,3 +2685,16 @@ preview	Title	Tytuł
 	{n} commands in the registry	{n} poleceń w rejestrze
 	{n} Arabic interface strings	{n} ciągów arabskiego interfejsu
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Dodanie polecenia: ikona w icons.rs, jeden Entry w ui_kit/<tab>.rs, jedna linia w i18n/ar.tsv — zobacz docs/ar-ui-kit.md.
+	Send	Wyślij
+	Send to DeckCraft AR	Wyślij do DeckCraft AR
+	Send to GridCraft AR	Wyślij do GridCraft AR
+	Receive from DeckCraft / GridCraft	Odbierz z DeckCraft / GridCraft
+	Send to\nDeckCraft	Wyślij do\nDeckCraft
+	Send to\nGridCraft	Wyślij do\nGridCraft
+	Receive…	Odbierz…
+	Craft exchange	Wymiana Craft
+	Sent to {app}	Wysłano do {app}
+	Saved {path} — open it in {app} (File › Open)	Zapisano w {path} — otwórz go w {app} (Plik › Otwórz)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Wysyła ten dokument do DeckCraft AR jako slajdy: każdy nagłówek zaczyna slajd, długi tekst przechodzi na następny, kierunek od prawej do lewej i kaszida są zachowane. Przykład: 3-stronicowy okólnik staje się 6 slajdami, «Obowiązki (2)» kontynuuje «Obowiązki».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Wysyła ten dokument do GridCraft AR jako skoroszyt: każda tabela trafia na własny arkusz, a tekst na arkusz «Text», kierunek od prawej do lewej i kaszida są zachowane w każdej komórce. Przykład: tabela obowiązków z 12 wierszy staje się arkuszem nazwanym od nagłówka, gotowym do sortowania i filtrowania.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Otwiera plik wymiany Craft (.craftx) przysłany przez DeckCraft AR lub GridCraft AR jako nowy dokument: każdy slajd staje się nagłówkiem z tekstem, notatki kursywą, a tabele pozostają tabelami. Przykład: prezentacja z 6 slajdów wraca jako sześć sekcji z nagłówkami.

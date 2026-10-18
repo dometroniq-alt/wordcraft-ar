@@ -187,6 +187,7 @@ fn format_name(ext: &str) -> String {
         "png" => "PNG Image".into(),
         "json" => "JSON".into(),
         "xml" => "XML".into(),
+        "craftx" => wordcraft_engine::io::CRAFTX_NAME.into(),
         other => other.to_ascii_uppercase(),
     }
 }

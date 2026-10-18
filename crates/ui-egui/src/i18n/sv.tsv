@@ -2710,3 +2710,16 @@ preview	Title	Titel
 	{n} commands in the registry	{n} kommandon i registret
 	{n} Arabic interface strings	{n} strängar i det arabiska gränssnittet
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Lägg till ett kommando: dess ikon i icons.rs, en Entry i ui_kit/<tab>.rs, en rad i i18n/ar.tsv — se docs/ar-ui-kit.md.
+	Send	Skicka
+	Send to DeckCraft AR	Skicka till DeckCraft AR
+	Send to GridCraft AR	Skicka till GridCraft AR
+	Receive from DeckCraft / GridCraft	Ta emot från DeckCraft / GridCraft
+	Send to\nDeckCraft	Skicka till\nDeckCraft
+	Send to\nGridCraft	Skicka till\nGridCraft
+	Receive…	Ta emot…
+	Craft exchange	Craft-utbyte
+	Sent to {app}	Skickat till {app}
+	Saved {path} — open it in {app} (File › Open)	Sparat som {path} — öppna den i {app} (Arkiv › Öppna)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Skickar dokumentet till DeckCraft AR som bilder: varje rubrik börjar en bild, lång text fortsätter på nästa, höger-till-vänster och kashida behålls. Exempel: ett 3-sidigt cirkulär blir 6 bilder, «Plikter (2)» fortsätter «Plikter».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Skickar dokumentet till GridCraft AR som en arbetsbok: varje tabell får ett eget blad och texten ett blad «Text», höger-till-vänster och kashida behålls i varje cell. Exempel: en plikttabell med 12 rader blir ett blad namngivet efter sin rubrik, klart att sortera och filtrera.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Öppnar en Craft-utbytesfil (.craftx) från DeckCraft AR eller GridCraft AR som ett nytt dokument: varje bild blir en rubrik med sin text, anteckningar i kursiv, tabeller förblir tabeller. Exempel: en presentation med 6 bilder kommer tillbaka som sex rubricerade avsnitt.

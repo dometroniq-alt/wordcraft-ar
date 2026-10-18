@@ -77,14 +77,15 @@ fn tooltip(app: &WordApp, resp: Response, label: &str, id: &str, params: &Value)
             let phase = film_phase(ui, since);
             crate::visual_help::thumbnail_animated(ui.painter(), r, &key, &t, phase);
             ui.add_space(4.0);
-            ui.label(egui::RichText::new(crate::i18n::explain(crate::i18n::current(), text)).size(11.5));
+            let font = egui::FontId::proportional(11.5);
+            // Wrapped in reading order and put line by line in the renderer's order (egui on
+            // its own wraps a right-to-left run from its visual end).
+            crate::rtl_text::paragraph(ui, crate::i18n::explain(crate::i18n::current(), text), font.clone(), t.text, crate::visual_help::SIZE.x);
             if bilingual && let Some(ar) = crate::i18n::Lang::from_code("ar") {
-                // Plain Arabic prose (the catalog keeps these sentences free of Latin words and
-                // brackets): egui wraps it correctly as it is, right-aligned.
                 let arabic = crate::i18n::explain(ar, text);
                 if arabic != text {
                     ui.add_space(2.0);
-                    ui.add(egui::Label::new(egui::RichText::new(arabic).size(11.5).color(t.text_dim)).halign(egui::Align::RIGHT));
+                    crate::rtl_text::paragraph(ui, arabic, font, t.text_dim, crate::visual_help::SIZE.x);
                 }
             }
         }

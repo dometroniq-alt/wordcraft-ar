@@ -120,6 +120,7 @@ The tests that pin the Arabic behaviour run with
 | Page Number | `service.pageNumbers` | Writes `( page - total )` in Arabic-Indic digits at the bottom of every page. |
 | Low · Medium · High · Distribute (Home › Kashida) | `service.kashida` | Kashida justification levels and Distribute for the current paragraphs. |
 | Format with ServiceWord-AR · With PDF | `service.external` | Hands the document to the Python engine and opens the result; optionally also the stamped print PDF. |
+| Send to DeckCraft AR / GridCraft AR · Receive… | `send.toDeckCraft` `send.toGridCraft` `send.importCraftx` | Sends the document (or the selection) to the sibling app as a Craft Exchange file (`.craftx`, [`docs/ar-exchange.md`](docs/ar-exchange.md)) — headings become slides or sheets, right-to-left and kashida travel with the text — and opens what the sibling sends back. |
 
 The cycle, the kashida and the numbering formats are described in detail (in Arabic) in
 [`AR-FORK.md`](AR-FORK.md).

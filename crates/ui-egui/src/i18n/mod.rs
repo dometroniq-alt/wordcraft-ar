@@ -413,7 +413,7 @@ pub fn explain(lang: Lang, s: &str) -> &str {
     if pseudo::on() {
         return pseudo::mark_quiet(s);
     }
-    lang.catalog().plain(s).unwrap_or(s)
+    lang.catalog().logical(s).unwrap_or(s)
 }
 
 /// Text that is part of a drawing (a thumbnail's sample words, a command id in the kit
@@ -491,7 +491,7 @@ pub fn fmt(template: &str, args: &[(&str, &str)]) -> String {
 /// it yields a string that egui draws as the bidi algorithm would. Each line of a multi-line
 /// label is a paragraph of its own. Strings of one run come back unchanged.
 pub fn rtl_display(s: &str) -> String {
-    if !s.chars().any(wordcraft_fonts::is_rtl) {
+    if !s.chars().any(|c| wordcraft_fonts::is_rtl(c) || is_arabic_digit(c)) {
         return s.to_string();
     }
     let mut out = String::with_capacity(s.len());
@@ -523,13 +523,77 @@ fn rtl_display_line(line: &str) -> String {
     let run_levels: Vec<u8> = runs.iter().map(|r| r.1).collect();
     let mut out = String::with_capacity(line.len());
     for k in wordcraft_layout::para::visual_order(&run_levels) {
-        let Some(&(start, _)) = runs.get(k) else { continue };
+        let Some(&(start, level)) = runs.get(k) else { continue };
         let end = runs.get(k + 1).map(|r| r.0).unwrap_or(line.len());
-        if let Some(piece) = line.get(start..end) {
-            out.push_str(piece);
+        let Some(piece) = line.get(start..end) else { continue };
+        if level % 2 == 0 {
+            // Arabic-Indic digits share the Arabic face with the letters around them, so the
+            // shaper reverses them with that run; written backwards, they read right.
+            if piece.chars().all(|c| is_arabic_digit(c) || c == '٫' || c == '٬') {
+                out.extend(piece.chars().rev());
+            } else {
+                out.push_str(piece);
+            }
+        } else {
+            out.push_str(&rtl_run_for_faces(piece));
         }
     }
     out
+}
+
+/// One right-to-left bidi run as egui will draw it. The Arabic interface face has the Arabic
+/// letters, the space and a few marks (`.,:!-«»`), so a bracket, a quote, a question mark or a
+/// slash in Arabic text comes from the Latin face: epaint then cuts the run into one font run
+/// per face and lays those out left to right, undoing the right-to-left order of the pieces.
+/// Emitting the pieces in reverse order (the Arabic ones unchanged: the shaper reverses them)
+/// restores it; a bracket drawn by the Latin face is mirrored by hand, as the shaper would
+/// have in a right-to-left run.
+fn rtl_run_for_faces(run: &str) -> String {
+    let mut pieces: Vec<(bool, String)> = Vec::new();
+    for c in run.chars() {
+        let arabic = in_arabic_face(c);
+        match pieces.last_mut() {
+            Some((a, s)) if *a == arabic => s.push(c),
+            _ => pieces.push((arabic, c.to_string())),
+        }
+    }
+    if pieces.len() < 2 {
+        return run.to_string();
+    }
+    let mut out = String::with_capacity(run.len());
+    for (arabic, s) in pieces.iter().rev() {
+        if *arabic {
+            out.push_str(s);
+        } else {
+            out.extend(s.chars().rev().map(mirror));
+        }
+    }
+    out
+}
+
+/// A character the bundled Arabic interface face draws (so it stays in the Arabic run).
+fn in_arabic_face(c: char) -> bool {
+    wordcraft_fonts::is_rtl(c) || is_arabic_digit(c) || matches!(c, ' ' | '.' | ',' | ':' | '!' | '-' | '«' | '»' | '\u{a0}' | '\u{2010}')
+}
+
+/// An Arabic-Indic or extended Arabic-Indic digit.
+pub fn is_arabic_digit(c: char) -> bool {
+    matches!(c as u32, 0x0660..=0x0669 | 0x06F0..=0x06F9)
+}
+
+/// The mirrored form of a paired bracket (what the shaper draws for it in right-to-left text).
+fn mirror(c: char) -> char {
+    match c {
+        '(' => ')',
+        ')' => '(',
+        '[' => ']',
+        ']' => '[',
+        '{' => '}',
+        '}' => '{',
+        '<' => '>',
+        '>' => '<',
+        other => other,
+    }
 }
 
 /// Fill `{name}` placeholders of `template` from `args`; unknown names stay as written.

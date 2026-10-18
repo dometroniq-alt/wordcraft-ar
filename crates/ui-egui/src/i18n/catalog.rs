@@ -32,6 +32,9 @@ pub struct Catalog {
     plain: HashMap<String, String>,
     /// (context, English source) → translation, for the few entries that need one.
     contextual: HashMap<(String, String), String>,
+    /// English source → the translation as written (logical order), for text that is wrapped
+    /// into lines before it is put in the renderer's order (`rtl_text::paragraph`).
+    logical: HashMap<String, String>,
 }
 
 fn unescape(text: &str) -> Result<String, String> {
@@ -125,8 +128,11 @@ impl Catalog {
         let (entries, errors) = parse_entries(text);
         let mut catalog = Catalog::default();
         for e in entries {
-            let translation = if rtl && placeholders(&e.translation).is_empty() { super::rtl_display(&e.translation) } else { e.translation };
+            let translation = if rtl && placeholders(&e.translation).is_empty() { super::rtl_display(&e.translation) } else { e.translation.clone() };
             if e.context.is_empty() {
+                if translation != e.translation {
+                    catalog.logical.insert(e.source.clone(), e.translation);
+                }
                 catalog.plain.insert(e.source, translation);
             } else {
                 catalog.contextual.insert((e.context, e.source), translation);
@@ -144,6 +150,12 @@ impl Catalog {
     }
     pub fn plain(&self, s: &str) -> Option<&str> {
         self.plain.get(s).map(String::as_str)
+    }
+
+    /// The translation of `s` as written in the catalog (logical character order), for a
+    /// paragraph that is wrapped first and ordered line by line.
+    pub fn logical(&self, s: &str) -> Option<&str> {
+        self.logical.get(s).map(String::as_str).or_else(|| self.plain(s))
     }
 
     /// The entry for `s` in `context`, else the plain one.

@@ -3162,3 +3162,16 @@
 	Stamps «سري» at the top and bottom of every page: the letter is secret and goes only to those cleared to read it. Example: a report on a security matter.	يختم «سري» في أعلى كل صفحة وأسفلها: الكتاب سري ولا يصل إلا إلى المخوّلين بقراءته. مثال: تقرير في مسألة أمنية.
 	Stamps «سري وشخصي» at the top and bottom of every page: secret, and to be opened by the named person alone. Example: a letter about one officer's own affairs.	يختم «سري وشخصي» في أعلى كل صفحة وأسفلها: سري، ولا يفتحه إلا الشخص المسمّى وحده. مثال: كتاب في شؤون ضابط بعينه.
 	Stamps «سري للغاية» at the top and bottom of every page: the highest secrecy, for the fewest eyes. Example: a letter on a matter of the greatest sensitivity.	يختم «سري للغاية» في أعلى كل صفحة وأسفلها: أعلى درجات الكتمان، لأقل عدد من الأعين. مثال: كتاب في مسألة بالغة الحساسية.
+	Send	إرسال
+	Send to DeckCraft AR	إرسال إلى DeckCraft AR
+	Send to GridCraft AR	إرسال إلى GridCraft AR
+	Receive from DeckCraft / GridCraft	استلام من DeckCraft / GridCraft
+	Send to\nDeckCraft	إرسال إلى\nDeckCraft
+	Send to\nGridCraft	إرسال إلى\nGridCraft
+	Receive…	استلام…
+	Craft exchange	ملف تبادل Craft
+	Sent to {app}	أُرسل إلى {app}
+	Saved {path} — open it in {app} (File › Open)	حُفظ الملف {path} — افتحه في {app} (ملف › فتح)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	يرسل هذا المستند إلى DeckCraft AR شرائحَ: كل عنوان يبدأ شريحة، والنص الطويل يتابع في الشريحة التالية، مع الحفاظ على الاتجاه من اليمين إلى اليسار والكشيدة. مثال: تعميم من ٣ صفحات يصير ٦ شرائح، و«الواجبات (٢)» تتابع «الواجبات».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	يرسل هذا المستند إلى GridCraft AR مصنفًا: كل جدول في ورقة خاصة به، والنص في ورقة «Text»، مع الحفاظ على الاتجاه من اليمين إلى اليسار والكشيدة في كل خلية. مثال: جدول واجبات من ١٢ صفًا يصير ورقة باسم عنوانه جاهزة للترتيب والتصفية.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	يفتح ملف تبادل Craft (.craftx) أرسله DeckCraft AR أو GridCraft AR مستندًا جديدًا: كل شريحة تصير عنوانًا يليه نصها، والملاحظات بخط مائل، والجداول تبقى جداول. مثال: عرض من ٦ شرائح يعود ستة أقسام بعناوينها.

@@ -1,7 +1,8 @@
 //! Service tab thumbnails (كتابات الخدمة): the numbering cycle, the classification stamp, page
-//! numbers, kashida levels and the ServiceWord-AR engine. Hand-drawn scenes on the shared kit,
-//! each a little film: the typed markers turn into the cycle one line at a time, the dots land
-//! one by one, the stamp comes down, the joints stretch, the gear turns.
+//! numbers, kashida levels, the ServiceWord-AR engine and the Craft Exchange hand-off to
+//! DeckCraft AR / GridCraft AR. Hand-drawn scenes on the shared kit, each a little film: the
+//! typed markers turn into the cycle one line at a time, the dots land one by one, the stamp
+//! comes down, the joints stretch, the gear turns, the paragraphs fly into a slide.
 
 use egui::{Align2, Color32, Rect, Stroke, pos2, vec2};
 
@@ -73,6 +74,21 @@ pub const ENTRIES: &[Entry] = &[
         "service.external:pdf",
         "Formats with ServiceWord-AR and also makes the stamped print PDF beside the document, ready for the printer.",
         |d| d.engine(true),
+    ),
+    Entry::new(
+        "send.toDeckCraft",
+        "Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».",
+        |d| d.send_deck(),
+    ),
+    Entry::new(
+        "send.toGridCraft",
+        "Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.",
+        |d| d.send_grid(),
+    ),
+    Entry::new(
+        "send.importCraftx",
+        "Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.",
+        |d| d.receive_craft(),
     ),
 ];
 
@@ -245,6 +261,157 @@ impl Draw<'_> {
         }
         // The margin the lines reach for.
         self.line(pos2(page.min.x, page.min.y), pos2(page.min.x, page.max.y), self.t.accent.linear_multiply(0.4), 1.0);
+    }
+
+    /// A right-to-left page whose heading and paragraphs fly, one after the other, into a
+    /// landscape slide: the heading becomes the title bar, the lines the body.
+    fn send_deck(&self) {
+        let page = self.page(6.0, 8.0, 62.0, 88.0);
+        let grey = self.t.text_dim;
+        let go = self.reveal(0.05, 0.3);
+        if go > 0.0 {
+            self.arrow_right(self.at(72.0, 52.0), self.at(72.0 + 14.0 * go, 52.0));
+        }
+        // The slide: 16:9, a title bar and room for four lines; the continuation slide «(2)»
+        // slides out from behind it at the end.
+        let slide = Rect::from_min_size(self.at(90.0, 22.0), vec2(78.0, 44.0));
+        let next = self.reveal(0.8, 0.95);
+        if next > 0.0 {
+            let r2 = slide.translate(vec2(6.0 * next, 8.0 * next));
+            self.p.rect_filled(r2, 2.0, Color32::WHITE);
+            self.p.rect_stroke(r2, 2.0, Stroke::new(1.0, self.t.border_strong.linear_multiply(next)), egui::StrokeKind::Inside);
+            self.label(pos2(r2.max.x - 3.0, r2.max.y - 4.0), "(2)", 6.5, self.t.accent.linear_multiply(next), Align2::RIGHT_CENTER);
+        }
+        self.p.rect_filled(slide, 2.0, Color32::WHITE);
+        self.p.rect_stroke(slide, 2.0, Stroke::new(1.0, self.t.border_strong), egui::StrokeKind::Inside);
+        let lines = [("h", 30.0), ("t", 44.0), ("t", 38.0), ("t", 46.0), ("t", 26.0)];
+        for (i, (kind, w)) in lines.iter().enumerate() {
+            let y = page.min.y + 6.0 + i as f32 * 13.0;
+            let heading = *kind == "h";
+            let fly = self.reveal(0.3 + i as f32 * 0.1, 0.5 + i as f32 * 0.1);
+            // Where the line lands on the slide: the title bar, or body line i.
+            let (to_x1, to_y, to_w) = if heading {
+                (slide.max.x - 5.0, slide.min.y + 6.0, slide.width() - 10.0)
+            } else {
+                (slide.max.x - 6.0, slide.min.y + 9.0 + i as f32 * 7.0, w * 1.3)
+            };
+            let (from_x1, from_y) = (page.max.x, y);
+            let x1 = from_x1 + (to_x1 - from_x1) * fly;
+            let yy = from_y + (to_y - from_y) * fly;
+            let ww = w + (to_w - w) * fly;
+            let c = if heading { self.t.accent } else { grey };
+            let stroke = if heading { 3.0 } else { 1.5 };
+            if fly >= 1.0 && heading {
+                self.p.rect_filled(Rect::from_min_max(pos2(x1 - ww, yy - 2.5), pos2(x1, yy + 2.5)), 1.0, c);
+            } else {
+                self.line(pos2(x1 - ww, yy), pos2(x1, yy), c, stroke);
+            }
+            // The line's place on the page stays marked faintly once it has flown.
+            if fly > 0.0 {
+                self.line(pos2(from_x1 - w, from_y), pos2(from_x1, from_y), grey.linear_multiply(0.3), 1.0);
+            }
+        }
+    }
+
+    /// A page with a table whose rows drop, one by one, into a spreadsheet grid at the right.
+    fn send_grid(&self) {
+        let page = self.page(6.0, 8.0, 62.0, 88.0);
+        let grey = self.t.text_dim;
+        self.text_lines(Rect::from_min_size(page.min, vec2(page.width(), 20.0)), true, &[44.0, 36.0], 10.0, grey);
+        let table = Rect::from_min_size(pos2(page.min.x, page.min.y + 26.0), vec2(page.width(), 40.0));
+        let go = self.reveal(0.05, 0.3);
+        if go > 0.0 {
+            self.arrow_right(self.at(72.0, 52.0), self.at(72.0 + 14.0 * go, 52.0));
+        }
+        // The sheet: column letters, row numbers, a 4 × 3 grid.
+        let sheet = Rect::from_min_size(self.at(92.0, 16.0), vec2(78.0, 72.0));
+        self.p.rect_filled(sheet, 2.0, Color32::WHITE);
+        self.p.rect_stroke(sheet, 2.0, Stroke::new(1.0, self.t.border_strong), egui::StrokeKind::Inside);
+        let grid = Rect::from_min_size(pos2(sheet.min.x + 10.0, sheet.min.y + 10.0), vec2(sheet.width() - 14.0, 48.0));
+        self.p.rect_filled(Rect::from_min_size(sheet.min, vec2(sheet.width(), 10.0)), 0.0, self.t.hover);
+        self.p.rect_filled(Rect::from_min_size(sheet.min, vec2(10.0, sheet.height())), 0.0, self.t.hover);
+        self.grid(grid, 4, 3, self.t.border);
+        for i in 0..4 {
+            self.label(pos2(sheet.min.x + 5.0, grid.min.y + (i as f32 + 0.5) * 12.0), &(i + 1).to_string(), 6.0, grey, Align2::CENTER_CENTER);
+        }
+        for (j, l) in ["A", "B", "C"].iter().enumerate() {
+            self.label(pos2(grid.max.x - (j as f32 + 0.5) * grid.width() / 3.0, sheet.min.y + 5.0), l, 6.0, grey, Align2::CENTER_CENTER);
+        }
+        // The table on the page, its rows flying into the grid's rows (right-to-left: column A at the right).
+        self.p.rect_stroke(table, 0.0, Stroke::new(1.0, self.t.border_strong), egui::StrokeKind::Inside);
+        for i in 0..4 {
+            let fly = self.reveal(0.3 + i as f32 * 0.12, 0.5 + i as f32 * 0.12);
+            let row = Rect::from_min_size(pos2(table.min.x, table.min.y + i as f32 * 10.0), vec2(table.width(), 10.0));
+            let to = self.cell(grid, 4, 3, i, 0);
+            let to = Rect::from_min_max(pos2(grid.min.x, to.min.y), pos2(grid.max.x, to.max.y));
+            let r = Rect::from_min_max(row.min + (to.min - row.min) * fly, row.max + (to.max - row.max) * fly);
+            let fill = if i == 0 { self.t.accent.linear_multiply(0.35) } else { self.t.hover };
+            self.p.rect_filled(r.shrink(0.5), 0.0, fill.linear_multiply(if fly >= 1.0 { 1.0 } else { 0.8 }));
+            // Three cells of text, right to left.
+            for j in 0..3 {
+                let cw = r.width() / 3.0;
+                let x1 = r.max.x - j as f32 * cw - 2.0;
+                self.line(pos2(x1 - cw * 0.55, r.center().y), pos2(x1, r.center().y), if i == 0 { self.t.text } else { grey }, 1.5);
+            }
+            if fly < 1.0 {
+                self.line(pos2(row.min.x, row.max.y), pos2(row.max.x, row.max.y), self.t.border, 1.0);
+            }
+        }
+        // The sheet tab, named after the heading.
+        let tab = self.reveal(0.85, 1.0);
+        if tab > 0.0 {
+            let r = Rect::from_min_size(pos2(sheet.max.x - 30.0, sheet.max.y - 9.0), vec2(26.0, 8.0));
+            self.p.rect_filled(r, 1.0, self.t.accent.linear_multiply(tab));
+            self.line(pos2(r.min.x + 4.0, r.center().y), pos2(r.max.x - 4.0, r.center().y), Color32::WHITE.linear_multiply(tab), 1.5);
+        }
+    }
+
+    /// A slide at the left whose title and lines flow back into a page at the right: the title
+    /// becomes a heading, the body the paragraphs under it.
+    fn receive_craft(&self) {
+        let grey = self.t.text_dim;
+        let slide = Rect::from_min_size(self.at(6.0, 30.0), vec2(66.0, 37.0));
+        self.p.rect_filled(slide, 2.0, Color32::WHITE);
+        self.p.rect_stroke(slide, 2.0, Stroke::new(1.0, self.t.border_strong), egui::StrokeKind::Inside);
+        self.label(pos2(slide.min.x + 4.0, slide.max.y + 7.0), ".craftx", 6.5, grey, Align2::LEFT_CENTER);
+        let go = self.reveal(0.05, 0.3);
+        if go > 0.0 {
+            self.arrow_right(self.at(78.0, 52.0), self.at(78.0 + 14.0 * go, 52.0));
+        }
+        let page = self.page(100.0, 8.0, 70.0, 88.0);
+        let items: [(bool, f32); 4] = [(true, 46.0), (false, 48.0), (false, 40.0), (false, 44.0)];
+        for (i, (heading, w)) in items.iter().enumerate() {
+            let fly = self.reveal(0.3 + i as f32 * 0.12, 0.5 + i as f32 * 0.12);
+            // From the slide (title bar, then body lines) to the page (heading, then paragraphs).
+            let (from_x1, from_y, from_w) = if *heading {
+                (slide.max.x - 5.0, slide.min.y + 6.0, slide.width() - 10.0)
+            } else {
+                (slide.max.x - 6.0, slide.min.y + 14.0 + i as f32 * 6.0, w * 0.9)
+            };
+            let (to_x1, to_y) = (page.max.x, page.min.y + 8.0 + i as f32 * 14.0);
+            let x1 = from_x1 + (to_x1 - from_x1) * fly;
+            let yy = from_y + (to_y - from_y) * fly;
+            let ww = from_w + (w - from_w) * fly;
+            if *heading {
+                let c = self.t.accent;
+                if fly <= 0.0 {
+                    self.p.rect_filled(Rect::from_min_max(pos2(x1 - ww, yy - 2.5), pos2(x1, yy + 2.5)), 1.0, c);
+                } else {
+                    self.line(pos2(x1 - ww, yy), pos2(x1, yy), c, 3.0);
+                }
+            } else {
+                self.line(pos2(x1 - ww, yy), pos2(x1, yy), grey, 1.5);
+            }
+            if fly > 0.0 {
+                self.line(pos2(from_x1 - from_w, from_y), pos2(from_x1, from_y), grey.linear_multiply(0.3), 1.0);
+            }
+        }
+        // The notes, in italics (a slanted short line), last.
+        let notes = self.reveal(0.85, 1.0);
+        if notes > 0.0 {
+            let y = page.min.y + 8.0 + 4.0 * 14.0;
+            self.line(pos2(page.max.x - 2.0, y - 1.5), pos2(page.max.x - 30.0, y + 1.5), grey.linear_multiply(notes), 1.5);
+        }
     }
 
     /// The page goes to the gear (the engine), which turns, and comes back justified.

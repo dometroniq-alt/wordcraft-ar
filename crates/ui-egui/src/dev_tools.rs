@@ -76,7 +76,7 @@ pub fn self_test() -> Report {
     let mut runs = Vec::new();
     for tab in crate::ribbon::TABS.iter().chain(&["Table Design", "Table Layout"]) {
         for (id, params) in crate::keytips::controls_public_with_params(tab) {
-            if id == "ui.dialog" || id == "ui.tab" || id.starts_with("file.") || id.starts_with("ui.zotero.") {
+            if id == "ui.dialog" || id == "ui.tab" || id.starts_with("file.") || id.starts_with("ui.zotero.") || id.starts_with("send.") {
                 continue;
             }
             let start = Instant::now();
@@ -195,10 +195,16 @@ fn kit_gallery(ui: &mut Ui, t: &Tokens, filter: &str) {
             ui.vertical(|ui| {
                 ui.set_max_width(400.0);
                 ui.label(egui::RichText::new(crate::i18n::artwork(e.key)).font(semibold(12.0)));
-                ui.label(egui::RichText::new(crate::i18n::explain(crate::i18n::current(), e.explain)).size(11.5));
-                if arabic != e.explain {
-                    ui.add(egui::Label::new(egui::RichText::new(arabic).size(11.5).color(t.text_dim)).halign(egui::Align::RIGHT));
-                } else {
+                crate::rtl_text::paragraph(
+                    ui,
+                    crate::i18n::explain(crate::i18n::current(), e.explain),
+                    egui::FontId::proportional(11.5),
+                    t.text,
+                    400.0,
+                );
+                if arabic != e.explain && !crate::i18n::current().is_arabic() {
+                    crate::rtl_text::paragraph(ui, arabic, egui::FontId::proportional(11.5), t.text_dim, 400.0);
+                } else if arabic == e.explain {
                     ui.label(egui::RichText::new(tl!("No Arabic translation yet")).small().color(t.red));
                 }
                 if !crate::icons::known(icon) {

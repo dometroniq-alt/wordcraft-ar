@@ -2691,3 +2691,16 @@
 	{n} commands in the registry	{n} parancs a nyilvántartásban
 	{n} Arabic interface strings	{n} arab felületi szöveg
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Parancs hozzáadása: ikon az icons.rs-ben, egy Entry a ui_kit/<tab>.rs-ben, egy sor az i18n/ar.tsv-ben — lásd docs/ar-ui-kit.md.
+	Send	Küldés
+	Send to DeckCraft AR	Küldés a DeckCraft AR-nak
+	Send to GridCraft AR	Küldés a GridCraft AR-nak
+	Receive from DeckCraft / GridCraft	Fogadás a DeckCraft / GridCraft-tól
+	Send to\nDeckCraft	Küldés a\nDeckCraft-nak
+	Send to\nGridCraft	Küldés a\nGridCraft-nak
+	Receive…	Fogadás…
+	Craft exchange	Craft-csere
+	Sent to {app}	Elküldve: {app}
+	Saved {path} — open it in {app} (File › Open)	Mentve: {path} — nyissa meg a {app} alkalmazásban (Fájl › Megnyitás)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Diákként küldi a dokumentumot a DeckCraft AR-nak: minden címsor új diát kezd, a hosszú szöveg a következőn folytatódik, a jobbról balra irány és a kasida megmarad. Példa: egy 3 oldalas körlevél 6 dia lesz, a «Feladatok (2)» a «Feladatok» folytatása.
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Munkafüzetként küldi a dokumentumot a GridCraft AR-nak: minden táblázat saját lapot kap, a szöveg a «Text» lapra kerül, a jobbról balra irány és a kasida minden cellában megmarad. Példa: egy 12 soros feladattáblázat a címsora nevét viselő lap lesz, rendezésre és szűrésre készen.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Új dokumentumként nyitja meg a DeckCraft AR vagy GridCraft AR által küldött Craft-cserefájlt (.craftx): minden dia címsor lesz a szövegével, a jegyzetek dőlten, a táblázatok táblázatok maradnak. Példa: egy 6 diás bemutató hat címsoros szakaszként tér vissza.

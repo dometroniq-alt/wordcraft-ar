@@ -2735,3 +2735,16 @@ template	Letter	Thư
 	{n} commands in the registry	{n} lệnh trong sổ đăng ký
 	{n} Arabic interface strings	{n} chuỗi giao diện tiếng Ả Rập
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Thêm lệnh: biểu tượng trong icons.rs, một Entry trong ui_kit/<tab>.rs, một dòng trong i18n/ar.tsv — xem docs/ar-ui-kit.md.
+	Send	Gửi
+	Send to DeckCraft AR	Gửi tới DeckCraft AR
+	Send to GridCraft AR	Gửi tới GridCraft AR
+	Receive from DeckCraft / GridCraft	Nhận từ DeckCraft / GridCraft
+	Send to\nDeckCraft	Gửi tới\nDeckCraft
+	Send to\nGridCraft	Gửi tới\nGridCraft
+	Receive…	Nhận…
+	Craft exchange	Tệp trao đổi Craft
+	Sent to {app}	Đã gửi tới {app}
+	Saved {path} — open it in {app} (File › Open)	Đã lưu tại {path} — mở trong {app} (Tệp › Mở)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Gửi tài liệu này tới DeckCraft AR dưới dạng trang chiếu: mỗi tiêu đề bắt đầu một trang, văn bản dài tiếp sang trang sau, hướng phải-sang-trái và kashida được giữ. Ví dụ: một thông tư 3 trang thành 6 trang chiếu, «Nhiệm vụ (2)» tiếp «Nhiệm vụ».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Gửi tài liệu này tới GridCraft AR dưới dạng sổ tính: mỗi bảng có trang tính riêng, văn bản vào trang «Text», hướng phải-sang-trái và kashida được giữ trong từng ô. Ví dụ: bảng nhiệm vụ 12 hàng thành một trang tính mang tên tiêu đề, sẵn sàng sắp xếp và lọc.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Mở tệp trao đổi Craft (.craftx) do DeckCraft AR hoặc GridCraft AR gửi thành tài liệu mới: mỗi trang chiếu thành một tiêu đề kèm văn bản, ghi chú in nghiêng, bảng vẫn là bảng. Ví dụ: bộ 6 trang chiếu trở về thành sáu mục có tiêu đề.

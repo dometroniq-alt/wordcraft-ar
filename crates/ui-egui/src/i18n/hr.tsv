@@ -2695,3 +2695,16 @@ preview	Title	Naslov
 	{n} commands in the registry	{n} naredbi u registru
 	{n} Arabic interface strings	{n} nizova arapskog sučelja
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Dodavanje naredbe: ikona u icons.rs, jedan Entry u ui_kit/<tab>.rs, jedan redak u i18n/ar.tsv — vidi docs/ar-ui-kit.md.
+	Send	Pošalji
+	Send to DeckCraft AR	Pošalji u DeckCraft AR
+	Send to GridCraft AR	Pošalji u GridCraft AR
+	Receive from DeckCraft / GridCraft	Primi iz DeckCraft / GridCraft
+	Send to\nDeckCraft	Pošalji u\nDeckCraft
+	Send to\nGridCraft	Pošalji u\nGridCraft
+	Receive…	Primi…
+	Craft exchange	Craft razmjena
+	Sent to {app}	Poslano u {app}
+	Saved {path} — open it in {app} (File › Open)	Spremljeno u {path} — otvorite ga u {app} (Datoteka › Otvori)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Šalje ovaj dokument u DeckCraft AR kao slajdove: svaki naslov počinje slajd, dugi tekst nastavlja se na sljedećem, smjer zdesna nalijevo i kašida ostaju. Primjer: okružnica od 3 stranice postaje 6 slajdova, «Dužnosti (2)» nastavlja «Dužnosti».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Šalje ovaj dokument u GridCraft AR kao radnu knjigu: svaka tablica dobiva svoj list, a tekst ide na list «Text», smjer zdesna nalijevo i kašida ostaju u svakoj ćeliji. Primjer: tablica dužnosti od 12 redaka postaje list nazvan po naslovu, spreman za sortiranje i filtriranje.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Otvara Craft datoteku razmjene (.craftx) koju je poslao DeckCraft AR ili GridCraft AR kao novi dokument: svaki slajd postaje naslov s tekstom, bilješke kurzivom, a tablice ostaju tablice. Primjer: prezentacija od 6 slajdova vraća se kao šest naslovljenih odjeljaka.

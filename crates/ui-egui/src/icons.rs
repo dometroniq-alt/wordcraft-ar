@@ -394,6 +394,9 @@ pub const NAMES: &[&str] = &[
     "distribute",
     "serviceEngine",
     "serviceEnginePdf",
+    "sendDeck",
+    "sendGrid",
+    "receiveCraft",
     "uiKit",
     "selfTest",
 ];
@@ -1867,6 +1870,42 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.page(4.0, 2.0, 16.0, 18.0);
             pen.frect(5.5, 10.0, 14.5, 14.5, a);
             pen.text(10.0, 12.2, 4.5, "PDF", Color32::WHITE, true);
+        }
+        // Craft Exchange (Service › Send): a page handed on to a landscape slide, to a grid, and
+        // a slide coming back into a page. Right-to-left text lines on the page; the arrow is the
+        // accent.
+        "sendDeck" => {
+            // A portrait page at the left, an arrow, a landscape slide (title bar + a line) at the right.
+            pen.page(1.0, 2.0, 8.5, 14.0);
+            pen.lines(2.5, 7.0, &[6.0, 8.5, 11.0]);
+            pen.line_c(&[(9.5, 8.0), (13.0, 8.0)], a);
+            pen.fill(&[(12.5, 6.3), (14.5, 8.0), (12.5, 9.7)], a);
+            pen.rect(11.0, 11.5, 19.5, 17.5, c);
+            pen.frect(12.0, 12.5, 18.5, 13.8, a);
+            pen.line(&[(13.0, 15.5), (17.5, 15.5)]);
+        }
+        "sendGrid" => {
+            // The same page, the arrow, and a 3 × 3 grid with a shaded header row.
+            pen.page(1.0, 2.0, 8.5, 14.0);
+            pen.lines(2.5, 7.0, &[6.0, 8.5, 11.0]);
+            pen.line_c(&[(9.5, 8.0), (13.0, 8.0)], a);
+            pen.fill(&[(12.5, 6.3), (14.5, 8.0), (12.5, 9.7)], a);
+            pen.frect(11.0, 10.0, 19.5, 12.5, a);
+            pen.rect(11.0, 10.0, 19.5, 18.0, c);
+            pen.line(&[(11.0, 12.5), (19.5, 12.5)]);
+            pen.line(&[(11.0, 15.25), (19.5, 15.25)]);
+            pen.line(&[(13.8, 10.0), (13.8, 18.0)]);
+            pen.line(&[(16.7, 10.0), (16.7, 18.0)]);
+        }
+        "receiveCraft" => {
+            // A slide at the left, an arrow pointing into a page at the right.
+            pen.rect(0.5, 4.0, 8.5, 10.0, c);
+            pen.frect(1.5, 5.0, 7.5, 6.2, a);
+            pen.line(&[(2.5, 8.0), (6.5, 8.0)]);
+            pen.line_c(&[(5.0, 13.0), (9.5, 13.0)], a);
+            pen.fill(&[(9.0, 11.3), (11.0, 13.0), (9.0, 14.7)], a);
+            pen.page(11.5, 2.0, 19.0, 18.0);
+            pen.lines(13.0, 17.5, &[7.0, 9.5, 12.0, 14.5]);
         }
         // WordCraft AR developer systems: a grid of tiles (the kit gallery), a tick over a page
         // (the self-test).

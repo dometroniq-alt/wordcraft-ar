@@ -2297,3 +2297,16 @@
 	{n} commands in the registry	命令登錄中有 {n} 條命令
 	{n} Arabic interface strings	阿拉伯文介面字串 {n} 條
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	新增命令：在 icons.rs 中加圖示，在 ui_kit/<tab>.rs 中加一個 Entry，在 i18n/ar.tsv 中加一行 — 見 docs/ar-ui-kit.md。
+	Send	傳送
+	Send to DeckCraft AR	傳送到 DeckCraft AR
+	Send to GridCraft AR	傳送到 GridCraft AR
+	Receive from DeckCraft / GridCraft	從 DeckCraft / GridCraft 接收
+	Send to\nDeckCraft	傳送到\nDeckCraft
+	Send to\nGridCraft	傳送到\nGridCraft
+	Receive…	接收…
+	Craft exchange	Craft 交換檔案
+	Sent to {app}	已傳送到 {app}
+	Saved {path} — open it in {app} (File › Open)	已儲存到 {path} — 請在 {app} 中開啟（檔案 › 開啟）
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	把本文件作為投影片傳送到 DeckCraft AR：每個標題開始一張投影片，長文字續到下一張，從右到左方向和卡希達都保留。範例：3 頁通告變成 6 張投影片，«職責 (2)» 接續 «職責»。
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	把本文件作為活頁簿傳送到 GridCraft AR：每個表格各佔一張工作表，文字放入 «Text» 工作表，每個儲存格都保留從右到左方向和卡希達。範例：12 列的職責表變成以其標題命名的工作表，可以排序和篩選。
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	把 DeckCraft AR 或 GridCraft AR 傳來的 Craft 交換檔案 (.craftx) 作為新文件開啟：每張投影片變成標題加內文，備註為斜體，表格仍是表格。範例：6 張投影片回來成為六個帶標題的小節。

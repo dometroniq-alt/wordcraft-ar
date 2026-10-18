@@ -1858,6 +1858,25 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
         big(ui, app, "serviceEngine", "Format with\nServiceWord-AR", "service.external", json!({}), false);
         small(ui, app, "serviceEnginePdf", Some("With PDF"), "Format and make the print PDF", "service.external", json!({"pdf": true}), false);
     });
+    // Craft Exchange (`docs/ar-exchange.md`): the document as slides or as a sheet, and back.
+    group(ui, "Send", None, app, |ui, app| {
+        big(ui, app, "sendDeck", "Send to\nDeckCraft", "send.toDeckCraft", json!({}), false);
+        big(ui, app, "sendGrid", "Send to\nGridCraft", "send.toGridCraft", json!({}), false);
+        small(ui, app, "receiveCraft", Some("Receive…"), "Receive from DeckCraft / GridCraft", "send.importCraftx", json!({}), false);
+    });
+}
+
+/// The status line after Send to DeckCraft / GridCraft: started, or where the file was saved
+/// when the sibling isn't installed (the engine's result carries `started`, `app` and `path`).
+pub(crate) fn sent_status(app: &mut WordApp, v: &serde_json::Value) {
+    let name = v.get("app").and_then(serde_json::Value::as_str).unwrap_or("DeckCraft AR");
+    let path = v.get("path").and_then(serde_json::Value::as_str).unwrap_or("");
+    let msg = if v.get("started").and_then(serde_json::Value::as_bool) == Some(true) {
+        crate::i18n::fmt(tl!("Sent to {app}"), &[("app", name)])
+    } else {
+        crate::i18n::fmt(tl!("Saved {path} — open it in {app} (File › Open)"), &[("path", path), ("app", name)])
+    };
+    app.status(msg);
 }
 
 fn zotero(app: &mut WordApp, ui: &mut Ui) {

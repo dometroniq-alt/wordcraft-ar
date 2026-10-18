@@ -2692,3 +2692,16 @@ preview	Title	Örnek
 	{n} commands in the registry	Kayıt defterinde {n} komut
 	{n} Arabic interface strings	{n} Arapça arayüz dizesi
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Komut ekleme: simgesi icons.rs'de, bir Entry ui_kit/<tab>.rs'de, bir satır i18n/ar.tsv'de — bkz. docs/ar-ui-kit.md.
+	Send	Gönder
+	Send to DeckCraft AR	DeckCraft AR'a gönder
+	Send to GridCraft AR	GridCraft AR'a gönder
+	Receive from DeckCraft / GridCraft	DeckCraft / GridCraft'tan al
+	Send to\nDeckCraft	DeckCraft'a\ngönder
+	Send to\nGridCraft	GridCraft'a\ngönder
+	Receive…	Al…
+	Craft exchange	Craft değişim dosyası
+	Sent to {app}	{app} uygulamasına gönderildi
+	Saved {path} — open it in {app} (File › Open)	{path} olarak kaydedildi — {app} içinde açın (Dosya › Aç)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Bu belgeyi slaytlar olarak DeckCraft AR'a gönderir: her başlık bir slayt başlatır, uzun metin sonraki slaytta sürer, sağdan sola yön ve keşide korunur. Örnek: 3 sayfalık bir genelge 6 slayt olur, «Görevler (2)» «Görevler»i sürdürür.
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Bu belgeyi çalışma kitabı olarak GridCraft AR'a gönderir: her tablo kendi sayfasına, metin «Text» sayfasına gider; sağdan sola yön ve keşide her hücrede korunur. Örnek: 12 satırlık bir görev tablosu, başlığının adını taşıyan, sıralanıp filtrelenmeye hazır bir sayfa olur.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	DeckCraft AR veya GridCraft AR'ın gönderdiği Craft değişim dosyasını (.craftx) yeni belge olarak açar: her slayt metniyle bir başlık olur, notlar italik, tablolar tablo kalır. Örnek: 6 slaytlık bir sunu, başlıklı altı bölüm olarak geri gelir.

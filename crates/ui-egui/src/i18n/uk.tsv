@@ -2308,3 +2308,16 @@
 	{n} commands in the registry	{n} команд у реєстрі
 	{n} Arabic interface strings	{n} рядків арабського інтерфейсу
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Додати команду: піктограма в icons.rs, один Entry в ui_kit/<tab>.rs, один рядок в i18n/ar.tsv — див. docs/ar-ui-kit.md.
+	Send	Надіслати
+	Send to DeckCraft AR	Надіслати в DeckCraft AR
+	Send to GridCraft AR	Надіслати в GridCraft AR
+	Receive from DeckCraft / GridCraft	Отримати з DeckCraft / GridCraft
+	Send to\nDeckCraft	Надіслати в\nDeckCraft
+	Send to\nGridCraft	Надіслати в\nGridCraft
+	Receive…	Отримати…
+	Craft exchange	Обмін Craft
+	Sent to {app}	Надіслано в {app}
+	Saved {path} — open it in {app} (File › Open)	Збережено в {path} — відкрийте його в {app} (Файл › Відкрити)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Надсилає документ у DeckCraft AR слайдами: кожен заголовок починає слайд, довгий текст продовжується на наступному, напрямок справа наліво й кашида зберігаються. Приклад: 3-сторінковий циркуляр стає 6 слайдами, «Обов'язки (2)» продовжує «Обов'язки».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Надсилає документ у GridCraft AR книгою: кожна таблиця на своєму аркуші, текст — на аркуші «Text», напрямок справа наліво й кашида зберігаються в кожній клітинці. Приклад: таблиця обов'язків із 12 рядків стає аркушем з ім'ям заголовка, готовим до сортування й фільтрування.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Відкриває файл обміну Craft (.craftx), надісланий DeckCraft AR або GridCraft AR, як новий документ: кожен слайд стає заголовком із текстом, нотатки — курсивом, таблиці лишаються таблицями. Приклад: презентація з 6 слайдів повертається шістьма розділами із заголовками.

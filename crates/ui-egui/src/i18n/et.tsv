@@ -2330,3 +2330,16 @@
 	{n} commands in the registry	{n} käsku registris
 	{n} Arabic interface strings	{n} araabiakeelse liidese sõnet
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Käsu lisamine: ikoon failis icons.rs, üks Entry failis ui_kit/<tab>.rs, üks rida failis i18n/ar.tsv — vt docs/ar-ui-kit.md.
+	Send	Saada
+	Send to DeckCraft AR	Saada DeckCraft AR-i
+	Send to GridCraft AR	Saada GridCraft AR-i
+	Receive from DeckCraft / GridCraft	Võta vastu DeckCraft / GridCraft-ist
+	Send to\nDeckCraft	Saada\nDeckCraft-i
+	Send to\nGridCraft	Saada\nGridCraft-i
+	Receive…	Võta vastu…
+	Craft exchange	Craft-vahetus
+	Sent to {app}	Saadetud: {app}
+	Saved {path} — open it in {app} (File › Open)	Salvestatud: {path} — ava see rakenduses {app} (Fail › Ava)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Saadab selle dokumendi DeckCraft AR-i slaididena: iga pealkiri alustab slaidi, pikk tekst jätkub järgmisel, paremalt vasakule suund ja kašiida säilivad. Näide: 3-leheline ringkiri saab 6 slaidiks, «Kohustused (2)» jätkab «Kohustused».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Saadab selle dokumendi GridCraft AR-i töövihikuna: iga tabel saab oma lehe ja tekst läheb lehele «Text», paremalt vasakule suund ja kašiida säilivad igas lahtris. Näide: 12-realine kohustuste tabel saab pealkirja järgi nimetatud leheks, valmis sortimiseks ja filtreerimiseks.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Avab DeckCraft AR-i või GridCraft AR-i saadetud Craft-vahetusfaili (.craftx) uue dokumendina: iga slaid saab pealkirjaks oma tekstiga, märkmed kaldkirjas, tabelid jäävad tabeliteks. Näide: 6 slaidi esitlus tuleb tagasi kuue pealkirjaga jaotisena.

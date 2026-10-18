@@ -73,6 +73,7 @@ pub mod printing;
 pub mod read_aloud;
 pub mod ribbon;
 pub mod rtl;
+pub mod rtl_text;
 pub mod ruler_tabs;
 pub mod scroll;
 pub mod system_clipboard;
@@ -953,6 +954,12 @@ impl WordApp {
         if let Err(e) = &r {
             self.status(e.clone());
         }
+        // Send to DeckCraft / GridCraft says whether the sibling started or where the file is.
+        if let Ok(v) = &r
+            && matches!(id, "send.toDeckCraft" | "send.toGridCraft")
+        {
+            crate::ribbon::sent_status(self, v);
+        }
         r
     }
 
@@ -1237,6 +1244,8 @@ impl WordApp {
         if let Some(what) = req.get("open").and_then(Value::as_str) {
             match what {
                 "openFile" => self.open_dialog(),
+                // Service › Send › Receive…: a `.craftx` from DeckCraft AR / GridCraft AR.
+                "receiveCraft" => self.receive_craft_dialog(),
                 "saveAs" => {
                     self.save_as_dialog();
                 }

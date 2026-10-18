@@ -2296,3 +2296,16 @@
 	{n} commands in the registry	コマンドレジストリ: {n} 件
 	{n} Arabic interface strings	アラビア語インターフェイス文字列: {n} 件
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	コマンドの追加: icons.rs にアイコン、ui_kit/<tab>.rs に Entry を 1 つ、i18n/ar.tsv に 1 行 — docs/ar-ui-kit.md を参照。
+	Send	送信
+	Send to DeckCraft AR	DeckCraft AR に送信
+	Send to GridCraft AR	GridCraft AR に送信
+	Receive from DeckCraft / GridCraft	DeckCraft / GridCraft から受信
+	Send to\nDeckCraft	DeckCraft\nに送信
+	Send to\nGridCraft	GridCraft\nに送信
+	Receive…	受信…
+	Craft exchange	Craft 交換ファイル
+	Sent to {app}	{app} に送信しました
+	Saved {path} — open it in {app} (File › Open)	{path} に保存しました — {app} で開いてください (ファイル › 開く)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	この文書をスライドとして DeckCraft AR に送ります。見出しごとにスライドが始まり、長い文は次のスライドに続き、右から左の方向とカシーダは保たれます。例: 3 ページの回状は 6 枚のスライドになり、「任務 (2)」が「任務」を続けます。
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	この文書をブックとして GridCraft AR に送ります。表はそれぞれ別のシートに、本文は「Text」シートに入り、右から左の方向とカシーダは各セルで保たれます。例: 12 行の任務表は見出しの名前のシートになり、並べ替えと絞り込みができます。
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	DeckCraft AR または GridCraft AR が送った Craft 交換ファイル (.craftx) を新しい文書として開きます。各スライドは見出しと本文になり、ノートは斜体、表は表のままです。例: 6 枚のスライドは見出し付きの 6 つの節として戻ります。

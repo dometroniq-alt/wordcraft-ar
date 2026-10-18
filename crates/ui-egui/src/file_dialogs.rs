@@ -32,7 +32,9 @@ pub enum FileDialogRequest {
 pub type FileDialogAnswer = Result<Option<String>, String>;
 
 const PICTURES: &[&str] = &["png", "jpg", "jpeg", "gif", "webp", "bmp", "wmf", "emf"];
-const DOCUMENTS: &[&str] = &["docx", "docm", "dotx", "dotm", "doc", "dot", "odt", "rtf", "txt", "md", "html", "htm", "tex", "json", "xml"];
+const DOCUMENTS: &[&str] = &["docx", "docm", "dotx", "dotm", "doc", "dot", "odt", "rtf", "txt", "md", "html", "htm", "tex", "json", "xml", "craftx"];
+/// Craft Exchange files (`docs/ar-exchange.md`), for Service › Send › Receive….
+const CRAFTX: &[&str] = &[wordcraft_engine::io::CRAFTX_EXT];
 
 /// The file types Open offers, as (label, extensions; `*` is any file): pictures for Insert/Change
 /// Picture, recipient lists for Select Recipients › Use an Existing List…, documents otherwise.
@@ -42,7 +44,8 @@ pub fn open_filters(purpose: &str) -> &'static [(&'static str, &'static [&'stati
         "picture" => &[("Pictures", PICTURES)],
         "font" => &[("Fonts", wordcraft_fonts::FONT_FILE_EXTS)],
         "recipients" => &[("Recipient lists", wordcraft_engine::cmd::mailings::RECIPIENT_EXTENSIONS), ("All files", &["*"])],
-        _ => &[("Documents", DOCUMENTS), ("Word document", &["docx"]), ("All files", &["*"])],
+        "craftx" => &[(wordcraft_engine::io::CRAFTX_NAME, CRAFTX), ("All files", &["*"])],
+        _ => &[("Documents", DOCUMENTS), (wordcraft_engine::io::CRAFTX_NAME, CRAFTX), ("Word document", &["docx"]), ("All files", &["*"])],
     }
 }
 
@@ -299,6 +302,16 @@ impl WordApp {
             return;
         }
         let _ = self.ask_file(FileDialogRequest::Open { purpose: "document".into() }, AfterPick::OpenDocument);
+    }
+
+    /// Service › Send › Receive…: pick a `.craftx` written by DeckCraft AR or GridCraft AR and
+    /// open it as a document.
+    pub(crate) fn receive_craft_dialog(&mut self) {
+        if let Some(f) = &self.services.open_async {
+            f("craftx");
+            return;
+        }
+        let _ = self.ask_file(FileDialogRequest::Open { purpose: "craftx".into() }, AfterPick::OpenDocument);
     }
 
     pub(crate) fn pick_picture(&mut self) {

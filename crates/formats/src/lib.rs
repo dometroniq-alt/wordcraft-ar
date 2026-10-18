@@ -1,5 +1,6 @@
 //! WordCraft import/export for the "other" text formats: plain text, Markdown (CommonMark subset
-//! plus GFM tables and strikethrough), HTML, RTF, OpenDocument Text and LaTeX — and, read-only,
+//! plus GFM tables and strikethrough), HTML, RTF, OpenDocument Text, LaTeX and Craft Exchange
+//! (`.craftx`, the hand-off to DeckCraft AR / GridCraft AR, [`craftx`]) — and, read-only,
 //! spreadsheet cells for mail-merge recipient lists ([`sheet`]: .xlsx/.xlsm/.xls/.ods).
 //!
 //! Every format maps to a small flow model ([`model::Flow`]: paragraphs with a kind, list
@@ -10,6 +11,7 @@
 #![deny(clippy::unwrap_used, clippy::expect_used, clippy::panic, clippy::unimplemented, clippy::todo, clippy::unreachable)]
 
 pub mod comments;
+pub mod craftx;
 pub mod html;
 pub mod latex;
 pub mod markdown;
@@ -23,7 +25,11 @@ pub mod txt;
 use wordcraft_doc::Document;
 
 /// Extensions this crate handles.
-pub const EXTENSIONS: &[&str] = &["txt", "text", "md", "markdown", "html", "htm", "xhtml", "rtf", "odt", "tex", "latex", "ltx"];
+pub const EXTENSIONS: &[&str] = &["txt", "text", "md", "markdown", "html", "htm", "xhtml", "rtf", "odt", "tex", "latex", "ltx", "craftx"];
+
+/// Extension and display name of the Craft Exchange format (the Open dialog's filter).
+pub const CRAFTX_EXT: &str = "craftx";
+pub const CRAFTX_NAME: &str = "Craft exchange";
 
 /// Import `bytes` in the format named by `ext` (no dot, any case). `None` = not our format.
 pub fn import(ext: &str, bytes: &[u8]) -> Option<Result<Document, String>> {
@@ -35,6 +41,7 @@ pub fn import(ext: &str, bytes: &[u8]) -> Option<Result<Document, String>> {
         "rtf" => rtf::import(bytes),
         "odt" => odt::import(bytes),
         "tex" | "latex" | "ltx" => Ok(latex::import(bytes)),
+        "craftx" => craftx::read(&txt::decode(bytes)).map_err(|e| e.to_string()),
         _ => return None,
     };
     Some(r.map(|mut d| {
@@ -68,6 +75,8 @@ pub fn export(ext: &str, doc: &Document) -> Option<Result<Vec<u8>, String>> {
         "rtf" => Ok(rtf::export(doc).into_bytes()),
         "odt" => odt::export(doc),
         "tex" | "latex" | "ltx" => Ok(latex::export(doc).into_bytes()),
+        // The title is the document's own; the sender (`send.*`) passes the file name instead.
+        "craftx" => craftx::write(doc, &doc.core.title).map(String::into_bytes).map_err(|e| e.to_string()),
         _ => return None,
     })
 }

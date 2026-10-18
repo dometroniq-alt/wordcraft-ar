@@ -203,7 +203,8 @@ fn normal_document(s: &Session) -> Document {
     d
 }
 
-fn open(s: &mut Session, v: &Value) -> CmdResult {
+/// `file.open`; also what `send.importCraftx` runs with a `.craftx` path.
+pub(crate) fn open(s: &mut Session, v: &Value) -> CmdResult {
     let Some(path) = p::str(v, "path") else {
         s.ui_requests.push(json!({"open": "openFile"}));
         return sel_result(s);
@@ -291,8 +292,14 @@ fn save(s: &mut Session, v: &Value) -> CmdResult {
             opts.word2003 = ext == "xml" && is_word_2003_file(&path);
         }
         Some(f) if matches!(f.as_str(), Some(FORMAT_WORD_2003 | FORMAT_FLAT_OPC)) && ext == "xml" => {}
+        // Craft Exchange (`docs/ar-exchange.md`): the format is the extension's.
+        Some(f) if f.as_str() == Some(wordcraft_formats::CRAFTX_EXT) && ext == wordcraft_formats::CRAFTX_EXT => {}
         Some(_) => {
-            return Err(CmdError::Params(format!("`format` is \"{FORMAT_WORD_2003}\" or \"{FORMAT_FLAT_OPC}\", and only for an .xml file")));
+            return Err(CmdError::Params(format!(
+                "`format` is \"{FORMAT_WORD_2003}\" or \"{FORMAT_FLAT_OPC}\" for an .xml file, or \"{}\" for a .{} file",
+                wordcraft_formats::CRAFTX_EXT,
+                wordcraft_formats::CRAFTX_EXT
+            )));
         }
     }
     s.stamp_save();

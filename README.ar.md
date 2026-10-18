@@ -105,6 +105,7 @@ Windows يقوم `build-windows.bat` بما سبق ويجمع البرنامج �
 | Page Number | `service.pageNumbers` | يكتب `( الصفحة - المجموع )` بالأرقام الهندية أسفل كل صفحة. |
 | Low · Medium · High · Distribute (الرئيسية › الكشيدة) | `service.kashida` | درجات الكشيدة والتوزيع للفقرات الحالية. |
 | Format with ServiceWord-AR · With PDF | `service.external` | يسلّم المستند إلى محرك Python ويفتح النتيجة؛ واختياريًا نسخة الطباعة PDF المختومة. |
+| Send to DeckCraft AR / GridCraft AR · Receive… | `send.toDeckCraft` `send.toGridCraft` `send.importCraftx` | يرسل المستند (أو التحديد) إلى التطبيق الشقيق بصيغة تبادل Craft (`.craftx`، انظر [`docs/ar-exchange.md`](docs/ar-exchange.md)) — العناوين تصير شرائح أو أوراقًا، والاتجاه من اليمين إلى اليسار والكشيدة يسافران مع النص — ويفتح ما يعيده التطبيق الشقيق. |
 
 الدورة والكشيدة وصيغ الترقيم مشروحة بالتفصيل في [`AR-FORK.md`](AR-FORK.md).
 

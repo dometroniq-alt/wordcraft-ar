@@ -2687,3 +2687,16 @@ preview	Title	Ukázka
 	{n} commands in the registry	{n} příkazů v registru
 	{n} Arabic interface strings	{n} řetězců arabského rozhraní
 	Add a command: its icon in icons.rs, one Entry in ui_kit/<tab>.rs, one line in i18n/ar.tsv — see docs/ar-ui-kit.md.	Přidání příkazu: ikona v icons.rs, jeden Entry v ui_kit/<tab>.rs, jeden řádek v i18n/ar.tsv — viz docs/ar-ui-kit.md.
+	Send	Odeslat
+	Send to DeckCraft AR	Odeslat do DeckCraft AR
+	Send to GridCraft AR	Odeslat do GridCraft AR
+	Receive from DeckCraft / GridCraft	Přijmout z DeckCraft / GridCraft
+	Send to\nDeckCraft	Odeslat do\nDeckCraft
+	Send to\nGridCraft	Odeslat do\nGridCraft
+	Receive…	Přijmout…
+	Craft exchange	Výměna Craft
+	Sent to {app}	Odesláno do {app}
+	Saved {path} — open it in {app} (File › Open)	Uloženo do {path} — otevřete jej v {app} (Soubor › Otevřít)
+	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Odešle tento dokument do DeckCraft AR jako snímky: každý nadpis začíná snímek, dlouhý text pokračuje na dalším, směr zprava doleva a kašída se zachovají. Příklad: 3stránkový oběžník se stane 6 snímky, «Povinnosti (2)» navazuje na «Povinnosti».
+	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Odešle tento dokument do GridCraft AR jako sešit: každá tabulka dostane vlastní list a text jde na list «Text», směr zprava doleva a kašída se zachovají v každé buňce. Příklad: tabulka povinností o 12 řádcích se stane listem pojmenovaným podle nadpisu, připraveným k řazení a filtrování.
+	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Otevře soubor výměny Craft (.craftx), který poslal DeckCraft AR nebo GridCraft AR, jako nový dokument: každý snímek se stane nadpisem s textem, poznámky kurzívou a tabulky zůstanou tabulkami. Příklad: prezentace o 6 snímcích se vrátí jako šest oddílů s nadpisy.

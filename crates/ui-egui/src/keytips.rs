@@ -307,6 +307,9 @@ fn controls(tab: &str) -> Vec<Control> {
             c("Page Number", "service.pageNumbers"),
             c("Format with ServiceWord-AR", "service.external"),
             p("With PDF", "service.external", serde_json::json!({"pdf": true})),
+            c("Send to DeckCraft AR", "send.toDeckCraft"),
+            c("Send to GridCraft AR", "send.toGridCraft"),
+            c("Receive from DeckCraft / GridCraft", "send.importCraftx"),
         ],
         "Review" => vec![
             c("Spelling & Grammar", "review.spelling"),

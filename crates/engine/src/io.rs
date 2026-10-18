@@ -26,9 +26,14 @@ pub const OPEN_EXTS: &[&str] = &[
     "xml",
     "wcraft.json",
     "json",
+    // Craft Exchange: the hand-off to DeckCraft AR / GridCraft AR (`docs/ar-exchange.md`).
+    "craftx",
 ];
+/// Craft Exchange (`docs/ar-exchange.md`): its extension and the Open dialog's filter name.
+pub const CRAFTX_EXT: &str = wordcraft_formats::CRAFTX_EXT;
+pub const CRAFTX_NAME: &str = wordcraft_formats::CRAFTX_NAME;
 /// Formats WordCraft saves (Save As).
-pub const SAVE_EXTS: &[&str] = &["docx", "docm", "dotx", "dotm", "pdf", "txt", "md", "html", "rtf", "odt", "tex", "png", "json", "xml"];
+pub const SAVE_EXTS: &[&str] = &["docx", "docm", "dotx", "dotm", "pdf", "txt", "md", "html", "rtf", "odt", "tex", "png", "json", "xml", "craftx"];
 
 /// Magic number for ZIP package signatures (used by .docx/.docm/.dotx/.dotm).
 const ZIP_SIG: &[u8] = b"PK\x03\x04";
