@@ -246,6 +246,9 @@ pub struct UiState {
     pub recent_symbols: Vec<dialogs_insert::RecentSymbol>,
     /// Colours picked in the Colors dialog (More Colors…), most recent first (#606).
     pub recent_colors: Vec<String>,
+    /// Fonts applied from the font boxes, most recent first (English family names): the top of
+    /// every font list, so the fonts in use are not searched for ([`previews::Previews::families`]).
+    pub font_use: Vec<String>,
     /// Interface theme: light, dark, or follow the OS appearance (#115).
     pub theme: theme::Appearance,
     /// Interface size (#475, #822): Auto (the display scale the system reports) or an absolute
@@ -359,6 +362,7 @@ impl Default for UiState {
             recent: Vec::new(),
             recent_symbols: Vec::new(),
             recent_colors: Vec::new(),
+            font_use: Vec::new(),
             theme: theme::Appearance::default(),
             interface_size: theme::InterfaceSize::default(),
             legacy_interface_size: None,
@@ -708,6 +712,7 @@ impl WordApp {
     /// Restore preferences saved by [`WordApp::prefs`].
     pub fn apply_prefs(&mut self, ui: UiState) {
         self.ui = ui;
+        self.previews.set_font_use(self.ui.font_use.clone());
         self.ui.backstage = false;
         // Word opens on Home every launch, so the tab `ui.json` holds is not restored. Going File
         // and back to the editor within the run still returns to the tab that was showing.
@@ -828,6 +833,18 @@ impl WordApp {
     /// Run a command for a script or an agent (control channel, MCP bridge): never asks first.
     /// UI-level commands (`ui.*`) are handled here, the rest by the engine.
     pub fn execute(&mut self, id: &str, params: Value) -> Result<Value, String> {
+        let font = (id == "format.font").then(|| params.get("name").and_then(Value::as_str).map(str::to_string)).flatten();
+        let r = self.execute_command(id, params);
+        if r.is_ok()
+            && let Some(f) = font
+            && self.previews.note_font(&f)
+        {
+            self.ui.font_use = self.previews.font_use().to_vec();
+        }
+        r
+    }
+
+    fn execute_command(&mut self, id: &str, params: Value) -> Result<Value, String> {
         // A pending Change Picture only survives until the next action (#147).
         if !matches!(id, "ui.changePicture" | "picture.change" | "insert.picture") {
             self.change_picture_target = None;

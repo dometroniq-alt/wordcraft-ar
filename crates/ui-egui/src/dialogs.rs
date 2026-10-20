@@ -2317,21 +2317,44 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             let r = ui.add(egui::TextEdit::singleline(query).hint_text(tl!("Type a command, e.g. \"insert table\"")).desired_width(380.0));
             r.request_focus();
             let reg = app.session.registry.clone();
-            // An empty box suggests a few common commands, as Word's Search does.
-            let mut hits: Vec<&wordcraft_engine::CommandSpec> = if query.trim().is_empty() {
+            // What the assistant understood of the words comes first (Iraqi and typos included),
+            // then the commands whose names hold them.
+            let mut assistant: Vec<(&wordcraft_engine::CommandSpec, Value)> = Vec::new();
+            let mut hits: Vec<(&wordcraft_engine::CommandSpec, Value)> = Vec::new();
+            if query.trim().is_empty() {
+                // An empty box suggests a few common commands, as Word's Search does.
                 ui.label(egui::RichText::new(tl!("Suggested")).font(semibold(12.5)));
-                SEARCH_SUGGESTIONS.iter().filter_map(|id| reg.get(id)).collect()
+                hits = SEARCH_SUGGESTIONS.iter().filter_map(|id| reg.get(id)).map(|c| (c, json!({}))).collect();
             } else {
-                reg.all().iter().filter(|c| command_matches(c, query)).collect()
-            };
+                for p in wordcraft_engine::cmd::agent::interpret(&app.session, query)
+                    .into_iter()
+                    .filter(|p| p.score >= wordcraft_engine::cmd::agent::ASK)
+                    .take(4)
+                {
+                    if let Some(c) = reg.get(&p.command) {
+                        assistant.push((c, p.params));
+                    }
+                }
+                hits.extend(
+                    reg.all().iter().filter(|c| command_matches(c, query) && !assistant.iter().any(|(a, _)| a.id == c.id)).map(|c| (c, json!({}))),
+                );
+            }
+            let ours = assistant.len();
+            assistant.extend(hits);
+            let mut hits = assistant;
             hits.truncate(14);
             let enter = ui.input(|i| i.key_pressed(egui::Key::Enter));
-            let mut run: Option<&str> = enter.then(|| hits.first().map(|c| c.id)).flatten();
-            for c in &hits {
+            // Enter on an understood request does all of it (agent.ask); on a name match, that command.
+            let mut run: Option<(String, Value)> = None;
+            if enter && let Some((c, params)) = hits.first() {
+                run = Some(if ours > 0 { ("agent.ask".to_string(), json!({"text": query.as_str()})) } else { (c.id.to_string(), params.clone()) });
+            }
+            for (i, (c, params)) in hits.iter().enumerate() {
                 let sc = crate::widgets::shortcut_text(app, c.id);
-                let label = format!("{}   —   {}", tl!(c.label), crate::i18n::location(c.location));
+                let place = if i < ours && !command_matches(c, query) { tl!("Assistant").to_string() } else { crate::i18n::location(c.location) };
+                let label = format!("{}   —   {}", tl!(c.label), place);
                 if ui.add(egui::Button::new(label).shortcut_text(sc).min_size(vec2(380.0, 0.0))).clicked() {
-                    run = Some(c.id);
+                    run = Some((c.id.to_string(), params.clone()));
                 }
             }
             // Search also finds the words in the document (the Navigation pane's results).
@@ -2342,8 +2365,8 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
                 let label = crate::i18n::fmt(tl!("Find “{text}” in the document"), &[("text", &text)]);
                 find = ui.add(egui::Button::new(label).min_size(vec2(380.0, 0.0))).clicked() || (enter && hits.is_empty());
             }
-            if let Some(id) = run {
-                let _ = app.run(id, json!({}));
+            if let Some((id, params)) = &run {
+                let _ = app.run(id, params.clone());
             } else if find {
                 find_in_navigation_pane(app, ui.ctx(), &text);
             }
@@ -3466,7 +3489,15 @@ fn command_matches(c: &wordcraft_engine::CommandSpec, query: &str) -> bool {
         crate::i18n::lowercase(tl!(c.label)),
         crate::i18n::lowercase(&crate::i18n::location(c.location))
     );
-    query.split_whitespace().all(|w| hay.contains(&w.to_lowercase()) || hay.contains(&crate::i18n::lowercase(w)))
+    query.split_whitespace().all(|w| {
+        if w.chars().any(|c| ('\u{0600}'..='\u{06FF}').contains(&c)) {
+            // Arabic words start a word: «رتب» is not found inside «ارتباط».
+            let strip = |x: &str| x.trim_start_matches("ال").to_string();
+            let w = strip(w);
+            return hay.split(|c: char| !c.is_alphanumeric()).any(|h| strip(h).starts_with(w.as_str()));
+        }
+        hay.contains(&w.to_lowercase()) || hay.contains(&crate::i18n::lowercase(w))
+    })
 }
 
 /// The Find and Replace dialog's Go To tab (#712): a page (a number, or `+2` / `-1` from the

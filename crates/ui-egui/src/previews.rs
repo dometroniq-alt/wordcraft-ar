@@ -14,6 +14,8 @@ use crate::theme::{Tokens, regular};
 
 #[derive(Default)]
 pub struct Previews {
+    /// Fonts applied from the font boxes, most recent first.
+    font_use: Vec<String>,
     tex: HashMap<String, TextureHandle>,
     /// The font list, for the interface language it was made in.
     families: Option<(&'static str, Vec<String>)>,
@@ -30,6 +32,24 @@ pub struct Previews {
     /// The Equation tab's pictures, packed into one texture (#1002).
     math: MathAtlas,
 }
+
+/// Fonts remembered as used, and how many of them (with the starters) head the font list.
+const MAX_FONT_USE: usize = 24;
+const FONT_TOP: usize = 10;
+
+/// Fonts for Arabic service writing that head the list until the user's own use fills it.
+const STARTER_FONTS: [&str; 10] = [
+    "Traditional Arabic",
+    "Simplified Arabic",
+    "Arabic Typesetting",
+    "Sakkal Majalla",
+    "Times New Roman",
+    "Arial",
+    "Tahoma",
+    "Calibri",
+    "Segoe UI",
+    "Noto Naskh Arabic",
+];
 
 /// Side of each square texture page the equation pictures share, in pixels.
 const MATH_ATLAS: usize = 2048;
@@ -172,10 +192,51 @@ impl Previews {
             let names = db.localized_names(lang);
             self.local_names = names.iter().map(|(e, l)| (e.to_lowercase(), l.clone())).collect();
             self.english_names = names.into_iter().map(|(e, l)| (l, e)).collect();
+            // The fonts in use head the list (then the starters, while few are in use), the rest
+            // follow in order: nobody searches 400 names for the font they used a minute ago.
+            let mut top: Vec<String> = Vec::new();
+            for want in self.font_use.iter().map(String::as_str).chain(STARTER_FONTS) {
+                if top.len() >= FONT_TOP {
+                    break;
+                }
+                let shown = self.local_names.get(&want.to_lowercase()).map(String::as_str).unwrap_or(want);
+                if let Some(name) = f.iter().find(|x| x.eq_ignore_ascii_case(shown))
+                    && !top.contains(name)
+                {
+                    top.push(name.clone());
+                }
+            }
+            f.retain(|x| !top.contains(x));
+            top.extend(f);
+            let f = top;
             self.families = Some((lang, f));
             self.east_asian = None;
         }
         self.families.as_ref().map(|(_, f)| f.clone()).unwrap_or_default()
+    }
+
+    /// The fonts the user applied, most recent first (English family names).
+    pub fn font_use(&self) -> &[String] {
+        &self.font_use
+    }
+
+    /// Replace the used-fonts list (saved preferences at startup).
+    pub fn set_font_use(&mut self, list: Vec<String>) {
+        self.font_use = list.into_iter().filter(|f| !f.trim().is_empty()).take(MAX_FONT_USE).collect();
+        self.families = None;
+    }
+
+    /// A font was applied: it goes first. Returns whether the list changed.
+    pub fn note_font(&mut self, family: &str) -> bool {
+        let family = family.trim();
+        if family.is_empty() || self.font_use.first().is_some_and(|f| f.eq_ignore_ascii_case(family)) {
+            return false;
+        }
+        self.font_use.retain(|f| !f.eq_ignore_ascii_case(family));
+        self.font_use.insert(0, family.to_string());
+        self.font_use.truncate(MAX_FONT_USE);
+        self.families = None;
+        true
     }
 
     /// The Font dialog's Asian text font list: the installed Chinese, Japanese and Korean fonts,
@@ -970,5 +1031,32 @@ mod tests {
             }
             assert_eq!(images, 1, "{theme:?}: the entry draws its rendered name");
         }
+    }
+
+    #[test]
+    fn used_fonts_head_the_font_list_once() {
+        let mut p = Previews::default();
+        let all = p.families();
+        assert!(all.len() > 12, "the test needs a few installed fonts");
+        let mut sorted = all.clone();
+        sorted.sort();
+        sorted.dedup();
+        assert_eq!(sorted.len(), all.len(), "no family twice");
+        // the last in the list, once used, comes first and appears nowhere else
+        let pick = all[all.len() - 1].clone();
+        assert!(p.note_font(&pick));
+        assert!(!p.note_font(&pick), "the same font again changes nothing");
+        let after = p.families();
+        assert_eq!(after.first(), Some(&pick));
+        assert_eq!(after.iter().filter(|f| **f == pick).count(), 1);
+        assert_eq!(after.len(), all.len(), "nothing lost, nothing added");
+        // the list is bounded and junk is ignored
+        for i in 0..100 {
+            p.note_font(&format!("Font {i}"));
+        }
+        p.note_font("   ");
+        assert!(p.font_use().len() <= MAX_FONT_USE);
+        p.set_font_use(vec![String::new(), "Arial".into()]);
+        assert_eq!(p.font_use(), ["Arial"]);
     }
 }
