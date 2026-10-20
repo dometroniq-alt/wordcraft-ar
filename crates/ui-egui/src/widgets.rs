@@ -358,15 +358,22 @@ pub fn split(
     if resp.clicked() {
         run_from_ribbon(app, id, params);
     }
-    egui::Popup::menu(&aresp).show(|ui| {
+    egui::Popup::menu(&aresp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
         ui.set_min_width(180.0);
         menu(ui, app);
-    });
+    }));
 }
 
 /// Whether a menu button whose menu is about command `id` is on ("" = always).
 pub fn menu_enabled(app: &WordApp, id: &str) -> bool {
     id.is_empty() || enabled(app, id)
+}
+
+/// Menu content that never outgrows the window: taller than the screen it scrolls instead of
+/// running off the top and bottom where its last items can't be reached (shapes, symbols…).
+pub fn screen_scroll<R>(ui: &mut Ui, add: impl FnOnce(&mut Ui) -> R) -> R {
+    let max_h = (ui.ctx().content_rect().height() - 24.0).max(120.0);
+    egui::ScrollArea::vertical().max_height(max_h).auto_shrink([true, true]).show(ui, add).inner
 }
 
 /// A button that only opens a menu (icon + label + drop-down marker).
@@ -429,10 +436,10 @@ pub fn menu_button(
     if !on {
         return;
     }
-    egui::Popup::menu(&resp).show(|ui| {
+    egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
         ui.set_min_width(200.0);
         menu(ui, app);
-    });
+    }));
 }
 
 #[cfg(test)]
