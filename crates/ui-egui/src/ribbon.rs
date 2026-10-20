@@ -248,16 +248,18 @@ pub fn show(app: &mut WordApp, ui: &mut Ui) {
                     let track = app.session.doc.settings.track_changes;
                     let mode =
                         crate::widgets::icon_text_menu_button(ui, "pencil", if track { tl!("Reviewing") } else { tl!("Editing") }, regular(12.0));
-                    egui::Popup::menu(&mode).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-                        if ui.selectable_label(!track, tl!(tl!("Editing — edit the document directly"))).clicked() {
-                            let _ = app.run("review.trackChanges", json!({"value": false}));
-                            ui.close();
-                        }
-                        if ui.selectable_label(track, tl!(tl!("Reviewing — edits become suggestions"))).clicked() {
-                            let _ = app.run("review.trackChanges", json!({"value": true}));
-                            ui.close();
-                        }
-                    }));
+                    egui::Popup::menu(&mode).show(|ui| {
+                        crate::widgets::screen_scroll(ui, |ui| {
+                            if ui.selectable_label(!track, tl!(tl!("Editing — edit the document directly"))).clicked() {
+                                let _ = app.run("review.trackChanges", json!({"value": false}));
+                                ui.close();
+                            }
+                            if ui.selectable_label(track, tl!(tl!("Reviewing — edits become suggestions"))).clicked() {
+                                let _ = app.run("review.trackChanges", json!({"value": true}));
+                                ui.close();
+                            }
+                        })
+                    });
                     ui.add_space(4.0);
                     if crate::widgets::icon_text_button(ui, "comment", tl!("Comments"), regular(12.0)).clicked() {
                         let _ = app.run("view.commentsPane", json!({}));
@@ -321,14 +323,16 @@ pub fn show(app: &mut WordApp, ui: &mut Ui) {
                                 ui.painter().rect_filled(r.shrink2(vec2(0.0, 4.0)), 4.0, t.hover);
                             }
                             ui.painter().text(r.center(), Align2::CENTER_CENTER, "»", medium(12.5), t.text);
-                            egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-                                for (tab, shown) in left_out {
-                                    if ui.selectable_label(false, shown).clicked() {
-                                        let _ = app.run("ui.tab", json!({"tab": tab}));
-                                        ui.close();
+                            egui::Popup::menu(&resp).show(|ui| {
+                                crate::widgets::screen_scroll(ui, |ui| {
+                                    for (tab, shown) in left_out {
+                                        if ui.selectable_label(false, shown).clicked() {
+                                            let _ = app.run("ui.tab", json!({"tab": tab}));
+                                            ui.close();
+                                        }
                                     }
-                                }
-                            }));
+                                })
+                            });
                         }
                     });
                 });

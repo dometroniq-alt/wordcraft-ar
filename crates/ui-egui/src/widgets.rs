@@ -358,10 +358,12 @@ pub fn split(
     if resp.clicked() {
         run_from_ribbon(app, id, params);
     }
-    egui::Popup::menu(&aresp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-        ui.set_min_width(180.0);
-        menu(ui, app);
-    }));
+    egui::Popup::menu(&aresp).show(|ui| {
+        crate::widgets::screen_scroll(ui, |ui| {
+            ui.set_min_width(180.0);
+            menu(ui, app);
+        })
+    });
 }
 
 /// Whether a menu button whose menu is about command `id` is on ("" = always).
@@ -436,10 +438,12 @@ pub fn menu_button(
     if !on {
         return;
     }
-    egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-        ui.set_min_width(200.0);
-        menu(ui, app);
-    }));
+    egui::Popup::menu(&resp).show(|ui| {
+        crate::widgets::screen_scroll(ui, |ui| {
+            ui.set_min_width(200.0);
+            menu(ui, app);
+        })
+    });
 }
 
 #[cfg(test)]

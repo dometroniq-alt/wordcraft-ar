@@ -66,10 +66,12 @@ fn math_menu_button(ui: &mut Ui, app: &mut WordApp, picture: &str, label: &str, 
         y += LABEL_PITCH;
     }
     let resp = resp.on_hover_text(label.replace('\n', " "));
-    egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-        ui.set_min_width(260.0);
-        menu(ui, app);
-    }));
+    egui::Popup::menu(&resp).show(|ui| {
+        crate::widgets::screen_scroll(ui, |ui| {
+            ui.set_min_width(260.0);
+            menu(ui, app);
+        })
+    });
 }
 
 /// One gallery tile: the template rendered, its name as a tooltip.
@@ -216,34 +218,36 @@ fn symbols(ui: &mut Ui, app: &mut WordApp) {
             ui.data_mut(|d| d.insert_temp(start_id, start + per_row));
         }
         let resp = ui.add(egui::Button::new("…").min_size(vec2(16.0, 22.0))).on_hover_text(tl!("All symbol sets"));
-        egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-            ui.set_width(420.0);
-            ui.horizontal_wrapped(|ui| {
-                for (i, (name, _)) in SYMBOL_SETS.iter().enumerate() {
-                    if ui.selectable_label(i == set, tl!(name)).clicked() {
-                        ui.data_mut(|d| {
-                            d.insert_temp(id, i);
-                            d.insert_temp(start_id, 0usize);
-                        });
-                    }
-                }
-            });
-            ui.separator();
-            let set = ui.data(|d| d.get_temp::<usize>(id)).unwrap_or(0);
-            if let Some((_, chars)) = SYMBOL_SETS.get(set) {
-                egui::ScrollArea::vertical().max_height(360.0).show(ui, |ui| {
-                    ui.horizontal_wrapped(|ui| {
-                        ui.spacing_mut().item_spacing = vec2(1.0, 1.0);
-                        for c in chars.chars() {
-                            if symbol_button(ui, app, c, &t) {
-                                let _ = app.run("equation.insertSymbol", json!({"char": c.to_string()}));
-                                app.canvas.want_focus = true;
-                            }
+        egui::Popup::menu(&resp).show(|ui| {
+            crate::widgets::screen_scroll(ui, |ui| {
+                ui.set_width(420.0);
+                ui.horizontal_wrapped(|ui| {
+                    for (i, (name, _)) in SYMBOL_SETS.iter().enumerate() {
+                        if ui.selectable_label(i == set, tl!(name)).clicked() {
+                            ui.data_mut(|d| {
+                                d.insert_temp(id, i);
+                                d.insert_temp(start_id, 0usize);
+                            });
                         }
-                    });
+                    }
                 });
-            }
-        }));
+                ui.separator();
+                let set = ui.data(|d| d.get_temp::<usize>(id)).unwrap_or(0);
+                if let Some((_, chars)) = SYMBOL_SETS.get(set) {
+                    egui::ScrollArea::vertical().max_height(360.0).show(ui, |ui| {
+                        ui.horizontal_wrapped(|ui| {
+                            ui.spacing_mut().item_spacing = vec2(1.0, 1.0);
+                            for c in chars.chars() {
+                                if symbol_button(ui, app, c, &t) {
+                                    let _ = app.run("equation.insertSymbol", json!({"char": c.to_string()}));
+                                    app.canvas.want_focus = true;
+                                }
+                            }
+                        });
+                    });
+                }
+            })
+        });
     });
 }
 

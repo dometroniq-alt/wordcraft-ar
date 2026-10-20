@@ -70,10 +70,12 @@ fn quick_access(ui: &mut Ui, app: &mut WordApp) {
     }
     icons::paint(ui.painter(), Rect::from_center_size(r.center(), vec2(16.0, 16.0)), "more", t.icon, t.accent);
     let resp = resp.on_hover_text(tl!("Customize Quick Access Toolbar"));
-    egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-        ui.set_min_width(220.0);
-        qat_menu(ui, app);
-    }));
+    egui::Popup::menu(&resp).show(|ui| {
+        crate::widgets::screen_scroll(ui, |ui| {
+            ui.set_min_width(220.0);
+            qat_menu(ui, app);
+        })
+    });
 }
 
 /// The Undo button's drop-down arrow (#701), which opens [`undo_list`].
@@ -432,6 +434,10 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
             // edge (right-to-left: the counts at the right, the zoom at the left).
             crate::rtl::horizontal_centered(ui, |ui| {
                 ui.spacing_mut().item_spacing = vec2(14.0, 0.0);
+                // A narrow window drops the least important items instead of letting the start and
+                // end clusters run over each other: language, then the word count, then the slider.
+                let room = ui.available_width();
+                let (compact, tiny) = (room < 760.0, room < 560.0);
                 let l = app.session.layout();
                 let page = if app.session.selects_whole_story() {
                     app.session.page_hint.min(l.pages.len().saturating_sub(1)) + 1
@@ -461,7 +467,7 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     let sw = wordcraft_doc::count_words(&app.session.selected_text());
                     crate::i18n::fmt(tl!("{selected} of {words} words"), &[("selected", &sw.to_string()), ("words", &words.to_string())])
                 };
-                if st(ui, &wtxt).clicked() {
+                if !tiny && st(ui, &wtxt).clicked() {
                     let _ = app.run("ui.dialog", json!({"name": "wordCount"}));
                 }
                 if app.session.sel.focus.story != StoryRef::Body && !crate::canvas::in_text_box(app) {
@@ -478,11 +484,13 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     ),
                     None => tl!("Language").to_string(),
                 };
-                let resp = st(ui, &shown).on_hover_text(tip);
-                egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
-                    ui.set_min_width(200.0);
-                    crate::ribbon::language_menu(ui, app);
-                }));
+                if !compact {
+                    let resp = st(ui, &shown).on_hover_text(tip);
+                    egui::Popup::menu(&resp).show(|ui| crate::widgets::screen_scroll(ui, |ui| {
+                        ui.set_min_width(200.0);
+                        crate::ribbon::language_menu(ui, app);
+                    }));
+                }
                 if app.session.doc.settings.track_changes {
                     st(ui, tl!("Track Changes: On"));
                 }
@@ -523,7 +531,7 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     let mut v = if reading { app.session.view.read_zoom } else { app.canvas.scale / crate::canvas::PX_PER_PT };
                     let slider = egui::Slider::new(&mut v, if reading { 0.75..=1.5 } else { 0.1..=5.0 }).logarithmic(!reading).show_value(false);
                     ui.spacing_mut().slider_width = 110.0;
-                    if ui.add(slider).changed() {
+                    if !tiny && ui.add(slider).changed() {
                         let command = if reading { "view.readTextSize" } else { "view.zoom" };
                         let _ = app.run(command, json!({"value": (v * 100.0).round()}));
                     }
@@ -556,8 +564,8 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     }
                     ui.add_space(8.0);
                     let focus = tl!("Focus");
-                    let focus_w = ui.ctx().fonts_mut(|f| f.layout_no_wrap(focus.to_string(), regular(11.5), t.text_dim).size().x);
-                    let (r, resp) = ui.allocate_exact_size(vec2((focus_w + 26.0).max(56.0), 20.0), Sense::click());
+                    let focus_w = if compact { 0.0 } else { ui.ctx().fonts_mut(|f| f.layout_no_wrap(focus.to_string(), regular(11.5), t.text_dim).size().x) };
+                    let (r, resp) = ui.allocate_exact_size(vec2(if compact { 22.0 } else { (focus_w + 26.0).max(56.0) }, 20.0), Sense::click());
                     if resp.hovered() {
                         ui.painter().rect_filled(r, 3.0, t.hover);
                     }
@@ -565,6 +573,7 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                     icons::paint(ui.painter(), crate::rtl::mirror_x(icon, r), "focus", t.icon, t.accent);
                     let ffont = TypeRung::Caption.regular();
                     let ftrack = TypeRung::Caption.tracking();
+                    if !compact {
                     paint_text(
                         ui.painter(),
                         pos2(crate::rtl::start_x(r, 22.0), r.center().y - TypeRung::Caption.line_height() / 2.0),
@@ -574,6 +583,7 @@ pub fn status_bar(app: &mut WordApp, ui: &mut Ui) {
                         ftrack,
                         t.text_dim,
                     );
+                    }
                     resp.widget_info(|| egui::WidgetInfo::labeled(egui::WidgetType::Button, true, focus));
                     if resp.clicked() {
                         let _ = app.run("view.focus", json!({}));
