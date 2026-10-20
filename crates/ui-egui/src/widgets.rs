@@ -371,11 +371,46 @@ pub fn menu_enabled(app: &WordApp, id: &str) -> bool {
     id.is_empty() || enabled(app, id)
 }
 
-/// Menu content that never outgrows the window: taller than the screen it scrolls instead of
-/// running off the top and bottom where its last items can't be reached (shapes, symbols…).
+/// The lowest y (in the window's own coordinates) a menu may reach: the window's bottom, or, when
+/// the window sticks out below the monitor (a maximised borderless window runs under the task
+/// bar, a window dragged down the screen), the monitor's bottom less room for the task bar.
+fn visible_bottom(ctx: &egui::Context) -> f32 {
+    let content = ctx.content_rect();
+    let mut bottom = content.bottom();
+    let (monitor, inner) = ctx.input(|i| (i.viewport().monitor_size, i.viewport().inner_rect));
+    if let (Some(m), Some(inner)) = (monitor, inner) {
+        // The window's content starts at inner.min on the screen; the monitor ends at m.y (the
+        // primary monitor starts at 0; a value that makes no sense is ignored).
+        let on_screen = m.y - inner.min.y - 56.0;
+        if on_screen > 160.0 && on_screen < bottom - content.top() {
+            bottom = content.top() + on_screen;
+        }
+    }
+    bottom
+}
+
+/// The tallest a menu starting at `top` may be so it stays on the screen (shapes, symbols…).
+pub fn menu_max_height(ctx: &egui::Context, top: f32) -> f32 {
+    let room = visible_bottom(ctx) - top.max(ctx.content_rect().top()) - 12.0;
+    room.min(ctx.content_rect().height() - 24.0).max(160.0)
+}
+
+/// Menu content that never outgrows the screen: taller than the room below its top it scrolls
+/// instead of running off the bottom where its last items can't be reached (shapes, symbols…).
 pub fn screen_scroll<R>(ui: &mut Ui, add: impl FnOnce(&mut Ui) -> R) -> R {
-    let max_h = (ui.ctx().content_rect().height() - 24.0).max(120.0);
+    let max_h = menu_max_height(ui.ctx(), ui.cursor().top());
     egui::ScrollArea::vertical().max_height(max_h).auto_shrink([true, true]).show(ui, add).inner
+}
+
+/// `ui.menu_button` whose sub-menu scrolls instead of leaving the screen.
+pub trait MenuExt {
+    fn menu_scroll<R>(&mut self, title: impl Into<egui::WidgetText>, add: impl FnOnce(&mut Ui) -> R) -> egui::InnerResponse<Option<R>>;
+}
+
+impl MenuExt for Ui {
+    fn menu_scroll<R>(&mut self, title: impl Into<egui::WidgetText>, add: impl FnOnce(&mut Ui) -> R) -> egui::InnerResponse<Option<R>> {
+        self.menu_button(title, |ui| screen_scroll(ui, add))
+    }
 }
 
 /// A button that only opens a menu (icon + label + drop-down marker).

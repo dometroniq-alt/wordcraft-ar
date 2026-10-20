@@ -2,6 +2,7 @@
 //! visible full-resolution tiles for exceptionally tall pages), with the caret, selection,
 //! rulers and mouse editing drawn by egui on top.
 
+use crate::widgets::MenuExt as _;
 use std::collections::{HashMap, HashSet};
 use std::hash::{Hash, Hasher};
 
@@ -2847,7 +2848,7 @@ fn context_menu(app: &mut WordApp, ui: &mut Ui) {
     item(ui, app, "Paste", "edit.paste", json!({}));
     ui.separator();
     if let Some(syn) = app.canvas.context_synonyms.clone().and_then(|v| v.as_array().cloned()).filter(|a| !a.is_empty()) {
-        ui.menu_button(tl!("Synonyms"), |ui| {
+        ui.menu_scroll(tl!("Synonyms"), |ui| {
             for w in syn.iter().filter_map(|x| x.as_str()) {
                 if ui.button(w).clicked() {
                     let _ = app.run("select.word", json!({}));
@@ -2891,13 +2892,13 @@ fn context_menu(app: &mut WordApp, ui: &mut Ui) {
         item(ui, app, "Size and Crop…", "ui.tab", json!({"tab": "Picture Format"}));
     }
     if object {
-        ui.menu_button(tl!("Wrap Text"), |ui| crate::ribbon::wrap_text_items(ui, app));
+        ui.menu_scroll(tl!("Wrap Text"), |ui| crate::ribbon::wrap_text_items(ui, app));
     }
     if app.session.sel.focus.path.cell().is_some() {
         // The table's items follow what is selected, as in Word (2019, Windows).
         let pick = table_pick(&app.session);
         ui.separator();
-        ui.menu_button(tl!("Insert"), |ui| {
+        ui.menu_scroll(tl!("Insert"), |ui| {
             item(ui, app, "Insert Columns to the Left", "table.insertColumnLeft", json!({}));
             item(ui, app, "Insert Columns to the Right", "table.insertColumnRight", json!({}));
             item(ui, app, "Insert Rows Above", "table.insertRowAbove", json!({}));
@@ -2905,7 +2906,7 @@ fn context_menu(app: &mut WordApp, ui: &mut Ui) {
         });
         // Every Delete is there whatever is selected, as on Word's Delete button: with the caret
         // in a cell, Delete Table is how the table goes (#1198).
-        ui.menu_button(tl!("Delete"), |ui| {
+        ui.menu_scroll(tl!("Delete"), |ui| {
             item(ui, app, "Delete Cells", "table.deleteCells", json!({}));
             item(ui, app, "Delete Columns", "table.deleteColumn", json!({}));
             item(ui, app, "Delete Rows", "table.deleteRow", json!({}));
@@ -2922,7 +2923,7 @@ fn context_menu(app: &mut WordApp, ui: &mut Ui) {
             item(ui, app, "Distribute Columns", "table.distributeColumns", json!({}));
         }
         if pick == TablePick::Table {
-            ui.menu_button(tl!("AutoFit"), |ui| {
+            ui.menu_scroll(tl!("AutoFit"), |ui| {
                 item(ui, app, "AutoFit Contents", "table.autofit", json!({"mode": "contents"}));
                 item(ui, app, "AutoFit Window", "table.autofit", json!({"mode": "window"}));
                 item(ui, app, "Fixed Column Width", "table.autofit", json!({"mode": "fixed"}));

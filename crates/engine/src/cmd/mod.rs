@@ -336,7 +336,7 @@ fn insert_text(s: &mut Session, text: &str, enter: bool) -> Result<(), CmdError>
 
 /// Is the paragraph at `at` still without letters (empty, or only spaces, digits and
 /// punctuation), with no direction set on it, its style chain or the document defaults?
-fn direction_unset(s: &Session, at: &Pos) -> bool {
+pub(crate) fn direction_unset(s: &Session, at: &Pos) -> bool {
     let Some(p) = s.doc.para_at(at) else { return false };
     if p.props.bidi.is_some() || p.text.chars().any(char::is_alphabetic) || s.doc.styles.default_para.bidi.is_some() {
         return false;

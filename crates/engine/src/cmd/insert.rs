@@ -23,7 +23,7 @@ pub fn specs() -> Vec<CommandSpec> {
             sel_result(s)
         }),
         CommandSpec::new("insert.coverPage", "Cover Page", "Insert › Pages", cover_page).params(r#"{"title"?: string, "subtitle"?: string, "author"?: string}"#),
-        CommandSpec::new("insert.table", "Table", "Insert › Tables", table).params(r#"{"rows": n, "cols": n, "style"?: string}"#),
+        CommandSpec::new("insert.table", "Table", "Insert › Tables", table).params(r#"{"rows": n, "cols": n, "style"?: string, "rtl"?: bool}"#),
         CommandSpec::new("insert.picture", "Pictures", "Insert › Illustrations", picture).params(r#"{"path"?: string, "data"?: base64, "width"?: pt, "alt"?: string}"#),
         CommandSpec::new("insert.icon", "Icons", "Insert › Illustrations", icon)
             .params(r#"{"id"?: string (omit to list the library), "color"?: "RRGGBB", "size"?: pt, "query"?: string, "category"?: string}"#),
@@ -162,7 +162,10 @@ fn table(s: &mut Session, v: &Value) -> CmdResult {
     // WordCraft AR: a table inserted into a right-to-left paragraph is right-to-left itself
     // (`w:bidiVisual`, as Word does): its first column stands at the right, where the caret
     // then goes.
-    if s.doc.para_at(&s.sel.focus).is_some_and(|p| s.doc.styles.resolve_para(&p.props).bidi) {
+    // `"rtl": true` (the right-to-left interface asking) also covers a paragraph that has no
+    // direction yet (an empty line), where the typing that follows will be Arabic.
+    let asked_rtl = p::bool(v, "rtl") == Some(true) && super::direction_unset(s, &s.sel.focus);
+    if asked_rtl || s.doc.para_at(&s.sel.focus).is_some_and(|p| s.doc.styles.resolve_para(&p.props).bidi) {
         t.props.bidi_visual = true;
     }
     let story = s.sel.focus.story;
@@ -1166,5 +1169,25 @@ mod ar_table_tests {
         s.run("insert.table", &json!({"rows": 2, "cols": 3})).unwrap();
         let t = s.doc.table(s.sel.focus.story, &wordcraft_doc::Path(vec![0])).expect("table");
         assert!(!t.props.bidi_visual);
+    }
+
+    /// A right-to-left interface asks for a right-to-left table in an empty paragraph, and an
+    /// explicitly left-to-right paragraph keeps a left-to-right table.
+    #[test]
+    fn table_is_right_to_left_when_the_interface_asks_in_an_empty_paragraph() {
+        let mut s = Session::new(wordcraft_doc::Document::new());
+        s.run("insert.table", &json!({"rows": 1, "cols": 2})).unwrap();
+        assert!(!first_table(&s).props.bidi_visual, "no hint, no direction: left to right");
+        let mut s = Session::new(wordcraft_doc::Document::new());
+        s.run("insert.table", &json!({"rows": 1, "cols": 2, "rtl": true})).unwrap();
+        assert!(first_table(&s).props.bidi_visual, "the hint on an empty paragraph");
+        let mut s = Session::new(wordcraft_doc::Document::new());
+        s.run("text.insert", &json!({"text": "Hello"})).unwrap();
+        s.run("insert.table", &json!({"rows": 1, "cols": 2, "rtl": true})).unwrap();
+        assert!(!first_table(&s).props.bidi_visual, "a Latin paragraph keeps a left-to-right table");
+    }
+
+    fn first_table(s: &Session) -> &wordcraft_doc::Table {
+        s.doc.body.iter().find_map(|b| if let Block::Table(t) = &**b { Some(t) } else { None }).expect("a table")
     }
 }

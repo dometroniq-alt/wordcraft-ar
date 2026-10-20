@@ -2,6 +2,7 @@
 //! (Review › Tracking). Each fills a form from the session and ends in one command
 //! (`list.define`, `review.trackingOptions`), so agents get the same result without the dialog.
 
+use crate::widgets::MenuExt as _;
 use egui::{Sense, Ui, vec2};
 use serde::Serialize;
 use serde_json::{Value, json};
@@ -441,7 +442,7 @@ fn color(ui: &mut Ui, theme: &[wordcraft_doc::Rgb], value: &mut String, none_lab
         }
         ui.painter().rect_stroke(r, 2.0, egui::Stroke::new(1.0, t.border_strong), egui::StrokeKind::Inside);
         let label = if c.is_some() { value.clone() } else { tl!(none_label).to_string() };
-        ui.menu_button(label, |ui| {
+        ui.menu_scroll(label, |ui| {
             if ui.button(tl!(none_label)).clicked() {
                 value.clear();
                 ui.close();

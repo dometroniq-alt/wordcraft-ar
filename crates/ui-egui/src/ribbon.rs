@@ -1,5 +1,6 @@
 //! The ribbon: tab strip and every tab's groups. Each control runs a command by id.
 
+use crate::widgets::MenuExt as _;
 use egui::{Align2, Rect, Sense, Stroke, Ui, pos2, vec2};
 use serde_json::{Value, json};
 
@@ -41,7 +42,7 @@ fn reading_toolbar(app: &mut WordApp, ui: &mut Ui, t: Tokens) {
                     Some(v) if v <= 350.0 => "Wide",
                     _ => "Page",
                 };
-                ui.menu_button(format!("{}: {}", tl!("Column width"), tl!(active)), |ui| {
+                ui.menu_scroll(format!("{}: {}", tl!("Column width"), tl!(active)), |ui| {
                     for (name, value) in [("Auto", "auto"), ("Narrow", "narrow"), ("Medium", "medium"), ("Wide", "wide"), ("Page", "page")] {
                         if ui.selectable_label(active == name, tl!(name)).clicked() {
                             let _ = app.run("view.readColumnWidth", json!({"value": value}));
@@ -51,7 +52,7 @@ fn reading_toolbar(app: &mut WordApp, ui: &mut Ui, t: Tokens) {
                 });
                 ui.separator();
                 let pct = (app.session.view.read_zoom * 100.0).round() as u32;
-                ui.menu_button(format!("{}: {pct}%", tl!("Text size")), |ui| {
+                ui.menu_scroll(format!("{}: {pct}%", tl!("Text size")), |ui| {
                     for percent in [75, 90, 100, 110, 125, 150] {
                         if ui.selectable_label(pct == percent, format!("{percent}%")).clicked() {
                             let _ = app.run("view.readTextSize", json!({"value": percent}));
@@ -62,7 +63,7 @@ fn reading_toolbar(app: &mut WordApp, ui: &mut Ui, t: Tokens) {
                 ui.separator();
                 let spacing = app.session.view.read_line_spacing;
                 let label = spacing.map_or_else(|| tl!("Document").to_owned(), |v| format!("{v}×"));
-                ui.menu_button(format!("{}: {}", tl!("Line spacing"), label), |ui| {
+                ui.menu_scroll(format!("{}: {}", tl!("Line spacing"), label), |ui| {
                     if ui.selectable_label(spacing.is_none(), tl!("Document")).clicked() {
                         let _ = app.run("view.readLineSpacing", json!({"value": "document"}));
                         ui.close();
@@ -880,9 +881,9 @@ fn home(app: &mut WordApp, ui: &mut Ui) {
                     let theme = app.session.doc.settings.theme_colors.clone();
                     crate::wordart_menus::style_gallery(ui, app, "format.textEffects");
                     ui.separator();
-                    ui.menu_button(tl!("Text Fill"), |ui| crate::wordart_menus::fill_menu(ui, app, &theme));
+                    ui.menu_scroll(tl!("Text Fill"), |ui| crate::wordart_menus::fill_menu(ui, app, &theme));
                     let outline = crate::wordart_menus::current_outline(app);
-                    ui.menu_button(tl!("Text Outline"), |ui| crate::wordart_menus::outline_menu(ui, app, &theme, outline));
+                    ui.menu_scroll(tl!("Text Outline"), |ui| crate::wordart_menus::outline_menu(ui, app, &theme, outline));
                     crate::wordart_menus::effects_menu(ui, app, &theme, false);
                     ui.separator();
                     mi(ui, app, "Outline", "format.outline", json!({}));
@@ -1111,7 +1112,7 @@ fn insert(app: &mut WordApp, ui: &mut Ui) {
             let drawing = app.canvas.table_tool == Some(crate::table_pen::TableTool::Draw);
             mi_check(ui, app, "Draw Table", drawing, "table.draw", json!({}));
             mi(ui, app, "Convert Text to Table…", "table.fromText", json!({}));
-            ui.menu_button(tl!("Quick Tables"), |ui| {
+            ui.menu_scroll(tl!("Quick Tables"), |ui| {
                 mi(ui, app, "Tabular List", "table.quick", json!({"kind": "tabular"}));
                 mi(ui, app, "Matrix", "table.quick", json!({"kind": "matrix"}));
                 mi(ui, app, "Calendar", "table.quick", json!({"kind": "calendar"}));
@@ -1628,7 +1629,7 @@ fn wrap_menu(ui: &mut Ui, app: &mut WordApp) {
             mi_check(ui, app, l, wrap == w, "arrange.wrap", json!({"wrap": v}));
         }
         ui.separator();
-        ui.menu_button(tl!("Wrap Text Sides"), |ui| {
+        ui.menu_scroll(tl!("Wrap Text Sides"), |ui| {
             for (l, s, v) in [
                 ("Both Sides", WrapText::BothSides, "bothSides"),
                 ("Left Only", WrapText::Left, "left"),
@@ -2309,7 +2310,7 @@ fn shape_format(app: &mut WordApp, ui: &mut Ui) {
                 mi(ui, app, "No Color", "shape.outline", json!({"color": null}));
                 crate::colors::menu(ui, app, &theme, Target::cmd("shape.outline"));
                 ui.separator();
-                ui.menu_button(tl!("Weight"), |ui| {
+                ui.menu_scroll(tl!("Weight"), |ui| {
                     let color = stroke.unwrap_or(wordcraft_doc::Rgb::BLACK).hex();
                     for w in [0.25, 0.5, 0.75, 1.0, 1.5, 2.25, 3.0, 4.5, 6.0] {
                         mi(ui, app, &format!("{w} pt"), "shape.outline", json!({"color": color, "width": w}));
@@ -2327,7 +2328,7 @@ fn shape_format(app: &mut WordApp, ui: &mut Ui) {
             menu_button(ui, app, "canvas", Some("Drawing\nCanvas"), "Drawing Canvas", true, "", |ui, app| {
                 mi(ui, app, "Fit", "canvas.fit", json!({}));
                 mi(ui, app, "Expand", "canvas.expand", json!({}));
-                ui.menu_button(tl!("Scale Drawing"), |ui| {
+                ui.menu_scroll(tl!("Scale Drawing"), |ui| {
                     for pct in [50, 75, 125, 150, 200] {
                         mi(ui, app, &format!("{pct}%"), "canvas.scale", json!({"factor": pct as f32 / 100.0}));
                     }
@@ -2424,26 +2425,26 @@ fn alt_text_group(ui: &mut Ui, app: &mut WordApp) {
 
 /// Shape Format › Shape Effects: Shadow, Glow and Soft Edges, each with presets and a "No …" entry.
 fn shape_effects_menu(ui: &mut Ui, app: &mut WordApp, theme: &[wordcraft_doc::Rgb], glow_size: Option<f32>) {
-    ui.menu_button(tl!("Shadow"), |ui| {
+    ui.menu_scroll(tl!("Shadow"), |ui| {
         mi(ui, app, "No Shadow", "shape.effects", json!({"shadow": null}));
         ui.separator();
         for (id, label) in wordcraft_doc::effects::SHADOW_PRESETS {
             mi(ui, app, label, "shape.effects", json!({"shadow": id}));
         }
     });
-    ui.menu_button(tl!("Glow"), |ui| {
+    ui.menu_scroll(tl!("Glow"), |ui| {
         mi(ui, app, "No Glow", "shape.effects", json!({"glow": null}));
         ui.separator();
         for size in [5.0, 8.0, 11.0, 18.0] {
             mi(ui, app, &format!("{size} pt"), "shape.effects", json!({"glow": size}));
         }
         ui.separator();
-        ui.menu_button(tl!("Glow Colors"), |ui| {
+        ui.menu_scroll(tl!("Glow Colors"), |ui| {
             let target = Target::at("shape.effects", json!({"glow": {"color": null, "size": glow_size.unwrap_or(8.0)}}), "/glow/color");
             crate::colors::menu(ui, app, theme, target);
         });
     });
-    ui.menu_button(tl!("Soft Edges"), |ui| {
+    ui.menu_scroll(tl!("Soft Edges"), |ui| {
         mi(ui, app, "No Soft Edges", "shape.effects", json!({"softEdge": null}));
         ui.separator();
         for r in [1.0, 2.5, 5.0, 10.0, 25.0, 50.0] {

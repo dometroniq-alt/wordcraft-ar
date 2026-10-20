@@ -3,6 +3,7 @@
 //! (line style, width and colour, and which edges) and cell alignment, over a live preview. OK
 //! runs `table.newStyle` / `table.modifyStyle` with only what changed.
 
+use crate::widgets::MenuExt as _;
 use egui::{Rect, Sense, Stroke, Ui, pos2, vec2};
 use serde::Serialize;
 use serde_json::{Value, json};
@@ -543,7 +544,7 @@ pub fn body(app: &mut WordApp, ui: &mut Ui, f: Form) -> bool {
                 ui.label(tl!("Color:"));
                 color_menu(ui, &theme, &mut pen.color);
             });
-            ui.menu_button(format!("{} ▾", tl!("Borders")), |ui| {
+            ui.menu_scroll(format!("{} ▾", tl!("Borders")), |ui| {
                 for (label, edges) in EDGES {
                     ui.horizontal(|ui| {
                         edge_glyph(ui, edges);

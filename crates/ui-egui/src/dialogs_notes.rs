@@ -3,6 +3,7 @@
 //! The form ends in commands (`references.noteOptions`, `references.convertNotes`,
 //! `references.footnote` / `references.endnote`), so agents get the same result without it.
 
+use crate::widgets::MenuExt as _;
 use egui::{Ui, vec2};
 use serde::Serialize;
 use serde_json::{Value, json};
@@ -97,7 +98,7 @@ pub fn note_options(app: &mut WordApp, ui: &mut Ui, f: &mut NoteForm) -> bool {
         });
         ui.end_row();
         ui.label("");
-        ui.menu_button(format!("{}…", tl!("Convert")), |ui| {
+        ui.menu_scroll(format!("{}…", tl!("Convert")), |ui| {
             for (to, l) in [("endnote", "Footnotes to endnotes"), ("footnote", "Endnotes to footnotes"), ("swap", "Swap footnotes and endnotes")] {
                 if ui.button(tl!(l)).clicked() {
                     convert = Some(to);

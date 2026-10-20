@@ -6,6 +6,7 @@
 //! `dialogs_keyboard`, Customize Ribbon in `dialogs_ribbon`). Every dialog ends by running a
 //! command (or shows one's result), so agents get the same result without the dialog.
 
+use crate::widgets::MenuExt as _;
 use std::collections::BTreeSet;
 
 use egui::{Sense, Ui, vec2};
@@ -122,7 +123,7 @@ const SPECIAL_REPLACE: &[(&str, &str)] = &[
 /// The Special ▾ menu button; returns the code picked.
 fn special_menu(ui: &mut Ui, extra: &FindExtra) -> Option<&'static str> {
     let mut picked = None;
-    ui.menu_button(format!("{} ▾", tl!("Special")), |ui| {
+    ui.menu_scroll(format!("{} ▾", tl!("Special")), |ui| {
         let wild_replace: &[(&str, &str)] = &[("Find What Expression", "\\1")];
         let lists: [&[(&str, &str)]; 2] = match (extra.to_replace, extra.wildcards) {
             (false, false) => [SPECIAL_FIND, &[]],
@@ -785,7 +786,7 @@ pub(crate) fn color_field(ui: &mut Ui, theme: &[wordcraft_doc::Rgb], value: &mut
         }
         ui.painter().rect_stroke(r, 2.0, egui::Stroke::new(1.0, t.border_strong), egui::StrokeKind::Inside);
         let label = if c.is_some() { value.clone() } else { tl!(none_label).to_string() };
-        ui.menu_button(label, |ui| {
+        ui.menu_scroll(label, |ui| {
             if ui.button(tl!(none_label)).clicked() {
                 *value = none_value.to_string();
                 ui.close();
@@ -1169,44 +1170,73 @@ impl Dialog {
     }
 }
 
-/// Grid picker for Insert › Table (hover to size, click to insert).
+/// The (row, column) of the table-picker cell under `p` (1-based; `(0, 0)` for none). The grid
+/// is `grid` with the cells filling from its start edge, so from the right when `rtl`; the gaps
+/// between cells count for the cell after them.
+fn table_cell_at(grid: egui::Rect, rtl: bool, p: egui::Pos2) -> (usize, usize) {
+    const COLS: usize = 10;
+    const ROWS: usize = 8;
+    const PITCH: f32 = 18.0;
+    let dx = if rtl { grid.max.x - p.x } else { p.x - grid.min.x };
+    let dy = p.y - grid.min.y;
+    if dx < 0.0 || dy < 0.0 || dx > COLS as f32 * PITCH - 1.0 || dy > ROWS as f32 * PITCH - 1.0 {
+        return (0, 0);
+    }
+    (((dy / PITCH).floor() as usize + 1).min(ROWS), ((dx / PITCH).floor() as usize + 1).min(COLS))
+}
+
+/// Grid picker for Insert › Table (hover to size, click to insert). The cells fill from the
+/// interface's start edge (the right in Arabic), the hovered size lights up in the same frame and
+/// the gaps between cells belong to a cell, so the pointer never "falls out" of the grid.
 pub fn table_grid_picker(ui: &mut Ui, app: &mut WordApp) {
+    const COLS: usize = 10;
+    const ROWS: usize = 8;
+    const CELL: f32 = 16.0;
+    const PITCH: f32 = CELL + 2.0;
     let t = Tokens::get(ui.ctx());
-    let id = egui::Id::new("table_picker_hover");
-    let hover: (usize, usize) = ui.data(|d| d.get_temp(id)).unwrap_or((0, 0));
-    ui.label(if hover.0 > 0 {
+    let width = (COLS as f32 * PITCH - 2.0).max(ui.available_width().min(260.0));
+    let size = vec2(width, ROWS as f32 * PITCH - 2.0);
+    // The label first (its text follows the hovered size), above the grid.
+    let (head, head_resp) = ui.allocate_exact_size(vec2(width, 20.0), Sense::hover());
+    let (grid, resp) = ui.allocate_exact_size(size, Sense::click());
+    let rtl = crate::rtl::on();
+    let cell_at = |p: egui::Pos2| table_cell_at(grid, rtl, p);
+    let hover = resp.hover_pos().map(cell_at).unwrap_or((0, 0));
+    let _ = head_resp;
+    let label = if hover.0 > 0 {
         crate::i18n::fmt(tl!("{cols}×{rows} Table"), &[("cols", &hover.1.to_string()), ("rows", &hover.0.to_string())])
     } else {
         tl!("Insert Table").to_string()
-    });
-    let mut new_hover = (0, 0);
-    let mut clicked = None;
-    egui::Grid::new("tgp").spacing(vec2(2.0, 2.0)).show(ui, |ui| {
-        for r in 1..=8 {
-            for c in 1..=10 {
-                let (rect, resp) = ui.allocate_exact_size(vec2(16.0, 16.0), Sense::click());
-                let on = r <= hover.0 && c <= hover.1;
-                ui.painter().rect(
-                    rect,
-                    1.0,
-                    if on { t.checked } else { t.input },
-                    egui::Stroke::new(1.0, if on { t.accent } else { t.border_strong }),
-                    egui::StrokeKind::Inside,
-                );
-                if resp.hovered() {
-                    new_hover = (r, c);
-                }
-                if resp.clicked() {
-                    clicked = Some((r, c));
-                }
-            }
-            ui.end_row();
+    };
+    ui.painter().text(
+        egui::pos2(crate::rtl::start_x(head, 2.0), head.center().y),
+        crate::rtl::start_center(),
+        label,
+        crate::theme::regular(12.5),
+        t.text,
+    );
+    for r in 1..=ROWS {
+        for c in 1..=COLS {
+            let x0 = if rtl { grid.max.x - c as f32 * PITCH + 2.0 } else { grid.min.x + (c - 1) as f32 * PITCH };
+            let rect = egui::Rect::from_min_size(egui::pos2(x0, grid.min.y + (r - 1) as f32 * PITCH), vec2(CELL, CELL));
+            let on = r <= hover.0 && c <= hover.1;
+            ui.painter().rect(
+                rect,
+                1.0,
+                if on { t.checked } else { t.input },
+                egui::Stroke::new(1.0, if on { t.accent } else { t.border_strong }),
+                egui::StrokeKind::Inside,
+            );
         }
-    });
-    ui.data_mut(|d| d.insert_temp(id, new_hover));
-    if let Some((r, c)) = clicked {
-        let _ = app.run("insert.table", json!({"rows": r, "cols": c}));
-        ui.close();
+    }
+    if resp.clicked()
+        && let Some(p) = resp.interact_pointer_pos()
+    {
+        let (r, c) = cell_at(p);
+        if r > 0 && c > 0 {
+            let _ = app.run("insert.table", json!({"rows": r, "cols": c, "rtl": rtl}));
+            ui.close();
+        }
     }
 }
 
@@ -1944,7 +1974,7 @@ fn body(app: &mut WordApp, ui: &mut Ui, d: &mut Dialog) -> bool {
             });
             let (ok, cancel) = buttons(ui, tl!("OK"));
             if ok {
-                let _ = app.run("insert.table", json!({"rows": *rows, "cols": *cols}));
+                let _ = app.run("insert.table", json!({"rows": *rows, "cols": *cols, "rtl": crate::rtl::on()}));
             }
             ok || cancel
         }
@@ -4569,5 +4599,19 @@ mod tests {
             h.step();
         }
         assert_eq!(wordcraft_engine::cmd::page::sect(&h.state().session).valign, PageVAlign::Justify);
+    }
+
+    /// The table picker's cells fill from the start edge: from the right in Arabic.
+    #[test]
+    fn table_picker_cells_follow_the_reading_direction() {
+        let grid = egui::Rect::from_min_size(egui::pos2(100.0, 50.0), egui::vec2(178.0, 142.0));
+        assert_eq!(table_cell_at(grid, false, egui::pos2(101.0, 51.0)), (1, 1));
+        assert_eq!(table_cell_at(grid, true, egui::pos2(277.0, 51.0)), (1, 1), "the first column is at the right in Arabic");
+        assert_eq!(table_cell_at(grid, true, egui::pos2(277.0 - 6.5 * 18.0, 50.0 + 2.5 * 18.0)), (3, 7));
+        assert_eq!(table_cell_at(grid, false, egui::pos2(100.0 + 6.5 * 18.0, 50.0 + 2.5 * 18.0)), (3, 7));
+        assert_eq!(table_cell_at(grid, false, egui::pos2(117.0, 51.0)), (1, 1), "the gap belongs to a cell");
+        assert_eq!(table_cell_at(grid, true, egui::pos2(99.0, 51.0)), (1, 10), "the last column, in the corner");
+        assert_eq!(table_cell_at(grid, false, egui::pos2(60.0, 60.0)), (0, 0), "outside the grid");
+        assert_eq!(table_cell_at(grid, false, egui::pos2(150.0, 300.0)), (0, 0));
     }
 }

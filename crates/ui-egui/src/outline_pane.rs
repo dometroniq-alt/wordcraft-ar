@@ -13,6 +13,7 @@
 //! All of it is `service.outline.*` commands of the engine (one undo step each), so scripts and MCP
 //! do the same. The pane draws; it does not decide.
 
+use crate::widgets::MenuExt as _;
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -442,7 +443,7 @@ fn tools(app: &mut WordApp, ui: &mut Ui, st: &mut PaneState, nodes: &Arc<Vec<Out
         }
         let label = tl!("Remove a level…");
         ui.add_enabled_ui(!levels.is_empty(), |ui| {
-            ui.menu_button(label, |ui| {
+            ui.menu_scroll(label, |ui| {
                 for (d, m) in &levels {
                     let text = crate::i18n::fmt(tl!("Level {n} ({marker})"), &[("n", &(d + 1).to_string()), ("marker", &rtl_display(m))]);
                     if ui.button(text).clicked() {
