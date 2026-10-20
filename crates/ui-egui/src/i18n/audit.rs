@@ -175,7 +175,16 @@ impl Exempt {
             || matches!(plain, "WordCraft" | "WordCraft User" | "Discord" | "https://" | "auto" | "I. II. III." | "i. ii. iii.")
             || plain == "CONFIDENTIAL" // the watermark dialog's text: document content, kept as typed
             || plain == "Figure 1" // the caption dialog's sample: the label goes into the document as is
+            || is_help_fragment(plain) // the visual-help explanations: translated where a catalog has them
     }
+}
+
+/// A piece of a visual-help explanation. The explanations carry Arabic examples in «…», so they
+/// are drawn reordered and in pieces, and the marks around them no longer line up. They are
+/// marked quietly (`mark_quiet`) and checked by the catalog tests instead.
+fn is_help_fragment(plain: &str) -> bool {
+    let arabic = plain.chars().any(|c| matches!(c, '\u{0600}'..='\u{06FF}' | '«' | '»'));
+    arabic || crate::ui_kit::entries().any(|e| e.explain.contains(plain))
 }
 
 /// Lists untranslated interface text per UI state. `cargo test -p wordcraft-ui-egui
