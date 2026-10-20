@@ -2697,3 +2697,26 @@ preview	Title	Título
 	Show explanations under the items	Mostrar las explicaciones bajo los elementos
 	This item	Este elemento
 	{items} numbered items · {notes} explanations	{items} elementos numerados · {notes} explicaciones
+	Copy Numbered Item	Copiar elemento numerado
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Copiar este elemento justo después de sí mismo (Ctrl+arrastrar lo copia a otro sitio)
+	Dragging and copying take the sub-items along	Arrastrar y copiar se llevan los subelementos
+	Dropping a card copies it (hold Ctrl to copy once)	Soltar copia la tarjeta (mantén Ctrl para copiar una vez)
+	Assistant	Asistente
+	Understand a Request	Entender una petición
+	Ask the Assistant	Preguntar al asistente
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Dile al asistente qué hacer, en árabe o inglés, y se hace al instante. Varios deseos en una frase se cumplen en orden.
+	Examples	Ejemplos
+	I did not understand that. The nearest commands:	No lo entendí. Los comandos más cercanos:
+	It will do:	Hará:
+	Tell the assistant what to do…	Dile al asistente qué hacer…
+	Do it	Hacerlo
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Abre el asistente junto a la página: escribe lo que quieres, en árabe o inglés, y se hace al instante, sin esperas. Bajo el cuadro muestra lo que entendió antes de pulsar Intro; varios deseos en una frase se cumplen en orden y cada uno es un paso de deshacer propio. Ejemplo: «اجعله غامقاً وحجم ١٦ ووسّطه» pone la selección en negrita, a 16 puntos y centrada.
+	Drop here to take it out of the numbering	Suelta aquí para sacarlo de la numeración
+	Did you mean:	¿Querías decir:
+	Next:	Siguiente:
+	Remembered for next time.	Recordado para la próxima vez.
+	Teach the Assistant	Enseñar al asistente
+	Train the Assistant	Entrenar al asistente
+	Make the Assistant Forget	Hacer que el asistente olvide
+	Save the Assistant's Memory	Guardar la memoria del asistente
+	Load the Assistant's Memory	Cargar la memoria del asistente

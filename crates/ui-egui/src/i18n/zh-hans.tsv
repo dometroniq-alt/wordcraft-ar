@@ -2343,3 +2343,26 @@
 	Show explanations under the items	在项目下方显示说明
 	This item	此项目
 	{items} numbered items · {notes} explanations	{items} 个编号项 · {notes} 条说明
+	Copy Numbered Item	复制编号项
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	紧接其后复制此项（Ctrl+拖动可复制到别处）
+	Dragging and copying take the sub-items along	拖动和复制会带上下级项目
+	Dropping a card copies it (hold Ctrl to copy once)	放下时复制卡片（按住 Ctrl 仅复制一次）
+	Assistant	助手
+	Understand a Request	理解请求
+	Ask the Assistant	询问助手
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	用阿拉伯语或英语告诉助手要做什么，立即完成。一句话里有多个要求时，按顺序执行。
+	Examples	示例
+	I did not understand that. The nearest commands:	没听懂。最接近的命令：
+	It will do:	将执行：
+	Tell the assistant what to do…	告诉助手要做什么…
+	Do it	执行
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	在页面旁打开助手：用阿拉伯语或英语写下你想做的事，立即完成，无需等待。按 Enter 之前，输入框下方会显示它理解的内容；一句话里的多个要求按顺序执行，每个都是单独的撤销步骤。例如：「اجعله غامقاً وحجم ١٦ ووسّطه」把所选内容设为加粗、16 磅并居中。
+	Drop here to take it out of the numbering	拖放到此处，将其移出编号
+	Did you mean:	你是想：
+	Next:	下一步：
+	Remembered for next time.	已记住，下次直接执行。
+	Teach the Assistant	教助手
+	Train the Assistant	训练助手
+	Make the Assistant Forget	让助手忘记
+	Save the Assistant's Memory	保存助手的记忆
+	Load the Assistant's Memory	载入助手的记忆

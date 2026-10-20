@@ -385,6 +385,7 @@ pub const NAMES: &[&str] = &[
     "serviceList",
     "serviceAuto",
     "serviceOutline",
+    "agent",
     "finalDot",
     "serviceSelection",
     "classification",
@@ -1817,6 +1818,15 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.rect(2.0, 14.5, 14.0, 18.5, c);
             pen.text(11.5, 16.5, 4.5, "ب.", c, true);
             pen.line(&[(3.5, 16.5), (8.0, 16.5)]);
+        }
+        "agent" => {
+            // A speech bubble with a spark: say it and it is done.
+            pen.rect(2.0, 3.0, 17.0, 13.0, c);
+            pen.line(&[(6.0, 13.0), (5.0, 18.0), (10.0, 13.0)]);
+            pen.line_c(&[(5.5, 6.5), (13.5, 6.5)], c);
+            pen.line_c(&[(5.5, 9.5), (10.0, 9.5)], c);
+            pen.line_c(&[(18.0, 12.0), (18.0, 20.0)], a);
+            pen.line_c(&[(14.0, 16.0), (22.0, 16.0)], a);
         }
         "finalDot" => {
             // Right-to-left lines, each ending (at its left) in a firm dot.

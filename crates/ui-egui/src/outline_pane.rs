@@ -49,6 +49,10 @@ struct PaneState {
     show_body: bool,
     previews: bool,
     whole_level: bool,
+    /// A dragged or copied item takes its sub-items (and explanations) along.
+    with_children: bool,
+    /// Dropping copies instead of moving (Ctrl does the same for one drop).
+    copy_mode: bool,
     selected: Option<usize>,
     editing: Option<(usize, String, bool)>,
     collapsed: HashSet<String>,
@@ -65,6 +69,8 @@ impl Default for PaneState {
             show_body: true,
             previews: true,
             whole_level: false,
+            with_children: true,
+            copy_mode: false,
             selected: None,
             editing: None,
             collapsed: HashSet::new(),
@@ -116,10 +122,11 @@ pub fn pane(app: &mut WordApp, ui: &mut Ui) {
     let t = Tokens::get(ui.ctx());
     // Room for the summary line and, while dragging, the take-out strip.
     let dragging = st.drag.is_some();
-    let footer_h = 26.0 + if dragging { 40.0 } else { 0.0 };
+    // The take-out strip is always there, so the cards don't move when a drag starts.
+    let footer_h = 26.0 + 42.0;
     let list_h = (ui.available_height() - footer_h).max(80.0);
     st.rects.clear();
-    let mut drop_target: Option<(usize, Place, Rect)> = None;
+    let mut drop_target: Option<(usize, Place, Rect, Option<usize>)> = None;
     let pointer = ui.ctx().input(|i| i.pointer.interact_pos());
     egui::ScrollArea::vertical().max_height(list_h).auto_shrink([false, false]).show(ui, |ui| {
         if nodes.is_empty() {
@@ -191,11 +198,14 @@ pub fn pane(app: &mut WordApp, ui: &mut Ui) {
 
     // The strip a card is dropped on to leave the numbering.
     let mut strip = None;
-    if dragging && st.drag.as_ref().is_some_and(|d| d.numbered) {
+    {
         ui.add_space(4.0);
         let (r, _) = ui.allocate_exact_size(vec2(ui.available_width(), 34.0), Sense::hover());
-        strip = Some(r);
-        let over = pointer.is_some_and(|p| r.contains(p));
+        let armed = dragging && st.drag.as_ref().is_some_and(|d| d.numbered);
+        if armed {
+            strip = Some(r);
+        }
+        let over = armed && pointer.is_some_and(|p| r.contains(p));
         ui.painter().rect_filled(r, CornerRadius::same(6), if over { t.orange.linear_multiply(0.25) } else { t.input });
         ui.painter().rect_stroke(r, CornerRadius::same(6), Stroke::new(1.0, if over { t.orange } else { t.border_strong }), StrokeKind::Inside);
         ui.painter().text(
@@ -203,19 +213,19 @@ pub fn pane(app: &mut WordApp, ui: &mut Ui) {
             Align2::CENTER_CENTER,
             tl!("Drop here to take it out of the numbering"),
             regular(12.0),
-            if over { t.text } else { t.text_dim },
+            if over { t.text } else { t.text_dim.linear_multiply(if armed { 1.0 } else { 0.6 }) },
         );
     }
 
     // Where the pointer is while a card is held.
     if let (Some(drag), Some(p)) = (st.drag.clone(), pointer) {
         if let Some(r) = strip.filter(|r| r.contains(p)) {
-            drop_target = Some((drag.from, Place::Detach, r));
+            drop_target = Some((drag.from, Place::Detach, r, None));
         } else if let Some((idx, r)) = st.rects.iter().find(|(_, r)| r.contains(p)).copied()
             && let Some(n) = nodes.iter().find(|n| n.index == idx)
         {
             let src = nodes.iter().find(|m| m.index == drag.from);
-            let inside = src.is_some_and(|s| idx >= s.index && idx <= s.end);
+            let inside = src.is_some_and(|s| idx >= s.index && idx <= if st.with_children { s.end } else { s.index });
             if !inside {
                 let f = (p.y - r.top()) / r.height().max(1.0);
                 let place = if n.numbered {
@@ -231,21 +241,50 @@ pub fn pane(app: &mut WordApp, ui: &mut Ui) {
                 } else {
                     Place::After
                 };
-                drop_target = Some((idx, place, r));
+                // The level: the same as the card under the pointer, or higher when the pointer is
+                // near the start edge (the first 36 pt: one level, the first 18 pt: two); a drop on
+                // the middle of a card makes the item a sub-item of it.
+                let depth = if n.numbered {
+                    let rtl = crate::rtl::on() || is_rtl_text(&n.text);
+                    let dist = if rtl { r.max.x - p.x } else { p.x - r.min.x };
+                    let up = if dist < 18.0 {
+                        2
+                    } else if dist < 36.0 {
+                        1
+                    } else {
+                        0
+                    };
+                    Some(if place == Place::Into { n.depth + 1 } else { n.depth.saturating_sub(up) })
+                } else {
+                    None
+                };
+                drop_target = Some((idx, place, r, depth));
             }
         }
-        if let Some((_, place, r)) = drop_target {
-            paint_drop(ui, &t, place, r);
+        let copying = st.copy_mode || ui.ctx().input(|i| i.modifiers.command || i.modifiers.ctrl);
+        if let Some((_, place, r, depth)) = drop_target {
+            let rtl = crate::rtl::on()
+                || nodes.iter().find(|n| st.rects.iter().any(|(i, rr)| *i == n.index && *rr == r)).is_some_and(|n| is_rtl_text(&n.text));
+            paint_drop(
+                ui,
+                &t,
+                place,
+                r,
+                depth,
+                rtl,
+                nodes.iter().find(|n| st.rects.iter().any(|(i, rr)| *i == n.index && *rr == r)).map_or(0, |n| n.depth),
+            );
         }
-        ghost(ui, &t, &drag, p);
+        ghost(ui, &t, &drag, p, copying, st.with_children);
         ui.ctx().request_repaint();
     }
     if st.drag.is_some() {
         let released = ui.ctx().input(|i| i.pointer.any_released());
         let cancelled = ui.ctx().input(|i| i.key_pressed(egui::Key::Escape));
         if released || cancelled {
-            if let (Some(drag), Some((to, place, _)), true) = (st.drag.clone(), drop_target, released && !cancelled) {
-                drop_card(app, &mut st, &drag, to, place);
+            if let (Some(drag), Some((to, place, _, depth)), true) = (st.drag.clone(), drop_target, released && !cancelled) {
+                let copying = st.copy_mode || ui.ctx().input(|i| i.modifiers.command || i.modifiers.ctrl);
+                drop_card(app, &mut st, &drag, (to, place, depth), copying);
             }
             st.drag = None;
         }
@@ -362,7 +401,8 @@ fn apply(app: &mut WordApp, st: &PaneState, nodes: &Arc<Vec<OutlineNode>>, cmd: 
 
 fn tools(app: &mut WordApp, ui: &mut Ui, st: &mut PaneState, nodes: &Arc<Vec<OutlineNode>>) {
     ui.horizontal(|ui| {
-        let w = (ui.available_width() - 4.0 * 26.0 - 8.0).max(60.0);
+        let sp = ui.spacing().item_spacing.x;
+        let w = (ui.available_width() - 4.0 * 24.0 - 4.0 * sp).max(60.0);
         ui.add(egui::TextEdit::singleline(&mut st.filter).hint_text(tl!("Find an item")).desired_width(w));
         if tool_button(ui, "pilcrow", tl!("Show explanations under the items"), st.show_body, true).clicked() {
             st.show_body = !st.show_body;
@@ -394,6 +434,12 @@ fn tools(app: &mut WordApp, ui: &mut Ui, st: &mut PaneState, nodes: &Arc<Vec<Out
             v.sort_by_key(|(d, _)| *d);
             v
         };
+        if tool_button(ui, "multilevel", tl!("Dragging and copying take the sub-items along"), st.with_children, true).clicked() {
+            st.with_children = !st.with_children;
+        }
+        if tool_button(ui, "copy", tl!("Dropping a card copies it (hold Ctrl to copy once)"), st.copy_mode, true).clicked() {
+            st.copy_mode = !st.copy_mode;
+        }
         let label = tl!("Remove a level…");
         ui.add_enabled_ui(!levels.is_empty(), |ui| {
             ui.menu_button(label, |ui| {
@@ -430,6 +476,7 @@ enum Action {
     Demote,
     Detach,
     Attach,
+    Duplicate,
     Commit(String),
     Cancel,
     StartDrag,
@@ -476,7 +523,8 @@ fn draw_card(app: &mut WordApp, ui: &mut Ui, st: &mut PaneState, t: &Tokens, c: 
     let marker_text = if n.numbered { n.marker.clone() } else { "¶".to_string() };
     let chip_galley = ui.painter().layout_no_wrap(rtl_display(&marker_text), chip_font, color);
     let chip_w = (chip_galley.size().x + 12.0).max(26.0);
-    let actions_w = if c.selected || c.current { 3.0 * 20.0 } else { 0.0 };
+    // reserved for every card, so selecting one doesn't re-wrap its words and move the cards below
+    let actions_w = 4.0 * 20.0;
     let text_w = (full - indent - chip_w - pad * 3.0 - 4.0 - 14.0 - actions_w).max(40.0);
     let font = if n.depth == 0 && n.numbered { semibold(13.0) } else { regular(12.5) };
     let text_color = if n.numbered { t.text } else { t.text_dim };
@@ -614,6 +662,7 @@ fn draw_card(app: &mut WordApp, ui: &mut Ui, st: &mut PaneState, t: &Tokens, c: 
             button("outlinePromote", tl!("Move out one level"), Action::Promote, ui, &mut action);
             button("outlineDemote", tl!("Move in one level"), Action::Demote, ui, &mut action);
             button("eraser", tl!("Take out of the numbering"), Action::Detach, ui, &mut action);
+            button("copy", tl!("Copy this item right after itself (Ctrl+drag copies it elsewhere)"), Action::Duplicate, ui, &mut action);
         } else {
             button("numbering", tl!("Put into the numbering"), Action::Attach, ui, &mut action);
         }
@@ -692,6 +741,12 @@ fn run_action(app: &mut WordApp, st: &mut PaneState, nodes: &Arc<Vec<OutlineNode
         Action::Detach => {
             let _ = app.run("service.outline.detach", json!({"index": n.index}));
         }
+        Action::Duplicate => {
+            let r = app.run("service.outline.copy", json!({"from": n.index, "to": n.index, "place": "after", "children": st.with_children}));
+            if let Some(at) = r.ok().and_then(|r| r.get("at").and_then(Value::as_u64)) {
+                st.selected = Some(at as usize);
+            }
+        }
         Action::Attach => {
             let _ = app.run("service.outline.attach", json!({"index": n.index}));
         }
@@ -711,7 +766,8 @@ fn run_action(app: &mut WordApp, st: &mut PaneState, nodes: &Arc<Vec<OutlineNode
     let _ = nodes;
 }
 
-fn drop_card(app: &mut WordApp, st: &mut PaneState, drag: &Drag, to: usize, place: Place) {
+fn drop_card(app: &mut WordApp, st: &mut PaneState, drag: &Drag, target: (usize, Place, Option<usize>), copy: bool) {
+    let (to, place, depth) = target;
     st.selected = None;
     match place {
         Place::Detach => {
@@ -723,21 +779,47 @@ fn drop_card(app: &mut WordApp, st: &mut PaneState, drag: &Drag, to: usize, plac
                 Place::After => "after",
                 _ => "into",
             };
-            // a plain paragraph dropped into a card joins the numbering there
-            let numbered = !drag.numbered && place == Place::Into;
-            let _ = app.run("service.outline.move", json!({"from": drag.from, "to": to, "place": p, "numbered": numbered}));
+            let mut params = json!({"from": drag.from, "to": to, "place": p, "children": st.with_children});
+            if let Some(d) = depth {
+                params["depth"] = json!(d);
+            }
+            let result = if copy {
+                app.run("service.outline.copy", params)
+            } else {
+                // a plain paragraph dropped into a card joins the numbering there
+                params["numbered"] = json!(!drag.numbered && place == Place::Into);
+                app.run("service.outline.move", params)
+            };
+            // the item that landed is the selected one
+            if let Some(at) = result.ok().and_then(|r| r.get("at").and_then(Value::as_u64)) {
+                st.selected = Some(at as usize);
+            }
         }
     }
 }
 
-fn paint_drop(ui: &Ui, t: &Tokens, place: Place, r: Rect) {
+/// The service cycle's marker of a level, for the drop indicator.
+fn cycle_marker(depth: usize) -> &'static str {
+    ["١.", "أ.", "أولاً.", "(١)", "(أ)", "(أولاً)"].get(depth).copied().unwrap_or("•")
+}
+
+fn paint_drop(ui: &Ui, t: &Tokens, place: Place, r: Rect, depth: Option<usize>, rtl: bool, card_depth: usize) {
     let p = ui.painter();
+    // The line starts at the column of the level it would land on.
+    let shift = depth.map_or(0.0, |d| (d as f32 - card_depth as f32) * 12.0);
+    let (x0, x1) = if rtl { (r.min.x, r.max.x - shift.max(-r.width() + 20.0)) } else { (r.min.x + shift, r.max.x) };
+    let (x0, x1) = (x0.min(x1), x0.max(x1));
+    let mut chip_at = None;
     match place {
         Place::Before => {
-            p.line_segment([pos2(r.min.x, r.min.y - 2.0), pos2(r.max.x, r.min.y - 2.0)], Stroke::new(3.0, t.accent));
+            let y = r.min.y - 2.0;
+            p.line_segment([pos2(x0, y), pos2(x1, y)], Stroke::new(3.0, t.accent));
+            chip_at = Some(pos2(if rtl { x1 } else { x0 }, y));
         }
         Place::After => {
-            p.line_segment([pos2(r.min.x, r.max.y + 2.0), pos2(r.max.x, r.max.y + 2.0)], Stroke::new(3.0, t.accent));
+            let y = r.max.y + 2.0;
+            p.line_segment([pos2(x0, y), pos2(x1, y)], Stroke::new(3.0, t.accent));
+            chip_at = Some(pos2(if rtl { x1 } else { x0 }, y));
         }
         Place::Into => {
             p.rect_filled(r, CornerRadius::same(7), t.accent.linear_multiply(0.14));
@@ -745,15 +827,39 @@ fn paint_drop(ui: &Ui, t: &Tokens, place: Place, r: Rect) {
         }
         Place::Detach => {}
     }
+    // the marker the item gets there
+    if let (Some(at), Some(d)) = (chip_at.or(if place == Place::Into { Some(r.center()) } else { None }), depth) {
+        let g = p.layout_no_wrap(rtl_display(cycle_marker(d)), semibold(11.5), Color32::WHITE);
+        let size = g.size() + vec2(8.0, 3.0);
+        let center = if place == Place::Into {
+            pos2(if rtl { r.min.x + 22.0 } else { r.max.x - 22.0 }, r.center().y)
+        } else {
+            // inside the pane, at the start of the line
+            pos2(if rtl { at.x - size.x / 2.0 - 2.0 } else { at.x + size.x / 2.0 + 2.0 }, at.y)
+        };
+        let box_ = Rect::from_center_size(center, size);
+        p.rect_filled(box_, CornerRadius::same(4), t.accent);
+        p.galley(box_.center() - g.size() / 2.0, g, Color32::WHITE);
+    }
 }
 
 /// The card under the pointer while it is dragged.
-fn ghost(ui: &Ui, t: &Tokens, drag: &Drag, p: egui::Pos2) {
+fn ghost(ui: &Ui, t: &Tokens, drag: &Drag, p: egui::Pos2, copying: bool, children: bool) {
     egui::Area::new(Id::new("outline_ghost")).order(egui::Order::Tooltip).fixed_pos(p + vec2(10.0, 12.0)).interactable(false).show(ui.ctx(), |ui| {
         egui::Frame::NONE.fill(t.menu).stroke(Stroke::new(1.0, t.accent)).corner_radius(6).inner_margin(6).show(ui, |ui| {
             let text = format!("{} {}", drag.marker, drag.text);
             let shown: String = text.chars().take(40).collect();
-            ui.label(egui::RichText::new(rtl_display(&shown)).font(semibold(12.5)).color(t.text));
+            ui.horizontal(|ui| {
+                if copying {
+                    let r = ui.allocate_exact_size(vec2(16.0, 16.0), Sense::hover()).0;
+                    crate::icons::paint(ui.painter(), r, "copy", t.accent, t.accent);
+                }
+                if drag.numbered && children {
+                    let r = ui.allocate_exact_size(vec2(16.0, 16.0), Sense::hover()).0;
+                    crate::icons::paint(ui.painter(), r, "multilevel", t.accent, t.accent);
+                }
+                ui.label(egui::RichText::new(rtl_display(&shown)).font(semibold(12.5)).color(t.text));
+            });
         });
     });
 }

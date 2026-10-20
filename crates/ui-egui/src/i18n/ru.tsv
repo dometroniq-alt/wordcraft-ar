@@ -2728,3 +2728,26 @@ preview	Title	Пример
 	Show explanations under the items	Показывать пояснения под пунктами
 	This item	Этот пункт
 	{items} numbered items · {notes} explanations	Пронумерованных пунктов: {items} · пояснений: {notes}
+	Copy Numbered Item	Копировать пронумерованный пункт
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Скопировать пункт сразу после него (Ctrl+перетаскивание копирует в другое место)
+	Dragging and copying take the sub-items along	Перетаскивание и копирование забирают подпункты
+	Dropping a card copies it (hold Ctrl to copy once)	Бросок копирует карточку (удерживайте Ctrl для одного копирования)
+	Assistant	Помощник
+	Understand a Request	Понять запрос
+	Ask the Assistant	Спросить помощника
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Скажите помощнику по-арабски или по-английски, что сделать, и это будет сделано сразу. Несколько просьб в одном предложении выполняются по порядку.
+	Examples	Примеры
+	I did not understand that. The nearest commands:	Я не понял. Ближайшие команды:
+	It will do:	Он сделает:
+	Tell the assistant what to do…	Скажите помощнику, что сделать…
+	Do it	Выполнить
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Открывает помощника рядом со страницей: напишите, что нужно, по-арабски или по-английски, и это будет сделано сразу, без ожидания. Под полем видно, что он понял, ещё до нажатия Enter; несколько просьб в одном предложении выполняются по порядку, и каждая — отдельный шаг отмены. Пример: «اجعله غامقاً وحجم ١٦ ووسّطه» делает выделенное полужирным, размером 16 пт и по центру.
+	Drop here to take it out of the numbering	Бросьте сюда, чтобы убрать из нумерации
+	Did you mean:	Вы имели в виду:
+	Next:	Далее:
+	Remembered for next time.	Запомнено на следующий раз.
+	Teach the Assistant	Научить помощника
+	Train the Assistant	Обучить помощника
+	Make the Assistant Forget	Заставить помощника забыть
+	Save the Assistant's Memory	Сохранить память помощника
+	Load the Assistant's Memory	Загрузить память помощника

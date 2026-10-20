@@ -2719,3 +2719,26 @@
 	Show explanations under the items	Показване на пояснения под елементите
 	This item	Този елемент
 	{items} numbered items · {notes} explanations	{items} номерирани елемента · {notes} пояснения
+	Copy Numbered Item	Копиране на номериран елемент
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Копирай елемента веднага след него (Ctrl+плъзгане го копира другаде)
+	Dragging and copying take the sub-items along	Плъзгането и копирането вземат и поделементите
+	Dropping a card copies it (hold Ctrl to copy once)	Пускането копира картата (задръж Ctrl за едно копиране)
+	Assistant	Асистент
+	Understand a Request	Разбиране на заявка
+	Ask the Assistant	Попитай асистента
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Кажете на асистента какво да направи – на арабски или английски – и то се изпълнява веднага. Няколко желания в едно изречение се изпълняват по ред.
+	Examples	Примери
+	I did not understand that. The nearest commands:	Не разбрах. Най-близките команди:
+	It will do:	Ще изпълни:
+	Tell the assistant what to do…	Кажете на асистента какво да направи…
+	Do it	Изпълни
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Отваря асистента до страницата: напишете какво искате на арабски или английски и то се изпълнява веднага, без чакане. Под полето се показва какво е разбрано, преди да натиснете Enter; няколко желания в едно изречение се изпълняват по ред и всяко е отделна стъпка за отмяна. Пример: «اجعله غامقاً وحجم ١٦ ووسّطه» прави избраното получер, 16 пункта и центрирано.
+	Drop here to take it out of the numbering	Пуснете тук, за да го извадите от номерацията
+	Did you mean:	Имахте предвид:
+	Next:	Следва:
+	Remembered for next time.	Запомнено за следващия път.
+	Teach the Assistant	Научи асистента
+	Train the Assistant	Обучи асистента
+	Make the Assistant Forget	Накарай асистента да забрави
+	Save the Assistant's Memory	Запази паметта на асистента
+	Load the Assistant's Memory	Зареди паметта на асистента

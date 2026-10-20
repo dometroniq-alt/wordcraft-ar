@@ -2345,3 +2345,26 @@
 	Show explanations under the items	Прикажи објашњења испод ставки
 	This item	Ова ставка
 	{items} numbered items · {notes} explanations	{items} нумерисаних ставки · {notes} објашњења
+	Copy Numbered Item	Копирај нумерисану ставку
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Копирај ову ставку одмах иза ње (Ctrl+превлачење копира другде)
+	Dragging and copying take the sub-items along	Превлачење и копирање носе и подставке
+	Dropping a card copies it (hold Ctrl to copy once)	Испуштање копира картицу (држи Ctrl за једно копирање)
+	Assistant	Помоћник
+	Understand a Request	Разумевање захтева
+	Ask the Assistant	Питај помоћника
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Реците помоћнику шта да уради, на арапском или енглеском, и то се одмах уради. Више жеља у једној реченици извршава се редом.
+	Examples	Примери
+	I did not understand that. The nearest commands:	Нисам разумео. Најближе команде:
+	It will do:	Урадиће:
+	Tell the assistant what to do…	Реците помоћнику шта да уради…
+	Do it	Изврши
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Отвара помоћника поред странице: напишите шта желите, на арапском или енглеском, и то се одмах уради, без чекања. Испод поља приказује шта је разумео пре него што притиснете Enter; више жеља у једној реченици извршава се редом, а свака је посебан корак поништавања. Пример: «اجعله غامقاً وحجم ١٦ ووسّطه» означено чини подебљаним, величине 16 тачака и центрираним.
+	Drop here to take it out of the numbering	Отпустите овде да га извадите из нумерације
+	Did you mean:	Мислите ли:
+	Next:	Следеће:
+	Remembered for next time.	Запамћено за следећи пут.
+	Teach the Assistant	Научи помоћника
+	Train the Assistant	Тренирај помоћника
+	Make the Assistant Forget	Натерај помоћника да заборави
+	Save the Assistant's Memory	Сачувај памћење помоћника
+	Load the Assistant's Memory	Учитај памћење помоћника

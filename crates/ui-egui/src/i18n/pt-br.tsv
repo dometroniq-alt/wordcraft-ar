@@ -2343,3 +2343,26 @@
 	Show explanations under the items	Mostrar as explicações sob os itens
 	This item	Este item
 	{items} numbered items · {notes} explanations	{items} itens numerados · {notes} explicações
+	Copy Numbered Item	Copiar item numerado
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Copiar este item logo após ele (Ctrl+arrastar copia para outro lugar)
+	Dragging and copying take the sub-items along	Arrastar e copiar levam os subitens junto
+	Dropping a card copies it (hold Ctrl to copy once)	Soltar copia o cartão (segure Ctrl para copiar uma vez)
+	Assistant	Assistente
+	Understand a Request	Entender um pedido
+	Ask the Assistant	Perguntar ao assistente
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Diga ao assistente o que fazer, em árabe ou inglês, e é feito na hora. Vários desejos em uma frase são feitos em ordem.
+	Examples	Exemplos
+	I did not understand that. The nearest commands:	Não entendi. Os comandos mais próximos:
+	It will do:	Vai fazer:
+	Tell the assistant what to do…	Diga ao assistente o que fazer…
+	Do it	Fazer
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Abre o assistente ao lado da página: escreva o que quer, em árabe ou inglês, e é feito na hora, sem espera. Abaixo da caixa ele mostra o que entendeu antes de você apertar Enter; vários desejos em uma frase são feitos em ordem e cada um é um passo de desfazer próprio. Exemplo: «اجعله غامقاً وحجم ١٦ ووسّطه» deixa a seleção em negrito, com 16 pontos e centralizada.
+	Drop here to take it out of the numbering	Solte aqui para tirar da numeração
+	Did you mean:	Você quis dizer:
+	Next:	Próximo:
+	Remembered for next time.	Lembrado para a próxima vez.
+	Teach the Assistant	Ensinar o assistente
+	Train the Assistant	Treinar o assistente
+	Make the Assistant Forget	Fazer o assistente esquecer
+	Save the Assistant's Memory	Salvar a memória do assistente
+	Load the Assistant's Memory	Carregar a memória do assistente

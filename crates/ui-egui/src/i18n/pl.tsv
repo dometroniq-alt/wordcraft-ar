@@ -2720,3 +2720,26 @@ preview	Title	Tytuł
 	Show explanations under the items	Pokaż objaśnienia pod pozycjami
 	This item	Ta pozycja
 	{items} numbered items · {notes} explanations	Pozycji numerowanych: {items} · objaśnień: {notes}
+	Copy Numbered Item	Kopiuj numerowaną pozycję
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Skopiuj tę pozycję tuż za nią (Ctrl+przeciągnięcie kopiuje gdzie indziej)
+	Dragging and copying take the sub-items along	Przeciąganie i kopiowanie zabierają podpozycje
+	Dropping a card copies it (hold Ctrl to copy once)	Upuszczenie kopiuje kartę (przytrzymaj Ctrl, by skopiować raz)
+	Assistant	Asystent
+	Understand a Request	Zrozum polecenie
+	Ask the Assistant	Zapytaj asystenta
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Powiedz asystentowi, co ma zrobić, po arabsku lub angielsku, a zostanie to zrobione od razu. Kilka życzeń w jednym zdaniu wykonuje się po kolei.
+	Examples	Przykłady
+	I did not understand that. The nearest commands:	Nie zrozumiałem. Najbliższe polecenia:
+	It will do:	Wykona:
+	Tell the assistant what to do…	Powiedz asystentowi, co ma zrobić…
+	Do it	Wykonaj
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Otwiera asystenta obok strony: napisz, czego chcesz, po arabsku lub angielsku, a zostanie to zrobione od razu, bez czekania. Pod polem widać, co zrozumiał, zanim naciśniesz Enter; kilka życzeń w jednym zdaniu wykonuje się po kolei, a każde jest osobnym krokiem cofania. Przykład: «اجعله غامقاً وحجم ١٦ ووسّطه» pogrubia zaznaczenie, ustawia 16 pkt i wyśrodkowuje.
+	Drop here to take it out of the numbering	Upuść tutaj, aby wyjąć z numeracji
+	Did you mean:	Czy chodzi o:
+	Next:	Dalej:
+	Remembered for next time.	Zapamiętano na następny raz.
+	Teach the Assistant	Naucz asystenta
+	Train the Assistant	Trenuj asystenta
+	Make the Assistant Forget	Każ asystentowi zapomnieć
+	Save the Assistant's Memory	Zapisz pamięć asystenta
+	Load the Assistant's Memory	Wczytaj pamięć asystenta

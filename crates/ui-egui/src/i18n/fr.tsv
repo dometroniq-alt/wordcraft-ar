@@ -2338,3 +2338,26 @@
 	Show explanations under the items	Afficher les explications sous les éléments
 	This item	Cet élément
 	{items} numbered items · {notes} explanations	{items} éléments numérotés · {notes} explications
+	Copy Numbered Item	Copier l’élément numéroté
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Copier cet élément juste après lui (Ctrl+glisser le copie ailleurs)
+	Dragging and copying take the sub-items along	Glisser et copier emportent les sous-éléments
+	Dropping a card copies it (hold Ctrl to copy once)	Déposer copie la carte (maintenez Ctrl pour copier une fois)
+	Assistant	Assistant
+	Understand a Request	Comprendre une demande
+	Ask the Assistant	Demander à l’assistant
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Dites à l’assistant quoi faire, en arabe ou en anglais, et c’est fait aussitôt. Plusieurs souhaits dans une phrase sont exécutés dans l’ordre.
+	Examples	Exemples
+	I did not understand that. The nearest commands:	Je n’ai pas compris. Les commandes les plus proches :
+	It will do:	Il va faire :
+	Tell the assistant what to do…	Dites à l’assistant quoi faire…
+	Do it	Exécuter
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Ouvre l’assistant à côté de la page : écrivez ce que vous voulez, en arabe ou en anglais, et c’est fait aussitôt, sans attente. Sous la zone, il montre ce qu’il a compris avant que vous n’appuyiez sur Entrée ; plusieurs souhaits dans une phrase sont exécutés dans l’ordre et chacun est une étape d’annulation à part. Exemple : « اجعله غامقاً وحجم ١٦ ووسّطه » met la sélection en gras, en 16 points et centrée.
+	Drop here to take it out of the numbering	Déposez ici pour le sortir de la numérotation
+	Did you mean:	Vouliez-vous dire :
+	Next:	Ensuite :
+	Remembered for next time.	Retenu pour la prochaine fois.
+	Teach the Assistant	Apprendre à l’assistant
+	Train the Assistant	Entraîner l’assistant
+	Make the Assistant Forget	Faire oublier l’assistant
+	Save the Assistant's Memory	Enregistrer la mémoire de l’assistant
+	Load the Assistant's Memory	Charger la mémoire de l’assistant

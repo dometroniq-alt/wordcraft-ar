@@ -2722,3 +2722,26 @@ preview	Title	Ukázka
 	Show explanations under the items	Zobrazit vysvětlivky pod položkami
 	This item	Tato položka
 	{items} numbered items · {notes} explanations	{items} číslovaných položek · {notes} vysvětlivek
+	Copy Numbered Item	Kopírovat číslovanou položku
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Zkopírovat položku hned za sebe (Ctrl+tažení ji zkopíruje jinam)
+	Dragging and copying take the sub-items along	Tažení a kopírování berou i podpoložky
+	Dropping a card copies it (hold Ctrl to copy once)	Pustení kartu zkopíruje (Ctrl pro jedno kopírování)
+	Assistant	Asistent
+	Understand a Request	Porozumět požadavku
+	Ask the Assistant	Zeptat se asistenta
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Řekněte asistentovi, co má udělat, arabsky nebo anglicky, a provede se to okamžitě. Více přání v jedné větě se provede popořadě.
+	Examples	Příklady
+	I did not understand that. The nearest commands:	Nerozuměl jsem. Nejbližší příkazy:
+	It will do:	Provede:
+	Tell the assistant what to do…	Řekněte asistentovi, co má udělat…
+	Do it	Provést
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Otevře asistenta vedle stránky: napište, co chcete, arabsky nebo anglicky, a provede se to okamžitě, bez čekání. Pod polem se před stiskem Enter zobrazí, co bylo pochopeno; více přání v jedné větě se provede popořadě a každé je samostatným krokem zpět. Příklad: «اجعله غامقاً وحجم ١٦ ووسّطه» udělá výběr tučným, velikosti 16 b. a na střed.
+	Drop here to take it out of the numbering	Pusťte sem a položka se vyjme z číslování
+	Did you mean:	Myslíte:
+	Next:	Dále:
+	Remembered for next time.	Zapamatováno pro příště.
+	Teach the Assistant	Naučit asistenta
+	Train the Assistant	Trénovat asistenta
+	Make the Assistant Forget	Nechat asistenta zapomenout
+	Save the Assistant's Memory	Uložit paměť asistenta
+	Load the Assistant's Memory	Načíst paměť asistenta

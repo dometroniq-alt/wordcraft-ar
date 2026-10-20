@@ -128,6 +128,8 @@ pub struct ViewState {
     /// editable tree beside the page.
     #[serde(default)]
     pub service_outline_pane: bool,
+    /// The Assistant pane (Service › Assistant).
+    pub agent_pane: bool,
     pub comments_pane: bool,
     /// The Clipboard pane (Home › Clipboard): items collected by Copy and Cut.
     #[serde(default)]
@@ -226,6 +228,7 @@ impl Default for ViewState {
             styles_pane: false,
             style_inspector: false,
             service_outline_pane: false,
+            agent_pane: false,
             comments_pane: false,
             clipboard_pane: false,
             smart_art_pane: false,
@@ -432,6 +435,8 @@ pub struct Session {
     pub read_aloud: crate::speech::ReadAloud,
     /// Preferences the front end saves between runs.
     pub prefs: Prefs,
+    /// The Assistant's memory: what it was taught, what follows what, the conversation.
+    pub agent: crate::cmd::agent::AgentMemory,
     /// The system region (#838): the paper a new blank document starts on, the default
     /// measurement unit and the decimal separator. The front end sets it from the platform (the
     /// browser's locale on the web); headless sessions keep `en-US`. A region the user chose
@@ -653,6 +658,7 @@ impl Session {
             math_normal_text: false,
             also_selected: Vec::new(),
             prefs: Prefs::default(),
+            agent: Default::default(),
             system_region: Default::default(),
             keymap: crate::KeyMap::default(),
             ribbon: crate::RibbonLayout::default(),
@@ -1097,6 +1103,7 @@ impl Session {
             document_id: _,
             read_aloud: _,
             prefs: _,
+            agent: _,
             system_region: _,
             keymap: _,
             ribbon: _,

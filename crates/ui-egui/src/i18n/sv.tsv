@@ -2745,3 +2745,26 @@ preview	Title	Titel
 	Show explanations under the items	Visa förklaringar under posterna
 	This item	Den här posten
 	{items} numbered items · {notes} explanations	{items} numrerade poster · {notes} förklaringar
+	Copy Numbered Item	Kopiera numrerad post
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Kopiera posten direkt efter sig själv (Ctrl+dra kopierar den någon annanstans)
+	Dragging and copying take the sub-items along	Dra och kopiera tar med underposterna
+	Dropping a card copies it (hold Ctrl to copy once)	Släpp kopierar kortet (håll Ctrl för en kopia)
+	Assistant	Assistent
+	Understand a Request	Förstå en begäran
+	Ask the Assistant	Fråga assistenten
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Berätta för assistenten på arabiska eller engelska vad som ska göras, så görs det genast. Flera önskemål i en mening utförs i ordning.
+	Examples	Exempel
+	I did not understand that. The nearest commands:	Jag förstod inte. De närmaste kommandona:
+	It will do:	Den kommer att göra:
+	Tell the assistant what to do…	Berätta för assistenten vad som ska göras…
+	Do it	Utför
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Öppnar assistenten bredvid sidan: skriv vad du vill, på arabiska eller engelska, så görs det genast, utan väntan. Under rutan visas vad den förstod innan du trycker Retur; flera önskemål i en mening utförs i ordning och varje är ett eget ångra-steg. Exempel: «اجعله غامقاً وحجم ١٦ ووسّطه» gör markeringen fet, 16 punkter och centrerad.
+	Drop here to take it out of the numbering	Släpp här för att ta bort från numreringen
+	Did you mean:	Menade du:
+	Next:	Nästa:
+	Remembered for next time.	Ihågkommet till nästa gång.
+	Teach the Assistant	Lär assistenten
+	Train the Assistant	Träna assistenten
+	Make the Assistant Forget	Låt assistenten glömma
+	Save the Assistant's Memory	Spara assistentens minne
+	Load the Assistant's Memory	Läs in assistentens minne

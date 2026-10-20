@@ -3205,4 +3205,26 @@
 	This item	هذا البند
 	Whole level	المستوى كله
 	{items} numbered items · {notes} explanations	{items} بند مرقّم · {notes} شرح
-	Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items, drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.	يفتح فهرس الترقيم بجانب الصفحة: كل بند مرقّم بطاقة تتبع ما تكتبه فوراً. اسحب البطاقة لنقلها مع بنودها الفرعية، وأفلتها على الشريط أسفل اللائحة لإخراجها من الترقيم، وانقر نقراً مزدوجاً لتحرير كلماتها، وأزل مستوى كاملاً فتُعاد ترقيم المستويات تحته في الحال. مثال: احذف المستوى الرئيسي فتصير البنود الفرعية رئيسية.
+	Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items and their formatting; the pointer's position sets the level it lands on, and Ctrl+drag copies it (with or without its sub-items). Drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.	يفتح فهرس الترقيم بجانب الصفحة: كل بند مرقّم بطاقة تتبع ما تكتبه فوراً. اسحب البطاقة لنقلها مع بنودها الفرعية وتنسيقها كما هو؛ يحدد موضع المؤشر مستوى الهبوط، وCtrl مع السحب ينسخها (مع بنودها الفرعية أو بدونها). أفلتها على الشريط أسفل اللائحة لإخراجها من الترقيم، وانقر نقراً مزدوجاً لتحرير كلماتها، وأزل مستوى كاملاً فتُعاد ترقيم المستويات تحته في الحال. مثال: احذف المستوى الرئيسي فتصير البنود الفرعية رئيسية.
+	Copy Numbered Item	نسخ بند مرقّم
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	انسخ هذا البند مباشرة بعده (Ctrl مع السحب ينسخه إلى مكان آخر)
+	Dragging and copying take the sub-items along	السحب والنسخ يأخذان البنود الفرعية معهما
+	Dropping a card copies it (hold Ctrl to copy once)	الإفلات ينسخ البطاقة (اضغط Ctrl لنسخة واحدة)
+	Assistant	المساعد
+	Understand a Request	فهم طلب
+	Ask the Assistant	اسأل المساعد
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	اكتب للمساعد ما تريد بالعربية أو الإنجليزية فيُنفَّذ في الحال. إن جمعتَ عدة رغبات في جملة واحدة نُفِّذت بالترتيب.
+	Examples	أمثلة
+	I did not understand that. The nearest commands:	لم أفهم ذلك. أقرب الأوامر:
+	It will do:	سينفّذ:
+	Tell the assistant what to do…	اكتب للمساعد ما تريد…
+	Do it	نفّذ
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	يفتح المساعد بجانب الصفحة: اكتب ما تريد بالعربية أو الإنجليزية فيُنفَّذ في الحال دون انتظار. يعرض تحت الخانة ما فهمه قبل أن تضغط Enter، وإذا جمعتَ عدة رغبات في جملة نُفِّذت بالترتيب، وكل واحدة منها خطوة تراجع مستقلة. مثال: «اجعله غامقاً وحجم ١٦ ووسّطه» يجعل التحديد غامقاً بحجم ١٦ ومتوسطاً.
+	Did you mean:	هل تقصد:
+	Next:	التالي:
+	Remembered for next time.	تم التذكّر للمرة القادمة.
+	Teach the Assistant	علّم المساعد
+	Train the Assistant	درّب المساعد
+	Make the Assistant Forget	اجعل المساعد ينسى
+	Save the Assistant's Memory	احفظ ذاكرة المساعد
+	Load the Assistant's Memory	حمّل ذاكرة المساعد

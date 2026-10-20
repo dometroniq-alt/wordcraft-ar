@@ -2365,3 +2365,26 @@
 	Show explanations under the items	Näita selgitusi kirjete all
 	This item	See kirje
 	{items} numbered items · {notes} explanations	{items} nummerdatud kirjet · {notes} selgitust
+	Copy Numbered Item	Kopeeri nummerdatud kirje
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Kopeeri see kirje vahetult enda järele (Ctrl+lohistamine kopeerib mujale)
+	Dragging and copying take the sub-items along	Lohistamine ja kopeerimine võtavad alamkirjed kaasa
+	Dropping a card copies it (hold Ctrl to copy once)	Maha laskmine kopeerib kaardi (hoia Ctrl ühekordseks kopeerimiseks)
+	Assistant	Assistent
+	Understand a Request	Päringu mõistmine
+	Ask the Assistant	Küsi assistendilt
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Ütle assistendile araabia või inglise keeles, mida teha, ja see tehakse kohe ära. Mitu soovi ühes lauses tehakse järjekorras.
+	Examples	Näited
+	I did not understand that. The nearest commands:	Ma ei saanud aru. Lähimad käsud:
+	It will do:	Teeb:
+	Tell the assistant what to do…	Ütle assistendile, mida teha…
+	Do it	Tee ära
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Avab assistendi lehe kõrval: kirjuta, mida soovid, araabia või inglise keeles, ja see tehakse kohe, ootamata. Lahtri all on näha, mida mõisteti, enne kui vajutad Enter; mitu soovi ühes lauses tehakse järjekorras ja iga neist on eraldi tagasivõtmise samm. Näide: «اجعله غامقاً وحجم ١٦ ووسّطه» teeb valiku paksuks, 16 punkti ja keskele.
+	Drop here to take it out of the numbering	Lase siia, et võtta see nummerdusest välja
+	Did you mean:	Kas mõtlesid:
+	Next:	Järgmine:
+	Remembered for next time.	Järgmiseks korraks meelde jäetud.
+	Teach the Assistant	Õpeta assistenti
+	Train the Assistant	Treeni assistenti
+	Make the Assistant Forget	Pane assistent unustama
+	Save the Assistant's Memory	Salvesta assistendi mälu
+	Load the Assistant's Memory	Laadi assistendi mälu

@@ -2331,3 +2331,26 @@
 	Show explanations under the items	項目の下に説明を表示
 	This item	この項目
 	{items} numbered items · {notes} explanations	番号付き項目 {items} 件 · 説明 {notes} 件
+	Copy Numbered Item	番号付き項目をコピー
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	この項目の直後にコピー（Ctrl+ドラッグで別の場所へコピー）
+	Dragging and copying take the sub-items along	ドラッグとコピーでは下位項目も一緒に扱う
+	Dropping a card copies it (hold Ctrl to copy once)	ドロップでカードをコピー（Ctrl を押すと一度だけコピー）
+	Assistant	アシスタント
+	Understand a Request	依頼の解釈
+	Ask the Assistant	アシスタントに頼む
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	アラビア語か英語でやってほしいことを伝えると、すぐに実行されます。1つの文に複数の依頼があれば、順番に実行されます。
+	Examples	例
+	I did not understand that. The nearest commands:	理解できませんでした。近いコマンド:
+	It will do:	実行する内容:
+	Tell the assistant what to do…	やってほしいことを入力…
+	Do it	実行
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	ページの横にアシスタントを開きます。アラビア語か英語でやりたいことを書くと、待たずにすぐ実行されます。Enter を押す前に、理解した内容が入力欄の下に表示されます。1つの文に複数の依頼があれば順番に実行され、それぞれが独立した元に戻す操作になります。例:「اجعله غامقاً وحجم ١٦ ووسّطه」は選択部分を太字・16ポイント・中央揃えにします。
+	Drop here to take it out of the numbering	ここにドロップすると番号から外れます
+	Did you mean:	もしかして:
+	Next:	次に:
+	Remembered for next time.	次回のために覚えました。
+	Teach the Assistant	アシスタントに教える
+	Train the Assistant	アシスタントを訓練
+	Make the Assistant Forget	アシスタントに忘れさせる
+	Save the Assistant's Memory	アシスタントの記憶を保存
+	Load the Assistant's Memory	アシスタントの記憶を読み込む

@@ -2330,3 +2330,26 @@
 	Show explanations under the items	Erläuterungen unter den Einträgen anzeigen
 	This item	Dieser Eintrag
 	{items} numbered items · {notes} explanations	{items} nummerierte Einträge · {notes} Erläuterungen
+	Copy Numbered Item	Nummerierten Eintrag kopieren
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Eintrag direkt hinter sich kopieren (Strg+Ziehen kopiert ihn woandershin)
+	Dragging and copying take the sub-items along	Ziehen und Kopieren nehmen die Untereinträge mit
+	Dropping a card copies it (hold Ctrl to copy once)	Ablegen kopiert die Karte (Strg halten für einmal kopieren)
+	Assistant	Assistent
+	Understand a Request	Anfrage verstehen
+	Ask the Assistant	Den Assistenten fragen
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Sagen Sie dem Assistenten auf Arabisch oder Englisch, was zu tun ist – es geschieht sofort. Mehrere Wünsche in einem Satz werden der Reihe nach ausgeführt.
+	Examples	Beispiele
+	I did not understand that. The nearest commands:	Das habe ich nicht verstanden. Die nächsten Befehle:
+	It will do:	Er wird ausführen:
+	Tell the assistant what to do…	Sagen Sie dem Assistenten, was zu tun ist…
+	Do it	Ausführen
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Öffnet den Assistenten neben der Seite: Schreiben Sie auf Arabisch oder Englisch, was Sie wollen, und es geschieht sofort, ohne Wartezeit. Unter dem Feld steht, was verstanden wurde, bevor Sie Enter drücken; mehrere Wünsche in einem Satz werden der Reihe nach ausgeführt, jeder ist ein eigener Rückgängig-Schritt. Beispiel: «اجعله غامقاً وحجم ١٦ ووسّطه» macht die Auswahl fett, 16 Punkt und zentriert.
+	Drop here to take it out of the numbering	Hier ablegen, um es aus der Nummerierung zu nehmen
+	Did you mean:	Meinten Sie:
+	Next:	Als Nächstes:
+	Remembered for next time.	Für das nächste Mal gemerkt.
+	Teach the Assistant	Dem Assistenten etwas beibringen
+	Train the Assistant	Den Assistenten trainieren
+	Make the Assistant Forget	Den Assistenten vergessen lassen
+	Save the Assistant's Memory	Gedächtnis des Assistenten speichern
+	Load the Assistant's Memory	Gedächtnis des Assistenten laden

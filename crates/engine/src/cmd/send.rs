@@ -82,9 +82,9 @@ fn send(s: &mut Session, v: &Value, app: Sibling) -> CmdResult {
     let title = title_of(s);
     let json = craftx_of(s, v, &title)?;
     let dir = std::env::temp_dir().join(EXCHANGE_DIR);
-    std::fs::create_dir_all(&dir).map_err(|e| CmdError::Failed(format!("{}: {e}", dir.display())))?;
+    crate::io::create_dir_all(&dir).map_err(CmdError::Failed)?;
     let path = dir.join(format!("{title}-{}.craftx", hhmmss()));
-    std::fs::write(&path, json.as_bytes()).map_err(|e| CmdError::Failed(format!("{}: {e}", path.display())))?;
+    crate::io::write_file(&path.to_string_lossy(), json.as_bytes()).map_err(CmdError::Failed)?;
     let shown = path.to_string_lossy().into_owned();
     let (started, exe, message) = match crate::craft_launch::launch(app, &path) {
         Ok(Launched::Started(exe)) => (true, Some(exe.to_string_lossy().into_owned()), format!("Sent to {}", app.name())),

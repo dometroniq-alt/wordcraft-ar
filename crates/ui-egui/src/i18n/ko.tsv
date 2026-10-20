@@ -2586,3 +2586,26 @@ preview	Title	제목
 	Show explanations under the items	항목 아래에 설명 표시
 	This item	이 항목
 	{items} numbered items · {notes} explanations	번호 항목 {items}개 · 설명 {notes}개
+	Copy Numbered Item	번호 항목 복사
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	이 항목을 바로 뒤에 복사(Ctrl+끌기는 다른 곳으로 복사)
+	Dragging and copying take the sub-items along	끌기와 복사에 하위 항목도 함께 포함
+	Dropping a card copies it (hold Ctrl to copy once)	놓으면 카드를 복사(Ctrl을 누르면 한 번만 복사)
+	Assistant	도우미
+	Understand a Request	요청 이해
+	Ask the Assistant	도우미에게 요청
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	아랍어나 영어로 할 일을 말하면 바로 실행됩니다. 한 문장에 여러 요청이 있으면 순서대로 실행됩니다.
+	Examples	예시
+	I did not understand that. The nearest commands:	이해하지 못했습니다. 가장 가까운 명령:
+	It will do:	실행할 내용:
+	Tell the assistant what to do…	할 일을 입력하세요…
+	Do it	실행
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	페이지 옆에 도우미를 엽니다. 아랍어나 영어로 원하는 것을 쓰면 기다림 없이 바로 실행됩니다. Enter를 누르기 전에 이해한 내용이 입력란 아래에 표시되며, 한 문장의 여러 요청은 순서대로 실행되고 각각이 별도의 실행 취소 단계가 됩니다. 예: «اجعله غامقاً وحجم ١٦ ووسّطه»는 선택 영역을 굵게, 16pt, 가운데 정렬로 만듭니다.
+	Drop here to take it out of the numbering	여기에 놓으면 번호에서 빠집니다
+	Did you mean:	혹시 이것인가요:
+	Next:	다음:
+	Remembered for next time.	다음을 위해 기억했습니다.
+	Teach the Assistant	도우미 가르치기
+	Train the Assistant	도우미 훈련
+	Make the Assistant Forget	도우미 잊게 하기
+	Save the Assistant's Memory	도우미 기억 저장
+	Load the Assistant's Memory	도우미 기억 불러오기

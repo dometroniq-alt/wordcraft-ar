@@ -32,8 +32,13 @@ pub const ENTRIES: &[Entry] = &[
     ),
     Entry::new(
         "view.serviceOutlinePane",
-        "Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items, drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.",
+        "Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items and their formatting; the pointer's position sets the level it lands on, and Ctrl+drag copies it (with or without its sub-items). Drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.",
         |d| d.outline_pane(),
+    ),
+    Entry::new(
+        "view.agentPane",
+        "Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.",
+        |d| d.agent_pane(),
     ),
     Entry::new(
         "service.finalDot",
@@ -254,6 +259,31 @@ impl Draw<'_> {
             self.p.rect_stroke(card, 3.0, Stroke::new(1.0, c), egui::StrokeKind::Inside);
             self.label(pos2(card.max.x - 4.0, y), m, 8.0, c, Align2::RIGHT_CENTER);
             self.line(pos2(card.min.x + 4.0, y), pos2(card.max.x - 20.0, y), c, 1.5);
+        }
+    }
+
+    /// The assistant: a request is typed into the box, then the steps it became tick off one by one.
+    fn agent_pane(&self) {
+        let grey = self.t.text_dim;
+        let page = self.page(30.0, 8.0, 52.0, 88.0);
+        self.text_lines(page.shrink2(vec2(2.0, 6.0)), true, &[34.0, 30.0, 34.0, 26.0, 32.0, 28.0], 12.0, grey);
+        let pane = Rect::from_min_max(pos2(page.max.x + 8.0, page.min.y), pos2(self.at(168.0, 0.0).x, page.max.y));
+        self.p.rect_stroke(pane, 3.0, Stroke::new(1.0, grey), egui::StrokeKind::Inside);
+        // The box at the bottom fills with the request as it is typed.
+        let boxr = Rect::from_min_max(pos2(pane.min.x + 4.0, pane.max.y - 18.0), pos2(pane.max.x - 4.0, pane.max.y - 4.0));
+        self.p.rect_stroke(boxr, 3.0, Stroke::new(1.0, self.t.accent), egui::StrokeKind::Inside);
+        let typed = self.reveal(0.0, 0.45);
+        let to = boxr.max.x - 5.0 - (boxr.width() - 10.0) * typed;
+        self.line(pos2(boxr.max.x - 5.0, boxr.center().y), pos2(to.min(boxr.max.x - 5.0), boxr.center().y), self.t.accent, 1.5);
+        // Then the steps appear above it, each with a green dot.
+        for i in 0..3 {
+            let on = self.reveal(0.5 + 0.15 * i as f32, 0.62 + 0.15 * i as f32);
+            if on <= 0.0 {
+                continue;
+            }
+            let y = pane.min.y + 14.0 + i as f32 * 17.0;
+            self.p.circle_filled(pos2(pane.max.x - 10.0, y), 3.0, Color32::from_rgb(40, 150, 80).linear_multiply(on));
+            self.line(pos2(pane.min.x + 8.0, y), pos2(pane.max.x - 18.0 - 14.0 * (i as f32), y), grey.linear_multiply(on), 1.5);
         }
     }
 

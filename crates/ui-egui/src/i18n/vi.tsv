@@ -2770,3 +2770,26 @@ template	Letter	Thư
 	Show explanations under the items	Hiện phần giải thích dưới các mục
 	This item	Mục này
 	{items} numbered items · {notes} explanations	{items} mục đã đánh số · {notes} phần giải thích
+	Copy Numbered Item	Sao chép mục đã đánh số
+	Copy this item right after itself (Ctrl+drag copies it elsewhere)	Sao chép mục này ngay sau chính nó (Ctrl+kéo sao chép sang nơi khác)
+	Dragging and copying take the sub-items along	Kéo và sao chép mang theo cả mục con
+	Dropping a card copies it (hold Ctrl to copy once)	Thả sẽ sao chép thẻ (giữ Ctrl để sao chép một lần)
+	Assistant	Trợ lý
+	Understand a Request	Hiểu một yêu cầu
+	Ask the Assistant	Hỏi trợ lý
+	Tell the assistant what to do, in Arabic or English, and it is done at once. Several wishes in one sentence are done in order.	Nói với trợ lý việc cần làm bằng tiếng Ả Rập hoặc tiếng Anh, việc đó được làm ngay. Nhiều yêu cầu trong một câu được làm lần lượt.
+	Examples	Ví dụ
+	I did not understand that. The nearest commands:	Tôi chưa hiểu. Các lệnh gần nhất:
+	It will do:	Sẽ thực hiện:
+	Tell the assistant what to do…	Nói với trợ lý việc cần làm…
+	Do it	Thực hiện
+	Opens the Assistant beside the page: write what you want, in Arabic or English, and it is done at once, with no waiting. Under the box it shows what it understood before you press Enter, several wishes in one sentence are done in order, and each one is its own undo step. Example: «اجعله غامقاً وحجم ١٦ ووسّطه» makes the selection bold, 16 points and centred.	Mở trợ lý bên cạnh trang: viết điều bạn muốn bằng tiếng Ả Rập hoặc tiếng Anh, việc đó được làm ngay, không phải chờ. Dưới ô nhập hiện điều trợ lý đã hiểu trước khi bạn nhấn Enter; nhiều yêu cầu trong một câu được làm lần lượt và mỗi yêu cầu là một bước hoàn tác riêng. Ví dụ: «اجعله غامقاً وحجم ١٦ ووسّطه» làm phần chọn đậm, cỡ 16 và căn giữa.
+	Drop here to take it out of the numbering	Thả vào đây để đưa ra khỏi đánh số
+	Did you mean:	Ý bạn là:
+	Next:	Tiếp theo:
+	Remembered for next time.	Đã ghi nhớ cho lần sau.
+	Teach the Assistant	Dạy trợ lý
+	Train the Assistant	Huấn luyện trợ lý
+	Make the Assistant Forget	Bắt trợ lý quên
+	Save the Assistant's Memory	Lưu bộ nhớ của trợ lý
+	Load the Assistant's Memory	Tải bộ nhớ của trợ lý

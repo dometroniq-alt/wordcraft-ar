@@ -274,6 +274,7 @@ pub fn icon_for(key: &str) -> &str {
         ("view.commentsPane", "showComments"),
         ("view.marks", "pilcrow"),
         ("view.serviceOutlinePane", "serviceOutline"),
+        ("view.agentPane", "agent"),
     ];
     if let Some((_, icon)) = ICONS.iter().find(|(c, _)| *c == key) {
         return icon;

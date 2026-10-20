@@ -39,7 +39,9 @@ pub fn specs() -> Vec<CommandSpec> {
         .params(r#"{"value"?: bool (default: toggle)} — the Numbering Outline pane beside the page"#)
         .pure(),
         CommandSpec::new("service.outline.move", "Move Numbered Item", "Service › Outline", move_node)
-            .params(r#"{"from": block index, "to": block index, "place": "before|after|into", "numbered"?: bool} — the item with its sub-items goes there and takes the level of its new place; a plain paragraph dropped with `numbered` joins the numbering there; the list renumbers"#),
+            .params(r#"{"from": block index, "to": block index, "place": "before|after|into", "depth"?: level, "children"?: bool (default true), "numbered"?: bool} — the item with its sub-items (or without them) goes there and takes the level of its new place, or `depth`; its paragraphs keep their formatting; a plain paragraph dropped with `numbered` joins the numbering there; the list renumbers"#),
+        CommandSpec::new("service.outline.copy", "Copy Numbered Item", "Service › Outline", copy_node)
+            .params(r#"{"from": block index, "to": block index, "place": "before|after|into", "depth"?: level, "children"?: bool (default true)} — a copy of the item (with its sub-items and explanations, or without its sub-items) goes there, formatted as the original, and the list renumbers"#),
         CommandSpec::new("service.outline.setLevel", "Change Item Level", "Service › Outline", set_level)
             .params(r#"{"index": block index, "delta"?: -1|1, "depth"?: level} — promote or demote an item with its sub-items"#),
         CommandSpec::new("service.outline.detach", "Take Out of Numbering", "Service › Outline", detach)
@@ -250,40 +252,77 @@ fn align_indents(s: &mut Session, blocks: &[usize]) -> Result<(), CmdError> {
     Ok(())
 }
 
+/// Where an item ends when only it is taken: its own explanations count (they come before its
+/// first sub-item), its numbered sub-items do not.
+fn light_end(nodes: &[OutlineNode], a: &OutlineNode) -> usize {
+    nodes.iter().find(|n| n.index > a.index && n.numbered).map(|n| n.index - 1).unwrap_or(a.end).min(a.end).max(a.index)
+}
+
 /// `service.outline.move`.
 fn move_node(s: &mut Session, v: &Value) -> CmdResult {
+    place_item(s, v, false)
+}
+
+/// `service.outline.copy`.
+fn copy_node(s: &mut Session, v: &Value) -> CmdResult {
+    place_item(s, v, true)
+}
+
+/// Move (or copy) an item — with its sub-items and explanations unless `children` is false — to a
+/// place, at the level of its new place or at `depth`. The paragraphs travel as they are: their
+/// runs, styles, indents and kashida stay; only the markers are rewritten (they take the formatting
+/// of the words after them) and the indents follow the new level.
+fn place_item(s: &mut Session, v: &Value, copy: bool) -> CmdResult {
     let from = idx(v, "from")?;
     let to = idx(v, "to")?;
     let place = p::str(v, "place").unwrap_or("after");
     if !matches!(place, "before" | "after" | "into") {
         return Err(CmdError::Params("`place` is before, after or into".into()));
     }
+    let children = p::bool(v, "children").unwrap_or(true);
     let nodes = outline(s);
     let a = find(&nodes, from)?.clone();
     let t = find(&nodes, to)?.clone();
-    if t.index >= a.index && t.index <= a.end {
+    let a_end = if children { a.end } else { light_end(&nodes, &a) };
+    if !copy && t.index >= a.index && t.index <= a_end {
         return Err(CmdError::Params("an item cannot be moved into itself".into()));
     }
-    let span_len = a.end - a.index + 1;
-    if span_len >= s.doc.body.len() {
+    let span_len = a_end - a.index + 1;
+    if !copy && span_len >= s.doc.body.len() {
         return reply(s, 0);
     }
-    let new_depth = if place == "into" { t.depth + 1 } else { t.depth };
-    let delta = if a.numbered { new_depth as isize - a.depth as isize } else { 0 };
-    let ins = if place == "before" { t.index } else { t.end + 1 };
-    // take the blocks out, then put them in at the (shifted) place
-    let mut blocks: Vec<Block> = Vec::with_capacity(span_len);
-    for _ in 0..span_len {
-        blocks.push(s.doc.remove_block(StoryRef::Body, &path_of(a.index))?);
-    }
-    let at = if ins > a.end { ins - span_len } else { ins };
-    for (k, b) in blocks.into_iter().enumerate() {
-        s.doc.insert_block(StoryRef::Body, &path_of(at + k), b)?;
-    }
+    let want_depth = p::u64(v, "depth").map(|d| d as usize).unwrap_or(if place == "into" { t.depth + 1 } else { t.depth });
+    let t_end = t.end;
+    let ins = if place == "before" { t.index } else { t_end + 1 };
+    let at = if copy {
+        let mut blocks: Vec<Block> = Vec::with_capacity(span_len);
+        for i in a.index..=a_end {
+            let b = s.doc.body.get(i).ok_or_else(|| CmdError::Params(format!("block {i} does not exist")))?;
+            blocks.push((**b).clone());
+        }
+        for (k, b) in blocks.into_iter().enumerate() {
+            s.doc.insert_block(StoryRef::Body, &path_of(ins + k), b)?;
+        }
+        ins
+    } else {
+        // take the blocks out, then put them in at the (shifted) place
+        let mut blocks: Vec<Block> = Vec::with_capacity(span_len);
+        for _ in 0..span_len {
+            blocks.push(s.doc.remove_block(StoryRef::Body, &path_of(a.index))?);
+        }
+        let at = if ins > a_end { ins - span_len } else { ins };
+        for (k, b) in blocks.into_iter().enumerate() {
+            s.doc.insert_block(StoryRef::Body, &path_of(at + k), b)?;
+        }
+        at
+    };
     let moved: Vec<usize> = (at..at + span_len).collect();
-    if !a.numbered && p::bool(v, "numbered").unwrap_or(false) {
+    let nodes = outline(s);
+    let pos = nodes.iter().position(|n| n.index >= at);
+    // a level the place can't hold (deeper than one under the item before it) is taken up
+    let new_depth = pos.map(|p| want_depth.min(max_depth(&nodes, p))).unwrap_or(want_depth);
+    if !a.numbered && p::bool(v, "numbered").unwrap_or(false) && !copy {
         // a plain paragraph dropped into the numbering: it is numbered at its new place's level
-        let nodes = outline(s);
         let pos = nodes.iter().position(|n| n.index == at).ok_or_else(|| CmdError::Params("the moved paragraph is empty".into()))?;
         let depth = new_depth.min(max_depth(&nodes, pos));
         let items = analyse(s, &top_paths(s), true);
@@ -294,18 +333,24 @@ fn move_node(s: &mut Session, v: &Value) -> CmdResult {
             estimate_indent(s, &path_of(at), depth)?;
         }
         let changed = relabel(s)?;
-        return reply(s, changed.max(1));
+        let mut r = reply(s, changed.max(1))?;
+        r["at"] = json!(at);
+        return Ok(r);
     }
+    // the item's level now, from the markers as they stand (a copy is the same as its original)
+    let cur = nodes.iter().find(|n| n.index == at && n.numbered).map(|n| n.depth);
+    let delta = cur.map(|c| new_depth as isize - c as isize).unwrap_or(0);
     let changed = if delta != 0 {
-        let nodes = outline(s);
-        // the moved items' levels, then the list
         let shifted = shift_levels(s, &nodes, at..=at + span_len - 1, delta)?;
         align_indents(s, &moved)?;
         shifted
     } else {
         relabel(s)?
     };
-    reply(s, changed)
+    let mut r = reply(s, changed)?;
+    r["at"] = json!(at);
+    r["count"] = json!(span_len);
+    Ok(r)
 }
 
 /// `service.outline.setLevel`.
@@ -589,6 +634,84 @@ mod tests {
         assert!(texts(&s)[2].starts_with("أ."));
         assert!(texts(&s)[2].ends_with("فرع معدّل"));
         assert_eq!(markers(&s)[2], "أ. فرع معدّل");
+    }
+
+    /// Give a paragraph a look of its own: size, bold, a style and alignment on every run.
+    fn style_para(s: &mut Session, index: usize) {
+        let para = s.doc.para_mut(StoryRef::Body, &path_of(index)).unwrap();
+        for r in para.runs.iter_mut() {
+            r.props.size = Some(17.0);
+            r.props.bold = Some(true);
+        }
+        para.props.style = Some("Heading3".into());
+        para.props.align = Some(wordcraft_doc::Align::Center);
+        para.touch();
+    }
+
+    fn look(s: &Session, index: usize) -> (Vec<(Option<f32>, Option<bool>)>, Option<String>, Option<wordcraft_doc::Align>) {
+        let para = s.doc.para(StoryRef::Body, &path_of(index)).unwrap();
+        (para.runs.iter().filter(|r| r.len > 0).map(|r| (r.props.size, r.props.bold)).collect(), para.props.style.clone(), para.props.align)
+    }
+
+    #[test]
+    fn a_moved_item_keeps_its_formatting_across_levels() {
+        let mut s = doc(SAMPLE);
+        // «ب. فرع ثان» (block 3) looks different from the rest
+        style_para(&mut s, 3);
+        let before = look(&s, 3);
+        // it goes to the main level, after «٢. الثاني» with its sub-item (block 5)
+        s.run("service.outline.move", &json!({"from": 3, "to": 4, "place": "after", "depth": 0, "children": false})).unwrap();
+        let o = outline(&s);
+        let n = o.iter().find(|n| n.text == "فرع ثان").unwrap();
+        assert_eq!((n.depth, n.marker.as_str()), (0, "٣."), "{o:?}");
+        let after = look(&s, n.index);
+        assert_eq!(after.1, before.1, "style kept");
+        assert_eq!(after.2, before.2, "alignment kept");
+        assert!(after.0.iter().all(|(sz, b)| *sz == Some(17.0) && *b == Some(true)), "every run, the marker too, keeps size and bold: {after:?}");
+    }
+
+    #[test]
+    fn dragging_to_a_given_level_takes_the_sub_items_along() {
+        let mut s = doc(SAMPLE);
+        style_para(&mut s, 5);
+        // «٢. الثاني» with «أ. فرع ثالث» goes under «١.»'s sub-items as a sub-item: its sub-item steps to «أولاً.»
+        s.run("service.outline.move", &json!({"from": 4, "to": 3, "place": "after", "depth": 1})).unwrap();
+        let o = outline(&s);
+        let m: Vec<String> = o.iter().map(|n| format!("{}{}", n.marker, n.text)).collect();
+        assert!(m.iter().any(|x| x.starts_with("ج") && x.contains("الثاني")), "{m:?}");
+        let moved_sub = o.iter().find(|n| n.text == "فرع ثالث").unwrap();
+        assert_eq!((moved_sub.depth, moved_sub.marker.as_str()), (2, "أولاً."), "{m:?}");
+        assert_eq!(look(&s, moved_sub.index).1.as_deref(), Some("Heading3"), "its own style stays");
+        // a level the place can't hold (deeper than one under the item before it) is taken up
+        let mut s = doc(SAMPLE);
+        s.run("service.outline.move", &json!({"from": 6, "to": 0, "place": "before", "depth": 3})).unwrap();
+        assert_eq!(outline(&s)[0].depth, 0, "nothing is above it to hold a deeper level");
+    }
+
+    #[test]
+    fn copying_an_item_with_and_without_its_sub_items() {
+        let mut s = doc(SAMPLE);
+        style_para(&mut s, 4);
+        let n = texts(&s).len();
+        // with its sub-item, to the end as a main item
+        s.run("service.outline.copy", &json!({"from": 4, "to": 6, "place": "after"})).unwrap();
+        let t = texts(&s);
+        assert_eq!(t.len(), n + 2, "{t:?}");
+        assert!(t[7].starts_with("٤.") && t[7].contains("الثاني"), "{t:?}");
+        assert!(t[8].starts_with("أ.") && t[8].contains("فرع ثالث"), "{t:?}");
+        assert!(t[4].starts_with("٢.") && t[4].contains("الثاني"), "the original stays: {t:?}");
+        assert_eq!(look(&s, 7).1.as_deref(), Some("Heading3"));
+        // without its sub-items, as a sub-item of «١.»
+        let mut s = doc(SAMPLE);
+        s.run("service.outline.copy", &json!({"from": 4, "to": 3, "place": "after", "depth": 1, "children": false})).unwrap();
+        let t = texts(&s);
+        assert_eq!(t.len(), n + 1, "{t:?}");
+        assert!(t[4].starts_with("جـ.") && t[4].contains("الثاني"), "{t:?}");
+        // an item can be copied right after itself
+        let mut s = doc(SAMPLE);
+        s.run("service.outline.copy", &json!({"from": 0, "to": 0, "place": "after"})).unwrap();
+        assert_eq!(texts(&s).len(), n + 4);
+        assert!(outline(&s).iter().filter(|n| n.depth == 0 && n.numbered).count() == 4);
     }
 
     #[test]
