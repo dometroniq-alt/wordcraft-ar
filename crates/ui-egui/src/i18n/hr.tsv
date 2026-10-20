@@ -217,6 +217,7 @@
 	AutoSave saves every change to the file (needs a saved document)	Automatsko spremanje sprema svaku promjenu u datoteku (potreban je spremljen dokument)
 	AutoSave writes your changes to the file a moment after you stop typing.	Automatsko spremanje zapisuje vaše promjene u datoteku trenutak nakon što prestanete tipkati.
 	AutoText	Automatski tekst
+	Auto\nNumber	Auto-\nnumeriranje
 	Automatic	Automatski
 	Automatic ({language})	Automatski ({language})
 	Automatic ({region})	Automatski ({region})

@@ -227,6 +227,7 @@
 	AutoSave saves every change to the file (needs a saved document)	يحفظ الحفظ التلقائي كل تغيير في الملف (يتطلب مستندًا محفوظًا)
 	AutoSave writes your changes to the file a moment after you stop typing.	يكتب الحفظ التلقائي تغييراتك في الملف بعد لحظة من توقفك عن الكتابة.
 	AutoText	نص تلقائي
+	Auto\nNumber	ترقيم\nتلقائي
 	Automatic	تلقائي
 	Automatic ({language})	تلقائي ({language})
 	Automatic ({region})	تلقائي ({region})
