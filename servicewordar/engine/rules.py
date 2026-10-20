@@ -30,7 +30,7 @@ DEFAULT_RULES = {
         "classification": "محدود",
         # footer page line "( PAGE - END )": start = number of the first content page, end = last page
         # number typed (None = automatic NUMPAGES field); digits in Arabic-Indic via the field switch
-        "numbering": {"enabled": True, "start": 1, "end": None, "digits": "arabic_indic"},
+        "numbering": {"enabled": True, "start": 1, "end": None, "digits": "unicode"},
     },
     "layout": {
         "base_indent": 0,                       # twips from the right margin for the top level

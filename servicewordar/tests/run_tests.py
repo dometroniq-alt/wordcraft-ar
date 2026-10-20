@@ -104,6 +104,8 @@ ok = all(cols[str(d)] == cols[str(pd)] + round(tg[str(pd)]) - dn[str(pd)] for pd
 check("child column = parent's dot ink start (every level)", ok and len(ds) >= 3, str((cols, tg, dn)))
 rep_end = Formatter({"layout": {"child_start": "dot_ink_end"}}).format_file(src, dst + ".x.docx")
 check("child_start=dot_ink_end keeps the old (further left) column", rep_end["summary"]["child_columns_twips"][str(ds[-1])] > cols[str(ds[-1])])
+from engine.rules import DEFAULT_RULES as _DR
+check("footer digits default = real Arabic-Indic characters (no font trick)", _DR["page"]["numbering"]["digits"] == "unicode" if "page" in _DR else _DR.get("numbering", {}).get("digits") == "unicode", str(_DR.get("page")))
 
 # ---- header / footer on the real-structure sample (synthetic doc has none; check the engine on src if present)
 sample = os.path.join(os.path.dirname(HERE), "..", "src11.docx")

@@ -141,7 +141,7 @@ def stamp_pdf(pdf_in: str, pdf_out: str, start: int, end, font_path: str, size_p
     reader = PdfReader(pdf_in)
     writer = PdfWriter()
     total_pages = len(reader.pages)
-    conv = N.to_arabic_indic if digits == "arabic_indic" else (lambda s: s)
+    conv = N.to_arabic_indic if digits in ("arabic_indic", "unicode") else (lambda s: s)
     # pages that carry a footer (the cover does not)
     numbered = []
     for i, page in enumerate(reader.pages):
@@ -169,7 +169,7 @@ def stamp_pdf(pdf_in: str, pdf_out: str, start: int, end, font_path: str, size_p
             # visual order for a right-to-left reader: page number on the right, last page on the left
             label = f"( {conv(str(last))} - {conv(str(n))} )"
             buf = io.BytesIO()
-            c = canvas.Canvas(buf, pagesize=(wdt, hgt))
+            c = canvas.Canvas(buf, pagesize=(wdt, hgt), initialFontName="StampFont")
             c.setFont("StampFont", size_pt)
             c.drawCentredString(wdt / 2.0, y, label)
             c.save()
@@ -246,10 +246,19 @@ def final_pdf(docx_path: str, out_pdf: str, rules: dict, font_dirs=None) -> dict
             if os.path.exists(cand):
                 font_path = cand
                 break
+    if font_path is None:   # Linux/macOS: any installed bold serif/sans that has the Arabic-Indic digits
+        try:
+            for fam in ("Times New Roman:bold", "Arial:bold", "Liberation Serif:bold", "DejaVu Sans:bold"):
+                got = subprocess.run(["fc-match", "-f", "%{file}", fam], capture_output=True, text=True).stdout.strip()
+                if got and os.path.exists(got):
+                    font_path = got
+                    break
+        except Exception:
+            pass
     if font_path is None:
         raise RuntimeError("لم أجد ملف خط لكتابة أرقام الصفحات (ضع timesbd.ttf في مجلد fonts).")
     rep = stamp_pdf(rendered, out_pdf, int(num.get("start", 1) or 1), num.get("end"), font_path,
-                    float(info.get("footer_size") or 12.0), cls, digits=num.get("digits", "arabic_indic"))
+                    float(info.get("footer_size") or 12.0), cls, digits=num.get("digits", "unicode"))
     rep["renderer"] = "LibreOffice" if find_soffice() else "Microsoft Word"
     rep["output"] = out_pdf
     # the formatted .docx gets the real count as the cached field value (Word recomputes it anyway)

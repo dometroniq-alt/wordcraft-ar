@@ -1770,6 +1770,8 @@ class Formatter:
                 if pn is None:
                     pn = _set_child(sect, "pgNumType", SECT_ORDER)
                 pn.set(w("start"), str(start))
+                if num.get("digits", "unicode") == "unicode":
+                    pn.set(w("fmt"), "hindiNumbers")   # PAGE is drawn with real Arabic-Indic digits ٠١٢…
                 if split:
                     tp = sect.find(w("titlePg"))
                     if tp is not None:
@@ -1777,7 +1779,7 @@ class Formatter:
             changed["cover_section"] = split
         # digits font: Latin digits drawn with Arabic-Indic shapes, embedded in the file
         self._digits_font = None
-        if num.get("enabled", True) and num.get("digits", "arabic_indic") == "arabic_indic":
+        if num.get("enabled", True) and num.get("digits", "unicode") == "arabic_indic":   # legacy font trick
             here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
             ttf = os.path.join(here, "fonts", "ServiceWordDigits.ttf")
             if os.path.exists(ttf):
@@ -1822,7 +1824,7 @@ class Formatter:
         for child in list(p):
             if etree.QName(child).localname != "pPr":
                 p.remove(child)
-        digits = num.get("digits", "arabic_indic") == "arabic_indic"
+        digits = num.get("digits", "unicode") in ("arabic_indic", "unicode")
         dfont = getattr(self, "_digits_font", None)
         k = getattr(self, "_page_offset", 0)
 
@@ -1867,7 +1869,7 @@ class Formatter:
         start = int(num.get("start", 1) or 1)
         end = num.get("end")
         run(text="( ")
-        field("PAGE", conv(start))
+        field("PAGE \\* HindiArabic" if num.get("digits", "unicode") == "unicode" else "PAGE", conv(start))
         run(text=" - ")
         if end:
             run(text=conv(int(end)), digits_font=True)
