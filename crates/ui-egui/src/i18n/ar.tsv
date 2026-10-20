@@ -211,6 +211,7 @@
 	Author	المؤلف
 	Auto	تلقائي
 	Auto ({percent}%)	تلقائي ({percent}%)
+	Auto Numbering While Typing	الترقيم التلقائي أثناء الكتابة
 	AutoCorrect	التصحيح التلقائي
 	AutoCorrect Options	خيارات التصحيح التلقائي
 	AutoFit	احتواء تلقائي
@@ -1564,6 +1565,7 @@
 	Number style for this level:	نمط الترقيم لهذا المستوى:
 	Number the equation; the number sits at the right margin (or type # then the number)	ترقيم المعادلة؛ يوضع الرقم عند الهامش الأيمن (أو اكتب # ثم الرقم)
 	Numbering	الترقيم
+	Numbering while you type: press Enter after «أ.» and the next marker «ب.» is written for you; Tab on a fresh marker steps one level in («أولاً.»), Shift+Tab one level out. Click again to switch it off and type plain text. Example: «١. المهمة» Enter gives «٢.».	الترقيم أثناء الكتابة: اضغط Enter بعد «أ.» فيُكتب لك المؤشر التالي «ب.»؛ ومفتاح Tab على مؤشر جديد ينزل مستوى واحدًا («أولاً.») وShift+Tab يصعد مستوى. اضغط مرة أخرى لإيقافه وكتابة نص عادي. مثال: «١. المهمة» ثم Enter تعطي «٢.».
 	Numbering:	الترقيم:
 	Numbering…	الترقيم…
 	Numerals	الأرقام
