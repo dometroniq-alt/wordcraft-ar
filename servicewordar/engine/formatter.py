@@ -682,6 +682,8 @@ class Formatter:
         # 3) indents: the child column starts where the INK of the parent's dot ends (not the glyph cell)
         depths = sorted(target)
         ink_inset = {}   # depth -> twips between the dot cell's far edge and the dot's ink
+        dot_near = {}    # depth -> twips between the dot cell's far edge and the START-side edge of the dot's ink
+        child_start = str(L.get("child_start", "dot_ink_start"))
         for pa in paras:
             if pa.kind is None:
                 continue
@@ -696,7 +698,20 @@ class Formatter:
             else:
                 eb = self.fonts.edge_bearings(core, fam, size, bold) if core else None
             ink_inset[d] = int(round(eb[1])) if eb else 0
+            # geometry of the level's DOT (last glyph of the marker) alone: advance and ink bearings
+            dot_ch = (tail or core or "")[-1:]
+            if dot_ch:
+                if tail:
+                    adv = self.fonts.width_twips(dot_ch, pf, ps, pb)
+                    deb = self.fonts.edge_bearings(dot_ch, pf, ps, pb)
+                else:
+                    adv = self.fonts.width_twips(dot_ch, fam, size, bold)
+                    deb = self.fonts.edge_bearings(dot_ch, fam, size, bold)
+                if deb:
+                    # distance from the far edge of the dot's cell to the NEAR (start-side) edge of its ink
+                    dot_near[d] = int(round(adv - deb[0]))
         self.report["summary"]["dot_ink_inset_twips"] = {str(k): v for k, v in ink_inset.items()}
+        self.report["summary"]["dot_ink_start_twips"] = {str(k): v for k, v in dot_near.items()}
         col = {}
         for d in depths:
             prev = [x for x in depths if x < d]
@@ -708,8 +723,13 @@ class Formatter:
             else:
                 pd = prev[-1]
                 # the parent's dot cell ends at col[pd] + target[pd]; its ink ends ink_inset earlier
-                col[d] = int(round(col[pd] + target[pd] - ink_inset.get(pd, 0)))
-        self.report["summary"]["dot_ink_inset_twips"] = {str(k): v for k, v in ink_inset.items()}
+                if child_start == "dot_ink_start" and pd in dot_near:
+                    # children (numbered items, sub-headings) START exactly where the parent's dot starts:
+                    # the first ink of their marker lies on the vertical line of that dot
+                    col[d] = int(round(col[pd] + target[pd] - dot_near[pd]))
+                else:
+                    col[d] = int(round(col[pd] + target[pd] - ink_inset.get(pd, 0)))
+        self.report["summary"]["child_columns_twips"] = {str(k): v for k, v in col.items()}
         for pa in paras:
             if pa.role in ("empty", "pagebreak", "cover"):
                 continue
@@ -746,7 +766,12 @@ class Formatter:
                 pa.layout.update({"column": ms, "marker_start": ms + off, "dot_column": ms + int(round(tg[pa._grp])), "hanging": hang, "left": L})
             else:  # body text under a heading: starts at the parent's dot column, no hanging
                 pd = max([x for x in depths if x < d], default=None)
-                L = base if pd is None else col[pd] + int(round(target[pd])) - ink_inset.get(pd, 0)
+                if pd is None:
+                    L = base
+                elif child_start == "dot_ink_start" and pd in dot_near:
+                    L = int(round(col[pd] + target[pd] - dot_near[pd]))
+                else:
+                    L = col[pd] + int(round(target[pd])) - ink_inset.get(pd, 0)
                 _set_child(ppr, "ind", PPR_ORDER, {"left": L, "hanging": 0, "firstLine": 0})
                 _set_child(ppr, "tabs", PPR_ORDER, remove=True)
                 pa.layout.update({"left": L})
@@ -783,6 +808,10 @@ class Formatter:
         diameter is made `dot_weight` x that stroke, so heavy display fonts get a dot that matches them."""
         fam, bold, size = self._run_font(pa.marker_run, pa.el)
         cfg = self.rules["numbering"]
+        if not cfg.get("punct_own_font", False):
+            # the dot / parentheses are drawn in the marker's own font and size (the role font is applied to
+            # every run of the paragraph), so that is also what the width model must measure
+            return fam, bold, size
         pf = cfg.get("dot_font") or fam
         if pa.kind in (0, 3) and not cfg.get("scale_digit_parens", False):
             return pf, bold, size
@@ -1649,12 +1678,16 @@ class Formatter:
         bold = role_cfg.get("bold")
         underline = role_cfg.get("underline")
         color = self.rules["fonts"].get("force_color")
+        own_punct = bool(self.rules["numbering"].get("punct_own_font", False))
+        core_run = getattr(pa, "marker_run", None)
+        punct_runs = [m for m in (getattr(pa, "marker_runs", None) or []) if m is not core_run] if own_punct else []
         for r in pa.el.iter(w("r")):
             rpr = _get_rpr(r)
-            if font:
+            skip_fs = any(r is m for m in punct_runs)   # dot/parens keep their own font and size
+            if font and not skip_fs:
                 _set_child(rpr, "rFonts", RPR_ORDER, {"ascii": font, "hAnsi": font, "cs": font, "eastAsia": font})
                 pa.changes.append("font_set")
-            if size:
+            if size and not skip_fs:
                 _set_child(rpr, "sz", RPR_ORDER, {"val": int(size * 2)})
                 _set_child(rpr, "szCs", RPR_ORDER, {"val": int(size * 2)})
                 pa.changes.append("size_set")

@@ -17,6 +17,7 @@ DEFAULT_RULES = {
         "marker_width_factor": 1.05,    # safety factor for wide/bold fonts
         "keep_top_level_start": False,
         "first_level_is_top": True,
+        "punct_own_font": False,        # False: dot/parentheses use the marker's own font+size (what is really drawn)
         "dot_font": "Times New Roman",  # the dot / parentheses of every marker are drawn in this font
         "dot_weight": 1.4,              # dot diameter = 1.4 x the marker font's stroke width (sized automatically)
         "scale_digit_parens": False,    # keep (١) parentheses at the digit size     # the shallowest level in the file becomes level 1 (١.) even if typed as أ.
@@ -47,6 +48,7 @@ DEFAULT_RULES = {
         "tight_fit_min": 0.965,                 # a line fuller than this is justified normally (no distribute)
         "keep_first_item": True,
         "fold_page_breaks": True,               # lone page-break paragraphs become "page break before" on the next paragraph
+        "child_start": "dot_ink_start",         # children (items, sub-headings, body) start on the parent's dot; dot_ink_end = old
         "equalize_to_widest": True,             # every marker of a level reaches the width of the widest one («ثاني عشر.» included): dots on one line, text on one column
         "natural_item_markers": False,          # True = items keep their natural marker width (hanging per item)
         "kashida_max_per_joint": 3,             # a short line never gets one long bar: above this many tatweels per word, a second gentle stretch is added mid-word

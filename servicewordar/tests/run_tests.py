@@ -96,6 +96,15 @@ check("hanging = text starts after marker+space", l4 - h4 == ms(4), f"{l4}-{h4} 
 check("indents are integers", all(int(e.get(W+"left")) >= 0 for e in root.iter(W+"ind")))
 check("original untouched", open(src, "rb").read() != open(dst, "rb").read())
 
+# ---- children start exactly where the parent's dot starts (ink line), at every level
+sm = rep["summary"]
+cols, tg, dn = sm["child_columns_twips"], sm["marker_columns_twips"], sm["dot_ink_start_twips"]
+ds = sorted(int(k) for k in cols)
+ok = all(cols[str(d)] == cols[str(pd)] + round(tg[str(pd)]) - dn[str(pd)] for pd, d in zip(ds, ds[1:]) if str(pd) in dn)
+check("child column = parent's dot ink start (every level)", ok and len(ds) >= 3, str((cols, tg, dn)))
+rep_end = Formatter({"layout": {"child_start": "dot_ink_end"}}).format_file(src, dst + ".x.docx")
+check("child_start=dot_ink_end keeps the old (further left) column", rep_end["summary"]["child_columns_twips"][str(ds[-1])] > cols[str(ds[-1])])
+
 # ---- header / footer on the real-structure sample (synthetic doc has none; check the engine on src if present)
 sample = os.path.join(os.path.dirname(HERE), "..", "src11.docx")
 if os.path.exists(sample):
