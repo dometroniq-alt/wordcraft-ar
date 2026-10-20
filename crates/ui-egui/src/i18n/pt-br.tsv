@@ -2323,3 +2323,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Envia este documento para o DeckCraft AR como slides: cada título inicia um slide, texto longo continua no próximo, e a direção da direita para a esquerda e a kashida são mantidas. Exemplo: uma circular de 3 páginas vira 6 slides, «Deveres (2)» continuando «Deveres».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Envia este documento para o GridCraft AR como pasta de trabalho: cada tabela ganha sua própria planilha e o texto vai para uma planilha «Text», mantendo em cada célula a direção da direita para a esquerda e a kashida. Exemplo: uma tabela de deveres de 12 linhas vira uma planilha com o nome do título, pronta para ordenar e filtrar.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Abre um arquivo de intercâmbio Craft (.craftx) enviado pelo DeckCraft AR ou GridCraft AR como novo documento: cada slide vira um título com seu texto, as anotações em itálico e as tabelas continuam tabelas. Exemplo: uma apresentação de 6 slides volta como seis seções com título.
+	Numbering Outline	Estrutura da numeração
+	Numbering\nOutline	Estrutura da\nnumeração
+	Move Numbered Item	Mover item numerado
+	Change Item Level	Alterar nível do item
+	Take Out of Numbering	Tirar da numeração
+	Put into Numbering	Incluir na numeração
+	Remove Numbering Level	Remover nível de numeração
+	Edit Numbered Item	Editar item numerado
+	Apply to every item of the selected card's level	Aplicar a todos os itens do nível do cartão selecionado
+	Collapse all items	Recolher todos os itens
+	Expand all items	Expandir todos os itens
+	Find an item	Localizar um item
+	Put every marker on the service cycle again	Recolocar todos os marcadores no ciclo de serviço
+	Put into the numbering	Incluir na numeração
+	Remove a level…	Remover um nível…
+	Renumber	Renumerar
+	Show a preview of each main item	Mostrar uma prévia de cada item principal
+	Show explanations under the items	Mostrar as explicações sob os itens
+	This item	Este item
+	{items} numbered items · {notes} explanations	{items} itens numerados · {notes} explicações

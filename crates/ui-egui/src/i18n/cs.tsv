@@ -2702,3 +2702,23 @@ preview	Title	Ukázka
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Odešle tento dokument do DeckCraft AR jako snímky: každý nadpis začíná snímek, dlouhý text pokračuje na dalším, směr zprava doleva a kašída se zachovají. Příklad: 3stránkový oběžník se stane 6 snímky, «Povinnosti (2)» navazuje na «Povinnosti».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Odešle tento dokument do GridCraft AR jako sešit: každá tabulka dostane vlastní list a text jde na list «Text», směr zprava doleva a kašída se zachovají v každé buňce. Příklad: tabulka povinností o 12 řádcích se stane listem pojmenovaným podle nadpisu, připraveným k řazení a filtrování.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Otevře soubor výměny Craft (.craftx), který poslal DeckCraft AR nebo GridCraft AR, jako nový dokument: každý snímek se stane nadpisem s textem, poznámky kurzívou a tabulky zůstanou tabulkami. Příklad: prezentace o 6 snímcích se vrátí jako šest oddílů s nadpisy.
+	Numbering Outline	Přehled číslování
+	Numbering\nOutline	Přehled\nčíslování
+	Move Numbered Item	Přesunout číslovanou položku
+	Change Item Level	Změnit úroveň položky
+	Take Out of Numbering	Vyjmout z číslování
+	Put into Numbering	Zařadit do číslování
+	Remove Numbering Level	Odebrat úroveň číslování
+	Edit Numbered Item	Upravit číslovanou položku
+	Apply to every item of the selected card's level	Použít na všechny položky úrovně vybrané karty
+	Collapse all items	Sbalit všechny položky
+	Expand all items	Rozbalit všechny položky
+	Find an item	Najít položku
+	Put every marker on the service cycle again	Vrátit všechny značky do služebního cyklu
+	Put into the numbering	Zařadit do číslování
+	Remove a level…	Odebrat úroveň…
+	Renumber	Přečíslovat
+	Show a preview of each main item	Zobrazit náhled každé hlavní položky
+	Show explanations under the items	Zobrazit vysvětlivky pod položkami
+	This item	Tato položka
+	{items} numbered items · {notes} explanations	{items} číslovaných položek · {notes} vysvětlivek

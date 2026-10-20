@@ -2699,3 +2699,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Изпраща документа към DeckCraft AR като слайдове: всяко заглавие започва слайд, дългият текст продължава на следващия, посоката отдясно наляво и кашидата се запазват. Пример: 3-странично циркулярно писмо става 6 слайда, «Задължения (2)» продължава «Задължения».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Изпраща документа към GridCraft AR като работна книга: всяка таблица получава свой лист, а текстът отива в лист «Text», посоката отдясно наляво и кашидата се пазят във всяка клетка. Пример: таблица със задължения от 12 реда става лист с името на заглавието си, готов за сортиране и филтриране.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Отваря файл за обмен Craft (.craftx), изпратен от DeckCraft AR или GridCraft AR, като нов документ: всеки слайд става заглавие с текста си, бележките в курсив, а таблиците остават таблици. Пример: презентация от 6 слайда се връща като шест озаглавени раздела.
+	Numbering Outline	Контур на номерацията
+	Numbering\nOutline	Контур на\nномерацията
+	Move Numbered Item	Преместване на номериран елемент
+	Change Item Level	Промяна на нивото на елемент
+	Take Out of Numbering	Изваждане от номерацията
+	Put into Numbering	Включване в номерацията
+	Remove Numbering Level	Премахване на ниво на номерация
+	Edit Numbered Item	Редактиране на номериран елемент
+	Apply to every item of the selected card's level	Прилагане към всички елементи от нивото на избраната карта
+	Collapse all items	Свиване на всички елементи
+	Expand all items	Разгъване на всички елементи
+	Find an item	Намиране на елемент
+	Put every marker on the service cycle again	Връщане на всички маркери към служебния цикъл
+	Put into the numbering	Включване в номерацията
+	Remove a level…	Премахване на ниво…
+	Renumber	Преномериране
+	Show a preview of each main item	Показване на преглед на всеки основен елемент
+	Show explanations under the items	Показване на пояснения под елементите
+	This item	Този елемент
+	{items} numbered items · {notes} explanations	{items} номерирани елемента · {notes} пояснения

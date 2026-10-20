@@ -2725,3 +2725,23 @@ preview	Title	Titel
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Skickar dokumentet till DeckCraft AR som bilder: varje rubrik börjar en bild, lång text fortsätter på nästa, höger-till-vänster och kashida behålls. Exempel: ett 3-sidigt cirkulär blir 6 bilder, «Plikter (2)» fortsätter «Plikter».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Skickar dokumentet till GridCraft AR som en arbetsbok: varje tabell får ett eget blad och texten ett blad «Text», höger-till-vänster och kashida behålls i varje cell. Exempel: en plikttabell med 12 rader blir ett blad namngivet efter sin rubrik, klart att sortera och filtrera.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Öppnar en Craft-utbytesfil (.craftx) från DeckCraft AR eller GridCraft AR som ett nytt dokument: varje bild blir en rubrik med sin text, anteckningar i kursiv, tabeller förblir tabeller. Exempel: en presentation med 6 bilder kommer tillbaka som sex rubricerade avsnitt.
+	Numbering Outline	Numreringsdisposition
+	Numbering\nOutline	Numrerings-\ndisposition
+	Move Numbered Item	Flytta numrerad post
+	Change Item Level	Ändra postens nivå
+	Take Out of Numbering	Ta bort från numreringen
+	Put into Numbering	Ta med i numreringen
+	Remove Numbering Level	Ta bort numreringsnivå
+	Edit Numbered Item	Redigera numrerad post
+	Apply to every item of the selected card's level	Använd på alla poster på det valda kortets nivå
+	Collapse all items	Fäll ihop alla poster
+	Expand all items	Expandera alla poster
+	Find an item	Hitta en post
+	Put every marker on the service cycle again	Sätt alla markörer på tjänstecykeln igen
+	Put into the numbering	Ta med i numreringen
+	Remove a level…	Ta bort en nivå…
+	Renumber	Numrera om
+	Show a preview of each main item	Visa en förhandsvisning av varje huvudpost
+	Show explanations under the items	Visa förklaringar under posterna
+	This item	Den här posten
+	{items} numbered items · {notes} explanations	{items} numrerade poster · {notes} förklaringar

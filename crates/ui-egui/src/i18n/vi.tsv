@@ -2750,3 +2750,23 @@ template	Letter	Thư
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Gửi tài liệu này tới DeckCraft AR dưới dạng trang chiếu: mỗi tiêu đề bắt đầu một trang, văn bản dài tiếp sang trang sau, hướng phải-sang-trái và kashida được giữ. Ví dụ: một thông tư 3 trang thành 6 trang chiếu, «Nhiệm vụ (2)» tiếp «Nhiệm vụ».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Gửi tài liệu này tới GridCraft AR dưới dạng sổ tính: mỗi bảng có trang tính riêng, văn bản vào trang «Text», hướng phải-sang-trái và kashida được giữ trong từng ô. Ví dụ: bảng nhiệm vụ 12 hàng thành một trang tính mang tên tiêu đề, sẵn sàng sắp xếp và lọc.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Mở tệp trao đổi Craft (.craftx) do DeckCraft AR hoặc GridCraft AR gửi thành tài liệu mới: mỗi trang chiếu thành một tiêu đề kèm văn bản, ghi chú in nghiêng, bảng vẫn là bảng. Ví dụ: bộ 6 trang chiếu trở về thành sáu mục có tiêu đề.
+	Numbering Outline	Dàn ý đánh số
+	Numbering\nOutline	Dàn ý\nđánh số
+	Move Numbered Item	Di chuyển mục đã đánh số
+	Change Item Level	Đổi cấp của mục
+	Take Out of Numbering	Đưa ra khỏi đánh số
+	Put into Numbering	Đưa vào đánh số
+	Remove Numbering Level	Xóa cấp đánh số
+	Edit Numbered Item	Sửa mục đã đánh số
+	Apply to every item of the selected card's level	Áp dụng cho mọi mục cùng cấp với thẻ đã chọn
+	Collapse all items	Thu gọn mọi mục
+	Expand all items	Mở rộng mọi mục
+	Find an item	Tìm một mục
+	Put every marker on the service cycle again	Đưa mọi ký hiệu về chu trình công vụ
+	Put into the numbering	Đưa vào đánh số
+	Remove a level…	Xóa một cấp…
+	Renumber	Đánh số lại
+	Show a preview of each main item	Hiện xem trước của từng mục chính
+	Show explanations under the items	Hiện phần giải thích dưới các mục
+	This item	Mục này
+	{items} numbered items · {notes} explanations	{items} mục đã đánh số · {notes} phần giải thích

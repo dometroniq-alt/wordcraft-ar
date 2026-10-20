@@ -423,6 +423,11 @@ pub fn preview_tint(t: &Tokens, dark_page: bool) -> egui::Color32 {
     if t.dark && !dark_page { egui::Color32::from_gray(0xC8) } else { egui::Color32::WHITE }
 }
 
+/// Several body blocks rendered as one thumbnail (the Numbering Outline's preview of an item).
+pub fn blocks_snippet(base: &Document, blocks: Vec<Block>, w: f32, h: f32, ppp: f32, margin: f32) -> Option<egui::ColorImage> {
+    snippet_blocks(base, blocks, w, h, ppp, margin, None, false)
+}
+
 fn snippet_blocks(
     base: &Document,
     blocks: Vec<Block>,

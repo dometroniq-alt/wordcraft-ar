@@ -1852,6 +1852,10 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
             );
         });
     });
+    group(ui, "Outline", None, app, |ui, app| {
+        let on = app.session.view.service_outline_pane;
+        big_toggle(ui, app, "serviceOutline", "Numbering\nOutline", "view.serviceOutlinePane", on);
+    });
     group(ui, "Classification", None, app, |ui, app| {
         menu_button(ui, app, "classification", Some("Classification"), "Classification", true, "service.classification", |ui, app| {
             for c in wordcraft_engine::cmd::service::CLASSIFICATIONS {

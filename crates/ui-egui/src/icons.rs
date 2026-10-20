@@ -384,6 +384,7 @@ pub const NAMES: &[&str] = &[
     "serviceRenumber",
     "serviceList",
     "serviceAuto",
+    "serviceOutline",
     "finalDot",
     "serviceSelection",
     "classification",
@@ -1804,6 +1805,18 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
             pen.line_c(&[(8.5, 10.5), (6.0, 12.5), (8.5, 14.5)], a);
             pen.text(18.0, 17.0, 8.0, "ب.", a, true);
             pen.line(&[(2.0, 17.0), (11.0, 17.0)]);
+        }
+        "serviceOutline" => {
+            // The outline as cards: a main card with its sub-cards stepped in under it.
+            pen.rect(2.0, 2.5, 18.0, 7.0, a);
+            pen.text(15.5, 4.8, 5.5, "١.", a, true);
+            pen.line_c(&[(3.5, 4.8), (11.0, 4.8)], a);
+            pen.rect(2.0, 9.0, 14.0, 13.0, c);
+            pen.text(11.5, 11.0, 4.5, "أ.", c, true);
+            pen.line(&[(3.5, 11.0), (8.0, 11.0)]);
+            pen.rect(2.0, 14.5, 14.0, 18.5, c);
+            pen.text(11.5, 16.5, 4.5, "ب.", c, true);
+            pen.line(&[(3.5, 16.5), (8.0, 16.5)]);
         }
         "finalDot" => {
             // Right-to-left lines, each ending (at its left) in a firm dot.

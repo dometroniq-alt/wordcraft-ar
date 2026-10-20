@@ -2708,3 +2708,23 @@ preview	Title	Пример
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Отправляет документ в DeckCraft AR слайдами: каждый заголовок начинает слайд, длинный текст продолжается на следующем, направление справа налево и кашида сохраняются. Пример: 3-страничный циркуляр становится 6 слайдами, «Обязанности (2)» продолжает «Обязанности».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Отправляет документ в GridCraft AR книгой: каждая таблица на своём листе, текст — на листе «Text», направление справа налево и кашида сохраняются в каждой ячейке. Пример: таблица обязанностей из 12 строк становится листом с именем заголовка, готовым к сортировке и фильтрации.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Открывает файл обмена Craft (.craftx), присланный DeckCraft AR или GridCraft AR, как новый документ: каждый слайд становится заголовком с текстом, заметки — курсивом, таблицы остаются таблицами. Пример: презентация из 6 слайдов возвращается шестью разделами с заголовками.
+	Numbering Outline	Структура нумерации
+	Numbering\nOutline	Структура\nнумерации
+	Move Numbered Item	Переместить пронумерованный пункт
+	Change Item Level	Изменить уровень пункта
+	Take Out of Numbering	Убрать из нумерации
+	Put into Numbering	Включить в нумерацию
+	Remove Numbering Level	Удалить уровень нумерации
+	Edit Numbered Item	Изменить пронумерованный пункт
+	Apply to every item of the selected card's level	Применить ко всем пунктам уровня выбранной карточки
+	Collapse all items	Свернуть все пункты
+	Expand all items	Развернуть все пункты
+	Find an item	Найти пункт
+	Put every marker on the service cycle again	Снова привести все маркеры к служебному циклу
+	Put into the numbering	Включить в нумерацию
+	Remove a level…	Удалить уровень…
+	Renumber	Перенумеровать
+	Show a preview of each main item	Показывать предпросмотр каждого главного пункта
+	Show explanations under the items	Показывать пояснения под пунктами
+	This item	Этот пункт
+	{items} numbered items · {notes} explanations	Пронумерованных пунктов: {items} · пояснений: {notes}

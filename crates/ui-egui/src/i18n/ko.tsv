@@ -2566,3 +2566,23 @@ preview	Title	제목
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	이 문서를 슬라이드로 DeckCraft AR에 보냅니다. 제목마다 슬라이드가 시작되고, 긴 글은 다음 슬라이드로 이어지며, 오른쪽에서 왼쪽 방향과 카시다가 유지됩니다. 예: 3쪽 회람이 6장의 슬라이드가 되고 «임무 (2)»가 «임무»를 이어갑니다.
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	이 문서를 통합 문서로 GridCraft AR에 보냅니다. 표마다 시트가 하나씩 만들어지고 글은 «Text» 시트로 가며, 셀마다 오른쪽에서 왼쪽 방향과 카시다가 유지됩니다. 예: 12행 임무표가 제목 이름의 시트가 되어 정렬과 필터링이 가능합니다.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	DeckCraft AR 또는 GridCraft AR이 보낸 Craft 교환 파일(.craftx)을 새 문서로 엽니다. 슬라이드마다 제목과 본문이 되고, 노트는 기울임꼴로, 표는 표로 남습니다. 예: 6장 슬라이드가 제목 달린 여섯 절로 돌아옵니다.
+	Numbering Outline	번호 개요
+	Numbering\nOutline	번호\n개요
+	Move Numbered Item	번호 항목 이동
+	Change Item Level	항목 수준 변경
+	Take Out of Numbering	번호에서 빼기
+	Put into Numbering	번호에 넣기
+	Remove Numbering Level	번호 수준 제거
+	Edit Numbered Item	번호 항목 편집
+	Apply to every item of the selected card's level	선택한 카드 수준의 모든 항목에 적용
+	Collapse all items	모든 항목 접기
+	Expand all items	모든 항목 펼치기
+	Find an item	항목 찾기
+	Put every marker on the service cycle again	모든 표시를 다시 업무 순서로 맞추기
+	Put into the numbering	번호에 넣기
+	Remove a level…	수준 제거…
+	Renumber	번호 다시 매기기
+	Show a preview of each main item	각 주요 항목의 미리보기 표시
+	Show explanations under the items	항목 아래에 설명 표시
+	This item	이 항목
+	{items} numbered items · {notes} explanations	번호 항목 {items}개 · 설명 {notes}개

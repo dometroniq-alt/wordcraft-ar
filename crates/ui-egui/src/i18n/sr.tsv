@@ -2325,3 +2325,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Шаље овај документ у DeckCraft AR као слајдове: сваки наслов почиње слајд, дуги текст се наставља на следећем, смер здесна налево и кашида остају. Пример: циркулар од 3 стране постаје 6 слајдова, «Дужности (2)» наставља «Дужности».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Шаље овај документ у GridCraft AR као радну свеску: свака табела добија свој лист, а текст иде на лист «Text», смер здесна налево и кашида остају у свакој ћелији. Пример: табела дужности од 12 редова постаје лист назван по наслову, спреман за сортирање и филтрирање.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Отвара Craft датотеку размене (.craftx) коју је послао DeckCraft AR или GridCraft AR као нови документ: сваки слајд постаје наслов са текстом, белешке курзивом, а табеле остају табеле. Пример: презентација од 6 слајдова враћа се као шест насловљених одељака.
+	Numbering Outline	Преглед нумерације
+	Numbering\nOutline	Преглед\nнумерације
+	Move Numbered Item	Премести нумерисану ставку
+	Change Item Level	Промени ниво ставке
+	Take Out of Numbering	Извади из нумерације
+	Put into Numbering	Укључи у нумерацију
+	Remove Numbering Level	Уклони ниво нумерације
+	Edit Numbered Item	Уреди нумерисану ставку
+	Apply to every item of the selected card's level	Примени на све ставке нивоа изабране картице
+	Collapse all items	Скупи све ставке
+	Expand all items	Прошири све ставке
+	Find an item	Пронађи ставку
+	Put every marker on the service cycle again	Врати све ознаке на службени циклус
+	Put into the numbering	Укључи у нумерацију
+	Remove a level…	Уклони ниво…
+	Renumber	Поново нумериши
+	Show a preview of each main item	Прикажи преглед сваке главне ставке
+	Show explanations under the items	Прикажи објашњења испод ставки
+	This item	Ова ставка
+	{items} numbered items · {notes} explanations	{items} нумерисаних ставки · {notes} објашњења

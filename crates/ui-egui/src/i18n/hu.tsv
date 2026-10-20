@@ -2706,3 +2706,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Diákként küldi a dokumentumot a DeckCraft AR-nak: minden címsor új diát kezd, a hosszú szöveg a következőn folytatódik, a jobbról balra irány és a kasida megmarad. Példa: egy 3 oldalas körlevél 6 dia lesz, a «Feladatok (2)» a «Feladatok» folytatása.
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Munkafüzetként küldi a dokumentumot a GridCraft AR-nak: minden táblázat saját lapot kap, a szöveg a «Text» lapra kerül, a jobbról balra irány és a kasida minden cellában megmarad. Példa: egy 12 soros feladattáblázat a címsora nevét viselő lap lesz, rendezésre és szűrésre készen.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Új dokumentumként nyitja meg a DeckCraft AR vagy GridCraft AR által küldött Craft-cserefájlt (.craftx): minden dia címsor lesz a szövegével, a jegyzetek dőlten, a táblázatok táblázatok maradnak. Példa: egy 6 diás bemutató hat címsoros szakaszként tér vissza.
+	Numbering Outline	Számozási vázlat
+	Numbering\nOutline	Számozási\nvázlat
+	Move Numbered Item	Számozott elem áthelyezése
+	Change Item Level	Elem szintjének módosítása
+	Take Out of Numbering	Kivétel a számozásból
+	Put into Numbering	Felvétel a számozásba
+	Remove Numbering Level	Számozási szint eltávolítása
+	Edit Numbered Item	Számozott elem szerkesztése
+	Apply to every item of the selected card's level	Alkalmazás a kijelölt kártya szintjének minden elemére
+	Collapse all items	Összes elem összecsukása
+	Expand all items	Összes elem kibontása
+	Find an item	Elem keresése
+	Put every marker on the service cycle again	Minden jelölő visszaállítása a szolgálati ciklusra
+	Put into the numbering	Felvétel a számozásba
+	Remove a level…	Szint eltávolítása…
+	Renumber	Újraszámozás
+	Show a preview of each main item	Minden főelem előnézetének megjelenítése
+	Show explanations under the items	Magyarázatok megjelenítése az elemek alatt
+	This item	Ez az elem
+	{items} numbered items · {notes} explanations	{items} számozott elem · {notes} magyarázat

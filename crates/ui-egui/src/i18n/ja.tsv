@@ -2311,3 +2311,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	この文書をスライドとして DeckCraft AR に送ります。見出しごとにスライドが始まり、長い文は次のスライドに続き、右から左の方向とカシーダは保たれます。例: 3 ページの回状は 6 枚のスライドになり、「任務 (2)」が「任務」を続けます。
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	この文書をブックとして GridCraft AR に送ります。表はそれぞれ別のシートに、本文は「Text」シートに入り、右から左の方向とカシーダは各セルで保たれます。例: 12 行の任務表は見出しの名前のシートになり、並べ替えと絞り込みができます。
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	DeckCraft AR または GridCraft AR が送った Craft 交換ファイル (.craftx) を新しい文書として開きます。各スライドは見出しと本文になり、ノートは斜体、表は表のままです。例: 6 枚のスライドは見出し付きの 6 つの節として戻ります。
+	Numbering Outline	番号アウトライン
+	Numbering\nOutline	番号\nアウトライン
+	Move Numbered Item	番号付き項目を移動
+	Change Item Level	項目のレベルを変更
+	Take Out of Numbering	番号から外す
+	Put into Numbering	番号に含める
+	Remove Numbering Level	番号レベルを削除
+	Edit Numbered Item	番号付き項目を編集
+	Apply to every item of the selected card's level	選択したカードのレベルの全項目に適用
+	Collapse all items	すべての項目を折りたたむ
+	Expand all items	すべての項目を展開
+	Find an item	項目を検索
+	Put every marker on the service cycle again	すべての番号を業務サイクルに戻す
+	Put into the numbering	番号に含める
+	Remove a level…	レベルを削除…
+	Renumber	番号を振り直す
+	Show a preview of each main item	主項目ごとにプレビューを表示
+	Show explanations under the items	項目の下に説明を表示
+	This item	この項目
+	{items} numbered items · {notes} explanations	番号付き項目 {items} 件 · 説明 {notes} 件

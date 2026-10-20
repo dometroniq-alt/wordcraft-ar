@@ -31,6 +31,11 @@ pub const ENTRIES: &[Entry] = &[
         |d| d.auto_number(),
     ),
     Entry::new(
+        "view.serviceOutlinePane",
+        "Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items, drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.",
+        |d| d.outline_pane(),
+    ),
+    Entry::new(
         "service.finalDot",
         "Puts a full stop at the end of every item that lacks one, as service writing requires. Example: «فحص المرضى» becomes «فحص المرضى.».",
         |d| d.final_dot(),
@@ -225,6 +230,31 @@ impl Draw<'_> {
         let key = Rect::from_center_size(pos2(page.min.x + 14.0, page.max.y - 12.0), vec2(22.0, 12.0));
         self.p.rect_stroke(key, 2.0, Stroke::new(1.0, self.t.accent), egui::StrokeKind::Outside);
         self.label(key.center(), "↵", 8.0, self.t.accent, Align2::CENTER_CENTER);
+    }
+
+    /// The outline pane: cards for the numbered items; the top card is dragged under another
+    /// one and the list renumbers.
+    fn outline_pane(&self) {
+        let grey = self.t.text_dim;
+        let page = self.page(30.0, 8.0, 52.0, 88.0);
+        self.text_lines(page.shrink2(vec2(2.0, 6.0)), true, &[34.0, 30.0, 34.0, 26.0, 32.0, 28.0], 12.0, grey);
+        let pane = Rect::from_min_max(pos2(page.max.x + 8.0, page.min.y), pos2(self.at(168.0, 0.0).x, page.max.y));
+        self.p.rect_stroke(pane, 3.0, Stroke::new(1.0, grey), egui::StrokeKind::Inside);
+        let marks = ["١.", "أ.", "ب.", "٢."];
+        let drag = self.reveal(0.2, 0.7);
+        for (i, m) in marks.iter().enumerate() {
+            let moving = i == 3;
+            // The last card is lifted and carried up under the first one.
+            let row = if moving { 3.0 - 2.0 * drag } else { i as f32 };
+            let y = pane.min.y + 10.0 + row * 19.0;
+            let indent = if i == 1 || i == 2 { 10.0 } else { 0.0 };
+            let card = Rect::from_min_max(pos2(pane.min.x + 4.0, y - 7.0), pos2(pane.max.x - 4.0 - indent, y + 7.0));
+            let c = if moving { self.t.accent } else { grey };
+            self.p.rect_filled(card, 3.0, c.linear_multiply(if moving { 0.2 } else { 0.1 }));
+            self.p.rect_stroke(card, 3.0, Stroke::new(1.0, c), egui::StrokeKind::Inside);
+            self.label(pos2(card.max.x - 4.0, y), m, 8.0, c, Align2::RIGHT_CENTER);
+            self.line(pos2(card.min.x + 4.0, y), pos2(card.max.x - 20.0, y), c, 1.5);
+        }
     }
 
     /// The stamp comes down on the header, then on the footer.

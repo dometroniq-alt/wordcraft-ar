@@ -2345,3 +2345,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Saadab selle dokumendi DeckCraft AR-i slaididena: iga pealkiri alustab slaidi, pikk tekst jätkub järgmisel, paremalt vasakule suund ja kašiida säilivad. Näide: 3-leheline ringkiri saab 6 slaidiks, «Kohustused (2)» jätkab «Kohustused».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Saadab selle dokumendi GridCraft AR-i töövihikuna: iga tabel saab oma lehe ja tekst läheb lehele «Text», paremalt vasakule suund ja kašiida säilivad igas lahtris. Näide: 12-realine kohustuste tabel saab pealkirja järgi nimetatud leheks, valmis sortimiseks ja filtreerimiseks.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Avab DeckCraft AR-i või GridCraft AR-i saadetud Craft-vahetusfaili (.craftx) uue dokumendina: iga slaid saab pealkirjaks oma tekstiga, märkmed kaldkirjas, tabelid jäävad tabeliteks. Näide: 6 slaidi esitlus tuleb tagasi kuue pealkirjaga jaotisena.
+	Numbering Outline	Nummerduse struktuur
+	Numbering\nOutline	Nummerduse\nstruktuur
+	Move Numbered Item	Teisalda nummerdatud kirje
+	Change Item Level	Muuda kirje taset
+	Take Out of Numbering	Võta nummerdusest välja
+	Put into Numbering	Lisa nummerdusse
+	Remove Numbering Level	Eemalda nummerduse tase
+	Edit Numbered Item	Muuda nummerdatud kirjet
+	Apply to every item of the selected card's level	Rakenda valitud kaardi taseme kõigile kirjetele
+	Collapse all items	Ahenda kõik kirjed
+	Expand all items	Laienda kõik kirjed
+	Find an item	Leia kirje
+	Put every marker on the service cycle again	Pane kõik märgid uuesti teenistustsüklisse
+	Put into the numbering	Lisa nummerdusse
+	Remove a level…	Eemalda tase…
+	Renumber	Nummerda uuesti
+	Show a preview of each main item	Näita iga põhikirje eelvaadet
+	Show explanations under the items	Näita selgitusi kirjete all
+	This item	See kirje
+	{items} numbered items · {notes} explanations	{items} nummerdatud kirjet · {notes} selgitust

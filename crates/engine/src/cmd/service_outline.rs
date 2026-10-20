@@ -32,8 +32,14 @@ pub fn specs() -> Vec<CommandSpec> {
         CommandSpec::new("service.outline", "Numbering Outline", "Service › Outline", |s, _| Ok(json!({"nodes": outline(s)}))).pure().params(
             r#"→ {"nodes": [{"index", "depth", "numbered", "marker", "text", "end"}]}: the document's numbered items as a tree in document order (`index` is the body block, `end` the last block of the item with its sub-items and explanations)"#,
         ),
+        CommandSpec::new("view.serviceOutlinePane", "Numbering Outline", "Service › Outline", |s, v| {
+            s.view.service_outline_pane = p::bool(v, "value").unwrap_or(!s.view.service_outline_pane);
+            Ok(json!({"value": s.view.service_outline_pane}))
+        })
+        .params(r#"{"value"?: bool (default: toggle)} — the Numbering Outline pane beside the page"#)
+        .pure(),
         CommandSpec::new("service.outline.move", "Move Numbered Item", "Service › Outline", move_node)
-            .params(r#"{"from": block index, "to": block index, "place": "before|after|into"} — the item with its sub-items goes there and takes the level of its new place; the list renumbers"#),
+            .params(r#"{"from": block index, "to": block index, "place": "before|after|into", "numbered"?: bool} — the item with its sub-items goes there and takes the level of its new place; a plain paragraph dropped with `numbered` joins the numbering there; the list renumbers"#),
         CommandSpec::new("service.outline.setLevel", "Change Item Level", "Service › Outline", set_level)
             .params(r#"{"index": block index, "delta"?: -1|1, "depth"?: level} — promote or demote an item with its sub-items"#),
         CommandSpec::new("service.outline.detach", "Take Out of Numbering", "Service › Outline", detach)
@@ -260,7 +266,7 @@ fn move_node(s: &mut Session, v: &Value) -> CmdResult {
     }
     let span_len = a.end - a.index + 1;
     if span_len >= s.doc.body.len() {
-        return Ok(reply(s, 0)?);
+        return reply(s, 0);
     }
     let new_depth = if place == "into" { t.depth + 1 } else { t.depth };
     let delta = if a.numbered { new_depth as isize - a.depth as isize } else { 0 };
@@ -275,6 +281,21 @@ fn move_node(s: &mut Session, v: &Value) -> CmdResult {
         s.doc.insert_block(StoryRef::Body, &path_of(at + k), b)?;
     }
     let moved: Vec<usize> = (at..at + span_len).collect();
+    if !a.numbered && p::bool(v, "numbered").unwrap_or(false) {
+        // a plain paragraph dropped into the numbering: it is numbered at its new place's level
+        let nodes = outline(s);
+        let pos = nodes.iter().position(|n| n.index == at).ok_or_else(|| CmdError::Params("the moved paragraph is empty".into()))?;
+        let depth = new_depth.min(max_depth(&nodes, pos));
+        let items = analyse(s, &top_paths(s), true);
+        let ipos = items.iter().position(|i| i.path.last() == at).unwrap_or(0);
+        let like = like_at_depth(&items, ipos, depth);
+        put_marker_sep(s, &path_of(at), 0, Kind::from_depth(depth), 1, like.as_ref(), None)?;
+        if like.is_none() {
+            estimate_indent(s, &path_of(at), depth)?;
+        }
+        let changed = relabel(s)?;
+        return reply(s, changed.max(1));
+    }
     let changed = if delta != 0 {
         let nodes = outline(s);
         // the moved items' levels, then the list
@@ -549,6 +570,16 @@ mod tests {
         assert_eq!(t.len(), 7);
         let at = t.iter().position(|x| x == "شرح الأول").unwrap();
         assert!(at > 4, "after «الثاني»: {t:?}");
+    }
+
+    #[test]
+    fn a_plain_phrase_dragged_into_the_numbering_becomes_an_item() {
+        let mut s = doc("١. الأول\nأ. فرع\n٢. الثاني\nجملة حرة");
+        // «جملة حرة» (block 3) goes after «١.»'s sub-item «أ.» as a sibling
+        s.run("service.outline.move", &json!({"from": 3, "to": 1, "place": "after", "numbered": true})).unwrap();
+        let t = texts(&s);
+        assert!(t[2].starts_with("ب.") && t[2].contains("جملة حرة"), "{t:?}");
+        assert!(t[3].starts_with("٢."), "{t:?}");
     }
 
     #[test]

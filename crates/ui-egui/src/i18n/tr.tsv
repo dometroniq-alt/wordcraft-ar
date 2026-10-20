@@ -2707,3 +2707,23 @@ preview	Title	Örnek
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Bu belgeyi slaytlar olarak DeckCraft AR'a gönderir: her başlık bir slayt başlatır, uzun metin sonraki slaytta sürer, sağdan sola yön ve keşide korunur. Örnek: 3 sayfalık bir genelge 6 slayt olur, «Görevler (2)» «Görevler»i sürdürür.
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Bu belgeyi çalışma kitabı olarak GridCraft AR'a gönderir: her tablo kendi sayfasına, metin «Text» sayfasına gider; sağdan sola yön ve keşide her hücrede korunur. Örnek: 12 satırlık bir görev tablosu, başlığının adını taşıyan, sıralanıp filtrelenmeye hazır bir sayfa olur.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	DeckCraft AR veya GridCraft AR'ın gönderdiği Craft değişim dosyasını (.craftx) yeni belge olarak açar: her slayt metniyle bir başlık olur, notlar italik, tablolar tablo kalır. Örnek: 6 slaytlık bir sunu, başlıklı altı bölüm olarak geri gelir.
+	Numbering Outline	Numaralandırma anahatları
+	Numbering\nOutline	Numaralandırma\nanahatları
+	Move Numbered Item	Numaralı öğeyi taşı
+	Change Item Level	Öğe düzeyini değiştir
+	Take Out of Numbering	Numaralandırmadan çıkar
+	Put into Numbering	Numaralandırmaya ekle
+	Remove Numbering Level	Numaralandırma düzeyini kaldır
+	Edit Numbered Item	Numaralı öğeyi düzenle
+	Apply to every item of the selected card's level	Seçili kartın düzeyindeki tüm öğelere uygula
+	Collapse all items	Tüm öğeleri daralt
+	Expand all items	Tüm öğeleri genişlet
+	Find an item	Öğe bul
+	Put every marker on the service cycle again	Tüm işaretleri yeniden hizmet döngüsüne getir
+	Put into the numbering	Numaralandırmaya ekle
+	Remove a level…	Düzeyi kaldır…
+	Renumber	Yeniden numaralandır
+	Show a preview of each main item	Her ana öğenin önizlemesini göster
+	Show explanations under the items	Öğelerin altındaki açıklamaları göster
+	This item	Bu öğe
+	{items} numbered items · {notes} explanations	{items} numaralı öğe · {notes} açıklama

@@ -65,6 +65,7 @@ pub mod keytips;
 pub mod mini_toolbar;
 pub mod objects;
 pub mod options;
+pub mod outline_pane;
 pub mod panes;
 pub mod paste_picture;
 pub mod previews;

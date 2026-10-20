@@ -3178,3 +3178,31 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	يرسل هذا المستند إلى DeckCraft AR شرائحَ: كل عنوان يبدأ شريحة، والنص الطويل يتابع في الشريحة التالية، مع الحفاظ على الاتجاه من اليمين إلى اليسار والكشيدة. مثال: تعميم من ٣ صفحات يصير ٦ شرائح، و«الواجبات (٢)» تتابع «الواجبات».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	يرسل هذا المستند إلى GridCraft AR مصنفًا: كل جدول في ورقة خاصة به، والنص في ورقة «Text»، مع الحفاظ على الاتجاه من اليمين إلى اليسار والكشيدة في كل خلية. مثال: جدول واجبات من ١٢ صفًا يصير ورقة باسم عنوانه جاهزة للترتيب والتصفية.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	يفتح ملف تبادل Craft (.craftx) أرسله DeckCraft AR أو GridCraft AR مستندًا جديدًا: كل شريحة تصير عنوانًا يليه نصها، والملاحظات بخط مائل، والجداول تبقى جداول. مثال: عرض من ٦ شرائح يعود ستة أقسام بعناوينها.
+	Numbering Outline	فهرس الترقيم
+	Numbering\nOutline	فهرس\nالترقيم
+	Move Numbered Item	نقل بند مرقّم
+	Change Item Level	تغيير مستوى البند
+	Take Out of Numbering	إخراج من الترقيم
+	Put into Numbering	إدخال في الترقيم
+	Remove Numbering Level	إزالة مستوى الترقيم
+	Edit Numbered Item	تحرير بند مرقّم
+	Apply to every item of the selected card's level	تطبيق على كل بنود مستوى البطاقة المحددة
+	Collapse all items	طيّ كل البنود
+	Drop here to take it out of the numbering	أفلت هنا لإخراجه من الترقيم
+	Expand all items	فتح كل البنود
+	Find an item	ابحث عن بند
+	Level {n} ({marker})	المستوى {n} ({marker})
+	Move in one level	إزاحة مستوى للداخل
+	Move out one level	رفع مستوى للخارج
+	No numbered items yet. Type ١. أ. أولاً. in the document, or press Renumber below, and they appear here.	لا توجد بنود مرقّمة بعد. اكتب ١. أ. أولاً. في المستند أو اضغط «إعادة الترقيم» بالأسفل فتظهر هنا.
+	Put every marker on the service cycle again	إعادة كل العلامات إلى دورة الخدمة
+	Put into the numbering	إدخاله في الترقيم
+	Remove a level…	إزالة مستوى…
+	Renumber	إعادة الترقيم
+	Show a preview of each main item	عرض معاينة لكل بند رئيسي
+	Show explanations under the items	عرض الشروحات تحت البنود
+	Take out of the numbering	إخراجه من الترقيم
+	This item	هذا البند
+	Whole level	المستوى كله
+	{items} numbered items · {notes} explanations	{items} بند مرقّم · {notes} شرح
+	Opens the Numbering Outline beside the page: every numbered item as a card that follows your typing. Drag a card to move it with its sub-items, drop it on the strip below to take it out of the numbering, double-click to edit its words, and remove a whole level so the levels under it renumber at once. Example: delete the main level and the sub-items become the main items.	يفتح فهرس الترقيم بجانب الصفحة: كل بند مرقّم بطاقة تتبع ما تكتبه فوراً. اسحب البطاقة لنقلها مع بنودها الفرعية، وأفلتها على الشريط أسفل اللائحة لإخراجها من الترقيم، وانقر نقراً مزدوجاً لتحرير كلماتها، وأزل مستوى كاملاً فتُعاد ترقيم المستويات تحته في الحال. مثال: احذف المستوى الرئيسي فتصير البنود الفرعية رئيسية.

@@ -124,6 +124,10 @@ pub struct ViewState {
     /// Style Inspector pane (Home › Styles).
     #[serde(default)]
     pub style_inspector: bool,
+    /// The Numbering Outline pane (Service tab, WordCraft AR): the numbered items as a live,
+    /// editable tree beside the page.
+    #[serde(default)]
+    pub service_outline_pane: bool,
     pub comments_pane: bool,
     /// The Clipboard pane (Home › Clipboard): items collected by Copy and Cut.
     #[serde(default)]
@@ -221,6 +225,7 @@ impl Default for ViewState {
             nav_pane: false,
             styles_pane: false,
             style_inspector: false,
+            service_outline_pane: false,
             comments_pane: false,
             clipboard_pane: false,
             smart_art_pane: false,

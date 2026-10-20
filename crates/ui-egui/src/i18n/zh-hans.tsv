@@ -2323,3 +2323,23 @@
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	把本文档作为幻灯片发送到 DeckCraft AR：每个标题开始一张幻灯片，长文本续到下一张，从右到左方向和卡希达都保留。示例：3 页通告变成 6 张幻灯片，«职责 (2)» 接续 «职责»。
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	把本文档作为工作簿发送到 GridCraft AR：每个表格各占一张工作表，文本放入 «Text» 工作表，每个单元格都保留从右到左方向和卡希达。示例：12 行的职责表变成以其标题命名的工作表，可以排序和筛选。
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	把 DeckCraft AR 或 GridCraft AR 发来的 Craft 交换文件 (.craftx) 作为新文档打开：每张幻灯片变成标题加正文，备注为斜体，表格仍是表格。示例：6 张幻灯片回来成为六个带标题的小节。
+	Numbering Outline	编号大纲
+	Numbering\nOutline	编号\n大纲
+	Move Numbered Item	移动编号项
+	Change Item Level	更改项目级别
+	Take Out of Numbering	移出编号
+	Put into Numbering	纳入编号
+	Remove Numbering Level	删除编号级别
+	Edit Numbered Item	编辑编号项
+	Apply to every item of the selected card's level	应用于所选卡片同级的所有项目
+	Collapse all items	折叠所有项目
+	Expand all items	展开所有项目
+	Find an item	查找项目
+	Put every marker on the service cycle again	将所有标记恢复到公文序号循环
+	Put into the numbering	纳入编号
+	Remove a level…	删除级别…
+	Renumber	重新编号
+	Show a preview of each main item	显示每个主项目的预览
+	Show explanations under the items	在项目下方显示说明
+	This item	此项目
+	{items} numbered items · {notes} explanations	{items} 个编号项 · {notes} 条说明

@@ -147,7 +147,10 @@ impl Exempt {
         for m in crate::credits::MODELS {
             names.extend([m.company, m.model, m.version].map(str::to_string));
         }
-        Exempt { body: app.session.doc.plain_text(wordcraft_doc::StoryRef::Body), names }
+        // Document words shown in a pane (the Numbering Outline) are wrapped and cut with «…»: compare
+        // them with the body's words, whitespace collapsed.
+        let body = app.session.doc.plain_text(wordcraft_doc::StoryRef::Body).split_whitespace().collect::<Vec<_>>().join(" ");
+        Exempt { body, names }
     }
 
     fn allows(&self, app: &WordApp, text: &str) -> bool {
@@ -168,6 +171,7 @@ impl Exempt {
             || theme_fonts
             || is_shortcut()
             || self.body.contains(plain)
+            || self.body.contains(plain.trim_end_matches('…').split_whitespace().collect::<Vec<_>>().join(" ").trim())
             || self.names.contains(plain)
             || plain.starts_with('@') // contributor handles
             || plain.starts_with("Style") || plain.starts_with("Table Style ") // a new style's default name

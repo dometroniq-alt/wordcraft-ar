@@ -2700,3 +2700,23 @@ preview	Title	Tytuł
 	Sends this document to DeckCraft AR as slides: every heading starts a slide, long text continues on the next slide, right-to-left and kashida are kept. Example: a 3-page circular becomes 6 slides, «Duties (2)» continuing «Duties».	Wysyła ten dokument do DeckCraft AR jako slajdy: każdy nagłówek zaczyna slajd, długi tekst przechodzi na następny, kierunek od prawej do lewej i kaszida są zachowane. Przykład: 3-stronicowy okólnik staje się 6 slajdami, «Obowiązki (2)» kontynuuje «Obowiązki».
 	Sends this document to GridCraft AR as a workbook: every table gets its own sheet and the text goes to a Text sheet, right-to-left and kashida kept in every cell. Example: a duties table of 12 rows becomes a sheet named after its heading, ready to sort and filter.	Wysyła ten dokument do GridCraft AR jako skoroszyt: każda tabela trafia na własny arkusz, a tekst na arkusz «Text», kierunek od prawej do lewej i kaszida są zachowane w każdej komórce. Przykład: tabela obowiązków z 12 wierszy staje się arkuszem nazwanym od nagłówka, gotowym do sortowania i filtrowania.
 	Opens a Craft Exchange file (.craftx) that DeckCraft AR or GridCraft AR sent, as a new document: every slide becomes a heading with its text, notes in italics, and tables stay tables. Example: a 6-slide deck comes back as six headed sections.	Otwiera plik wymiany Craft (.craftx) przysłany przez DeckCraft AR lub GridCraft AR jako nowy dokument: każdy slajd staje się nagłówkiem z tekstem, notatki kursywą, a tabele pozostają tabelami. Przykład: prezentacja z 6 slajdów wraca jako sześć sekcji z nagłówkami.
+	Numbering Outline	Konspekt numeracji
+	Numbering\nOutline	Konspekt\nnumeracji
+	Move Numbered Item	Przenieś numerowaną pozycję
+	Change Item Level	Zmień poziom pozycji
+	Take Out of Numbering	Wyjmij z numeracji
+	Put into Numbering	Włącz do numeracji
+	Remove Numbering Level	Usuń poziom numeracji
+	Edit Numbered Item	Edytuj numerowaną pozycję
+	Apply to every item of the selected card's level	Zastosuj do wszystkich pozycji poziomu zaznaczonej karty
+	Collapse all items	Zwiń wszystkie pozycje
+	Expand all items	Rozwiń wszystkie pozycje
+	Find an item	Znajdź pozycję
+	Put every marker on the service cycle again	Przywróć wszystkie znaczniki do cyklu służbowego
+	Put into the numbering	Włącz do numeracji
+	Remove a level…	Usuń poziom…
+	Renumber	Numeruj ponownie
+	Show a preview of each main item	Pokaż podgląd każdej pozycji głównej
+	Show explanations under the items	Pokaż objaśnienia pod pozycjami
+	This item	Ta pozycja
+	{items} numbered items · {notes} explanations	Pozycji numerowanych: {items} · objaśnień: {notes}
