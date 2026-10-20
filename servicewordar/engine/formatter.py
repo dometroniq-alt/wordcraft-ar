@@ -618,7 +618,11 @@ class Formatter:
             # start earlier, into the empty space right of the column, so their dot stays on the line
             two_word = " " in core.strip()
             core_w = self._marker_width(pa, None, 100) - self._marker_width(pa, "", 100)
-            if not two_word:
+            if L.get("equalize_to_widest", False):
+                # every marker of the level reaches the width of the WIDEST one (two-word ordinals included)
+                maxw[g] = max(maxw.get(g, 0.0), mw)
+                lo_reach[g] = maxw[g]
+            elif not two_word:
                 maxw[g] = max(maxw.get(g, 0.0), mw)
                 # the narrowest width this marker can reach: only the word is narrowed, never its dot/parens
                 lo_reach[g] = max(lo_reach.get(g, 0.0), mw - core_w * (1.0 - L.get("marker_min_scale", 0.85)))
@@ -666,9 +670,12 @@ class Formatter:
         policy = {f"{g[0]}/{g[1]}": v for g, v in policy.items()}
         self.report["summary"]["level_policy"] = {str(k): v for k, v in sorted(policy.items())}
         # 2) stretch the narrower markers to the widest one of their depth (kashida + glyph scaling)
+        natural_items = bool(L.get("natural_item_markers", False))
         for pa in paras:
             if pa.kind is None:
                 continue
+            if natural_items and pa._grp[1] == "item":
+                continue   # items keep their natural marker: it starts on the parent's dot line
             fam, bold, size = pa._mfont
             self._equalize_marker(pa, tg[pa._grp], fam, bold, size)
         self.report["summary"]["marker_columns_twips"] = {str(d): int(round(v)) for d, v in sorted(target.items())}
@@ -717,6 +724,9 @@ class Formatter:
                 own = tg[pa._grp]
                 if pa.kind in (0, 3) and not R["layout"].get("equalize_digits", False):
                     own = self._marker_width(pa) - pa._ink_lead  # (١) keeps one space after it
+                if natural_items and pa._grp[1] == "item":
+                    own = self._marker_width(pa) - pa._ink_lead  # natural width: one space, then the text
+                    pa.layout["marker_offset"] = 0
                 hang_full = int(round(own + sp * R["layout"]["marker_space_factor"]))
                 L = ms + hang_full
                 # a marker that could not be stretched to the full width starts a little later so that
@@ -1451,6 +1461,27 @@ class Formatter:
                 # even distribution: how many tatweels in total, then spread over joints
                 avg_tw = sum(t for _, t in joints) / len(joints)
                 count = int(deficit // avg_tw)
+                cap = R.get("kashida_max_per_joint", 0)
+                if cap and one_per_word and count > cap * len(joints):
+                    # a short line: one stretch per word would be a long ugly bar; use every joint
+                    joints = []
+                    for wi in l:
+                        word = words[wi]
+                        fam, bold, size = chars[starts[wi]][2]
+                        tw = self.fonts.width_twips(N.TATWEEL, fam, size, bold) or 1
+                        jb = self._best_joint(word)
+                        if jb is not None:
+                            joints.append((starts[wi] + jb, tw))
+                        if len(word) >= 5:
+                            # second, gentler stretch near the middle of longer words
+                            others = [j for j in self._joints(word) if j != jb]
+                            if others:
+                                mid = min(others, key=lambda j: abs(j - len(word) / 2.0))
+                                joints.append((starts[wi] + mid, tw))
+                    if not joints:
+                        continue
+                    avg_tw = sum(t for _, t in joints) / len(joints)
+                    count = int(deficit // avg_tw)
                 if count <= 0:
                     continue
                 per = [count // len(joints)] * len(joints)

@@ -37,7 +37,7 @@ DEFAULT_RULES = {
         "marker_space_factor": 1.0,             # gap after the marker, in spaces of the marker's font
         "balance_lines": True,                  # measure with the real fonts and balance line breaks
         "insert_breaks": True,                  # write the balanced breaks as soft line breaks
-        "line_safety": 0.04,                    # keep 4% of the line free so Word never re-wraps
+        "line_safety": 0.02,                    # keep 4% of the line free so Word never re-wraps
         "stretch_min_fill": 0.0,                # 0 = every line (even one word) is stretched to the margin
         "fill_lines_with_kashida": True,        # write the kashida into the text (same look in Word, LibreOffice, WordCraft)
         "kashida_fill_target": 0.985,
@@ -47,6 +47,9 @@ DEFAULT_RULES = {
         "tight_fit_min": 0.965,                 # a line fuller than this is justified normally (no distribute)
         "keep_first_item": True,
         "fold_page_breaks": True,               # lone page-break paragraphs become "page break before" on the next paragraph
+        "equalize_to_widest": True,             # every marker of a level reaches the width of the widest one («ثاني عشر.» included): dots on one line, text on one column
+        "natural_item_markers": False,          # True = items keep their natural marker width (hanging per item)
+        "kashida_max_per_joint": 3,             # a short line never gets one long bar: above this many tatweels per word, a second gentle stretch is added mid-word
         "equalize_markers": True,               # all markers of a level get the width of the widest one
         "equalize_with_kashida": True,          # stretch marker words with kashida first, then letter spacing
         "marker_max_scale": 1.15,               # a marker without a kashida joint (أ. د.) may be widened up to 115%
@@ -58,11 +61,11 @@ DEFAULT_RULES = {
         "equalize_digits": False,               # digit markers (١) keep their natural width
         # a heading and its numbered items stay on one page when the group is at most this share of
         # the text height; longer groups keep only heading+first items and the last items together
-        "marker_kashida_lam_alef": False,       # alternative: kashida between ل and ا (أولـــاً); off = keep the ligature
+        "marker_kashida_lam_alef": True,       # alternative: kashida between ل and ا (أولـــاً); off = keep the ligature
         # أولاً keeps its ligature and reaches the level width with a lengthened lam-alef glyph (a tiny
         # font derived from the document's font, embedded in the file), plus mild glyph scaling and a
         # little letter spacing — in this order and within these ranges:
-        "marker_lamalef_glyph": True,
+        "marker_lamalef_glyph": False,
         "lamalef_spacing_soft_em": 0.10,         # 1) open the natural gaps (أ|و|لا) a little, each
         "lamalef_extend_soft_em": 0.28,          # 2) lengthen the lam-alef (the font's own sweep, stretched)
         "lamalef_spacing_max_em": 0.22,          # 3) gaps up to this
