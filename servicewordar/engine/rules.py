@@ -61,6 +61,7 @@ DEFAULT_RULES = {
         "narrow_cost": 0.25,                    # cost weight of narrowing a marker down to marker_min_scale                 # …and takes the rest as a small gap before its dot (dots stay on one line)
         "marker_min_scale": 0.85,               # the widest marker of a level may be narrowed down to 85%
         "equalize_digits": False,               # digit markers (١) keep their natural width
+        "digit_dot_gap": True,                  # digit markers keep their shape; the shorter one («٦.» next to «١٠.») takes the difference as a gap before its dot, so the dots of a level are on one line
         # a heading and its numbered items stay on one page when the group is at most this share of
         # the text height; longer groups keep only heading+first items and the last items together
         "marker_kashida_lam_alef": True,       # alternative: kashida between ل and ا (أولـــاً); off = keep the ligature

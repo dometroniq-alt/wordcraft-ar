@@ -742,7 +742,7 @@ class Formatter:
                 sp = self.fonts.width_twips(" ", fam, size, bold)
                 ms = col[d]
                 own = tg[pa._grp]
-                if pa.kind in (0, 3) and not R["layout"].get("equalize_digits", False):
+                if pa.kind in (0, 3) and self._digits_natural():
                     own = self._marker_width(pa) - pa._ink_lead  # (١) keeps one space after it
                 if natural_items and pa._grp[1] == "item":
                     own = self._marker_width(pa) - pa._ink_lead  # natural width: one space, then the text
@@ -1001,6 +1001,11 @@ class Formatter:
             cost += 50 + abs(wdt - target) / em
         return {"delta_tw": delta, "scale": scale, "spacing_tw": sp, "width": wdt, "ok": ok, "cost": cost}
 
+    def _digits_natural(self) -> bool:
+        """True when digit markers keep their natural width (no gap before the dot)."""
+        L = self.rules["layout"]
+        return not L.get("equalize_digits", False) and not L.get("digit_dot_gap", True)
+
     def _marker_cost(self, pa, t: float):
         """(cost, reachable) of making this marker `t` twips wide."""
         L = self.rules["layout"]
@@ -1135,12 +1140,20 @@ class Formatter:
         widen the glyphs (horizontal scaling); markers wider than the target are narrowed; any remainder
         shifts the marker start so its dot still lands on the level's dot line. Punctuation is untouched."""
         marker = pa.new_marker
-        if pa.kind in (0, 3) and not self.rules["layout"].get("equalize_digits", False):
+        L = self.rules["layout"]
+        digits_gap = pa.kind in (0, 3) and not L.get("equalize_digits", False) and L.get("digit_dot_gap", True)
+        if pa.kind in (0, 3) and not L.get("equalize_digits", False) and not digits_gap:
             return  # (١) and (١٠): digits are not stretched; only the paren of 10+ shifts by one digit
         mw = self._marker_width(pa) - pa._ink_lead
         deficit = target - mw
         lead, core, tail = self._split_marker(marker)
-        L = self.rules["layout"]
+        if digits_gap:
+            # «٦.» and «١٠.» are not stretched (the digits keep their shape): the shorter one takes the
+            # difference as a gap between its digit and its dot, so every dot of the level stands on
+            # ONE vertical line and the children start under that line
+            gap = int(round(deficit)) if deficit > 2 else 0
+            self._write_marker(pa, lead, core, tail, core, 100, gap, 0, "align_dot")
+            return
         policy = getattr(self, "_level_policy", {}).get(getattr(pa, "_grp", None), "align_dot")
         if getattr(pa, "_eq", None) and pa._eq.get("lamalef") and deficit > 4:
             self._apply_lamalef(pa, target, policy)
@@ -1177,6 +1190,13 @@ class Formatter:
             gap = int(round(remainder))
             mw2 += gap
             remainder = target - mw2
+        offset = int(round(remainder)) if abs(remainder) > 2 else 0
+        if policy == "align_start":
+            offset = 0   # a level with markers that cannot reach the width aligns the starts instead
+        self._write_marker(pa, lead, core, tail, new_core, scale, gap, offset, policy)
+
+    def _write_marker(self, pa, lead, core, tail, new_core, scale, gap, offset, policy):
+        """Write the equalized marker: kashida/scale/gap into its runs and the layout numbers."""
         t = pa.marker_run.find(w("t"))
         rpr = _get_rpr(pa.marker_run)
         # a style may carry character spacing (Word's Title style: -0.5pt); the marker must be measured
@@ -1200,11 +1220,8 @@ class Formatter:
             _set_child(rpr, "w", RPR_ORDER, {"val": scale})
         else:
             _set_child(rpr, "w", RPR_ORDER, remove=True)
-        # remainder > 0: the marker is still narrower than the level width -> it starts later;
-        # remainder < 0: still wider (clamped at marker_min_scale) -> it starts earlier (hanging grows)
-        offset = int(round(remainder)) if abs(remainder) > 2 else 0
-        if policy == "align_start":
-            offset = 0   # a level with markers that cannot reach the width aligns the starts instead
+        # offset > 0: the marker is still narrower than the level width -> it starts later;
+        # offset < 0: still wider (clamped at marker_min_scale) -> it starts earlier (hanging grows)
         pa.layout["marker_display"] = lead + new_core + tail
         pa.layout["marker_scale"] = scale
         pa.layout["marker_offset"] = offset

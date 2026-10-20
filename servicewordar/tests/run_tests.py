@@ -140,5 +140,21 @@ if os.path.exists(sample):
     except Exception as e:
         check("print copy pipeline", False, repr(e))
 
+# ---- one-digit and two-digit headings (٦. next to ١٠.): ONE dot line per level, children under it
+import docx as _docx
+_d = _docx.Document()
+_d.add_paragraph("غلاف")
+for _i in range(1, 13):
+    _d.add_paragraph("%d. واجبات رقم %d" % (_i, _i))
+    for _j, _t in enumerate("أبج"):
+        _d.add_paragraph("%s. بند %d" % (_t, _j))
+_p = os.path.join(tempfile.mkdtemp(), "dots.docx"); _d.save(_p)
+_rep = Formatter().format_file(_p, _p + ".out.docx")
+_h = [r for r in _rep["paragraphs"] if r.get("depth") == 0]
+check("headings ١. … ١٢. share ONE dot column", len({r["layout"]["dot_column"] for r in _h}) == 1, str({r["marker"]: r["layout"]["dot_column"] for r in _h}))
+check("one-digit headings take the difference as a gap before the dot", all(r["layout"].get("marker_gap_twips", 0) > 0 for r in _h if len(r["marker"]) == 2) and all(r["layout"].get("marker_gap_twips", 0) == 0 for r in _h if len(r["marker"]) == 3), str({r["marker"]: r["layout"].get("marker_gap_twips") for r in _h}))
+_s = _rep["summary"]
+check("items start at the dot of the widest heading = every heading's dot", _s["child_columns_twips"]["1"] == _s["child_columns_twips"]["0"] + round(_s["marker_columns_twips"]["0"]) - _s["dot_ink_start_twips"]["0"])
+
 print("\n%d failure(s)" % fails if fails else "\nALL CHECKS PASSED")
 sys.exit(1 if fails else 0)
