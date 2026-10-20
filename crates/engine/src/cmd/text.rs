@@ -584,6 +584,13 @@ fn new_paragraph(s: &mut Session, _: &Value) -> CmdResult {
         super::tools::autocorrect_word(s, true)?;
         at = s.sel.focus.clone();
     }
+    // WordCraft AR: Enter after a service marker writes the next marker of the cycle.
+    if s.sel.is_collapsed()
+        && let Some(caret) = super::service::auto_enter(s, &at)?
+    {
+        s.sel = Selection::caret(caret);
+        return sel_result(s);
+    }
     let new = split_para(s, &at)?;
     s.sel = Selection::caret(new);
     s.goal_x = None;
@@ -611,6 +618,9 @@ fn tab(s: &mut Session, _: &Value) -> CmdResult {
             Pos { story, path: q, off }
         });
         s.sel = Selection { anchor: start.clone(), focus: end.unwrap_or(start) };
+        return sel_result(s);
+    }
+    if super::service::auto_tab(s, false)? {
         return sel_result(s);
     }
     let f = s.sel.focus.clone();
@@ -644,6 +654,9 @@ fn back_tab(s: &mut Session, _: &Value) -> CmdResult {
         let mut path = tpath.0.clone();
         path.extend([nr as u32, nc as u32, 0]);
         s.sel = Selection::caret(Pos { story, path: wordcraft_doc::Path(path), off: 0 });
+        return sel_result(s);
+    }
+    if super::service::auto_tab(s, true)? {
         return sel_result(s);
     }
     let f = s.sel.focus.clone();

@@ -239,6 +239,7 @@ pub fn icon_for(key: &str) -> &str {
         ("send.toDeckCraft", "sendDeck"),
         ("send.toGridCraft", "sendGrid"),
         ("service.applyList", "serviceList"),
+        ("service.autoNumber", "serviceAuto"),
         ("service.external", "serviceEngine"),
         ("service.kashida", "kashidaMedium"),
         ("service.pageNumbers", "servicePages"),

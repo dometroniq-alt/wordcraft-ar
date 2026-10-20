@@ -35,8 +35,9 @@ pub fn specs() -> Vec<CommandSpec> {
 }
 
 /// The on/off settings by their `file.options` name.
-fn flags() -> [(&'static str, fn(&mut Prefs) -> &mut bool); 8] {
+fn flags() -> [(&'static str, fn(&mut Prefs) -> &mut bool); 9] {
     [
+        ("serviceAutoNumber", |p| &mut p.service_autonumber),
         ("arabicDocuments", |p| &mut p.arabic_documents),
         ("typingReplacesSelection", |p| &mut p.typing_replaces_selection),
         ("insertKeyOvertype", |p| &mut p.insert_key_overtype),
@@ -212,6 +213,7 @@ pub fn current(s: &Session) -> Value {
         "region": {"language": region.language, "territory": region.territory, "paper": region.paper().0, "decimal": region.decimal().to_string()},
         "regionFromSystem": pr.region.is_none(),
         "arabicDocuments": pr.arabic_documents,
+        "serviceAutoNumber": pr.service_autonumber,
         "typingReplacesSelection": pr.typing_replaces_selection,
         "insertKeyOvertype": pr.insert_key_overtype,
         "overtype": pr.overtype,

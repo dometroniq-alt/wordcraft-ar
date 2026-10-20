@@ -383,6 +383,7 @@ pub const NAMES: &[&str] = &[
     "designMode",
     "serviceRenumber",
     "serviceList",
+    "serviceAuto",
     "finalDot",
     "serviceSelection",
     "classification",
@@ -1794,6 +1795,15 @@ pub fn paint(p: &Painter, r: Rect, name: &str, c: Color32, accent: Color32) {
                 pen.text(x - 2.75, *y, 6.5, mark, if i == 0 { a } else { c }, true);
                 pen.line(&[(1.5, *y), (x - 7.5, *y)]);
             }
+        }
+        "serviceAuto" => {
+            // A typed marker, the Enter arrow, and the next marker already written.
+            pen.text(18.0, 5.0, 8.0, "أ.", c, true);
+            pen.line(&[(2.0, 5.0), (11.0, 5.0)]);
+            pen.line_c(&[(17.0, 9.5), (17.0, 12.5), (6.0, 12.5)], a);
+            pen.line_c(&[(8.5, 10.5), (6.0, 12.5), (8.5, 14.5)], a);
+            pen.text(18.0, 17.0, 8.0, "ب.", a, true);
+            pen.line(&[(2.0, 17.0), (11.0, 17.0)]);
         }
         "finalDot" => {
             // Right-to-left lines, each ending (at its left) in a firm dot.

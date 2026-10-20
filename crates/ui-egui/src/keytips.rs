@@ -301,6 +301,7 @@ fn controls(tab: &str) -> Vec<Control> {
         "Service" => vec![
             c("Renumber Cycle", "service.renumber"),
             c("Service List", "service.applyList"),
+            c("Auto Number", "service.autoNumber"),
             c("Final Dot", "service.finalDot"),
             p("Selection Only", "service.renumber", serde_json::json!({"scope": "selection"})),
             m("Classification", "service.classification"),

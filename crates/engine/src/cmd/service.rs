@@ -34,6 +34,12 @@ pub fn specs() -> Vec<CommandSpec> {
         CommandSpec::new("service.kashida", "Kashida Justification", "Home › Kashida", kashida)
             .params(r#"{"value"?: "distribute|low|medium|high|off" (default distribute)}"#),
         CommandSpec::new("service.finalDot", "End Items with a Dot", "Service › Text", final_dot),
+        CommandSpec::new("service.autoNumber", "Auto Numbering While Typing", "Service › Numbering", |s, v| {
+            s.prefs.service_autonumber = p::bool(v, "value").unwrap_or(!s.prefs.service_autonumber);
+            Ok(json!({"value": s.prefs.service_autonumber}))
+        })
+        .params(r#"{"value"?: bool (default: toggle)} — on: Enter after a service marker («أ.» «أولاً.» «(١).») writes the next marker of the cycle, Tab on a fresh marker steps one level in, Shift+Tab one level out; off: they behave as plain text"#)
+        .pure(),
         CommandSpec::new("service.external", "Format with ServiceWord-AR", "Service › Engine", external).params(
             r#"{"engine"?: path of ServiceWord-AR's cli.py (default: $WORDCRAFT_AR_ENGINE, then servicewordar/cli.py beside the program or in the settings folder), "python"?: interpreter (default: py -3 on Windows, python3 elsewhere), "pdf"?: bool (also make the stamped print PDF)}"#,
         ),
@@ -390,6 +396,258 @@ fn apply_list(s: &mut Session, v: &Value) -> CmdResult {
     r["num"] = json!(num);
     r["numbered"] = json!(changed);
     Ok(r)
+}
+
+// ------------------------------------------------------- numbering while typing
+
+/// Marker text of a kind and number: «٣.», «جـ.»-style abjad, «ثالثاً.», «(٣).», …
+fn marker_for_kind(kind: Kind, n: u32) -> String {
+    let core = match kind {
+        Kind::Digit | Kind::DigitParen => ar::arabic_indic(n),
+        Kind::Abjad | Kind::AbjadParen => ar::abjad(n),
+        Kind::Ordinal | Kind::OrdinalParen => ar::ordinal(n),
+    };
+    if kind.index() >= 3 { format!("({core}).") } else { format!("{core}.") }
+}
+
+/// The marker paragraph at `path` and the document's numbered items, for the typing helpers.
+fn typing_context(s: &Session, path: &wordcraft_doc::Path) -> Option<(Vec<Item>, usize)> {
+    let paths = s.doc.para_paths(StoryRef::Body);
+    let items = analyse(s, &paths, false);
+    let idx = items.iter().position(|i| &i.path == path && i.marker.is_some())?;
+    Some((items, idx))
+}
+
+/// A typed service marker the caret sits in or after: (kind, number, marker length).
+fn typed_marker_at(s: &Session, at: &Pos) -> Option<(Kind, u32, usize)> {
+    if at.story != StoryRef::Body || at.path.cell().is_some() || s.doc.settings.track_changes {
+        return None;
+    }
+    let para = s.doc.para_at(at)?;
+    // a real Word list item keeps Word's own behaviour
+    if para.props.numbering.is_some_and(|n| n.num != 0) {
+        return None;
+    }
+    detect(&para.text)
+}
+
+/// Replace the marker of `path` (`old_len` bytes, 0 if none) with `kind`/`n` + a tab. The new
+/// marker is written with the character formatting of `like` (a paragraph of that level) or of
+/// the paragraph's own first run; when `like` is given its indents and tab stop are copied too,
+/// so the item lands on the level's column. Returns the new marker's length.
+fn put_marker(s: &mut Session, path: &wordcraft_doc::Path, old_len: usize, kind: Kind, n: u32, like: Option<&wordcraft_doc::Path>) -> Result<usize, CmdError> {
+    put_marker_sep(s, path, old_len, kind, n, like, None)
+}
+
+/// [`put_marker`] with the separator after the marker: a tab or one space. `None` keeps the one
+/// the replaced marker had (a tab when there was none).
+fn put_marker_sep(
+    s: &mut Session,
+    path: &wordcraft_doc::Path,
+    old_len: usize,
+    kind: Kind,
+    n: u32,
+    like: Option<&wordcraft_doc::Path>,
+    sep: Option<&str>,
+) -> Result<usize, CmdError> {
+    let sep = match sep {
+        Some(x) => x.to_string(),
+        None => {
+            let old = s.doc.para(StoryRef::Body, path).and_then(|p| p.text.get(..old_len)).unwrap_or("");
+            if old.is_empty() || old.ends_with('\t') { "\t".to_string() } else { " ".to_string() }
+        }
+    };
+    let own = s.doc.para(StoryRef::Body, path).and_then(|p| p.runs.first().map(|r| r.props.clone())).unwrap_or_default();
+    let props = like.and_then(|l| s.doc.para(StoryRef::Body, l)).and_then(|p| p.runs.first().map(|r| r.props.clone())).unwrap_or(own);
+    let text = format!("{}{}", marker_for_kind(kind, n), sep);
+    let a = Pos::new(StoryRef::Body, path.clone(), 0);
+    if old_len > 0 {
+        s.doc.delete_range(&a, &Pos::new(StoryRef::Body, path.clone(), old_len))?;
+    }
+    s.doc.insert_text(&a, &text, &props)?;
+    if let Some(src) = like.and_then(|l| s.doc.para(StoryRef::Body, l)).map(|p| (p.props.indent_left, p.props.indent_first, p.props.tabs.clone())) {
+        let para = s.doc.para_mut(StoryRef::Body, path)?;
+        para.props.bidi = Some(true);
+        para.props.indent_left = src.0;
+        para.props.indent_first = src.1;
+        para.props.tabs = src.2;
+        para.touch();
+    }
+    Ok(text.len())
+}
+
+/// Set a paragraph's hanging indent for a level by the engine's estimate (used when the document
+/// has no item of that level to copy the column from).
+fn estimate_indent(s: &mut Session, path: &wordcraft_doc::Path, depth: usize) -> Result<(), CmdError> {
+    let size = para_size(s, path);
+    let hang = hang_for(depth, size);
+    let start: f32 = (0..depth).map(|d| hang_for(d, size) * 0.9).sum();
+    let para = s.doc.para_mut(StoryRef::Body, path)?;
+    para.props.bidi = Some(true);
+    para.props.indent_left = Some(start + hang);
+    para.props.indent_first = Some(-hang);
+    para.props.tabs = Some(vec![TabStop { pos: start + hang, align: TabAlign::Left, leader: Default::default() }]);
+    para.touch();
+    Ok(())
+}
+
+/// After a marker was added, removed or moved to another level: renumber the markers from `from`
+/// on so every level counts 1, 2, 3 … again (only numbers that differ are rewritten; indents and
+/// the rest of each paragraph stay).
+fn fix_numbers_from(s: &mut Session, from: &wordcraft_doc::Path) -> Result<(), CmdError> {
+    let paths = s.doc.para_paths(StoryRef::Body);
+    let items = analyse(s, &paths, false);
+    let mut counters: Vec<u32> = vec![0; 64];
+    let mut last_depth = 0usize;
+    let mut after = false;
+    let mut edits = Vec::new();
+    for it in &items {
+        if &it.path == from {
+            after = true;
+        }
+        if !it.numbered {
+            continue;
+        }
+        if it.depth < last_depth {
+            for c in counters.iter_mut().skip(it.depth + 1) {
+                *c = 0;
+            }
+        }
+        if let Some(c) = counters.get_mut(it.depth) {
+            *c += 1;
+        }
+        last_depth = it.depth;
+        let want = counters.get(it.depth).copied().unwrap_or(1);
+        if after && let Some((kind, n, len)) = it.marker && n != want && &it.path != from {
+            edits.push((it.path.clone(), kind, want, len));
+        }
+    }
+    for (path, kind, want, len) in edits {
+        put_marker(s, &path, len, kind, want, None)?;
+    }
+    Ok(())
+}
+
+/// The nearest earlier numbered item of `depth` that opens or continues the same run of siblings
+/// (stops at an item shallower than `depth`): its path, kind and number.
+fn previous_sibling(items: &[Item], idx: usize, depth: usize) -> Option<(wordcraft_doc::Path, Kind, u32)> {
+    for it in items[..idx].iter().rev() {
+        if !it.numbered {
+            continue;
+        }
+        if it.depth == depth {
+            return it.marker.map(|(k, n, _)| (it.path.clone(), k, n));
+        }
+        if it.depth < depth {
+            return None;
+        }
+    }
+    None
+}
+
+/// Any item of exactly `depth` in the document nearest to `idx` (to copy its column and look).
+fn like_at_depth(items: &[Item], idx: usize, depth: usize) -> Option<wordcraft_doc::Path> {
+    let before = items[..idx].iter().rev().find(|i| i.numbered && i.depth == depth && i.marker.is_some());
+    let after = items.get(idx + 1..).and_then(|r| r.iter().find(|i| i.numbered && i.depth == depth && i.marker.is_some()));
+    before.or(after).map(|i| i.path.clone())
+}
+
+fn caret_after_marker(s: &mut Session, path: &wordcraft_doc::Path, len: usize) {
+    s.sel = crate::Selection::caret(Pos::new(StoryRef::Body, path.clone(), len));
+    s.goal_x = None;
+}
+
+/// Enter while typing a numbered item (`prefs.service_autonumber`): the new paragraph starts with
+/// the next marker of the same level; Enter on an item with no text steps one level out (a
+/// top-level one just loses its marker). Returns the caret when it handled the key.
+pub(crate) fn auto_enter(s: &mut Session, at: &Pos) -> Result<Option<Pos>, CmdError> {
+    if !s.prefs.service_autonumber {
+        return Ok(None);
+    }
+    let Some((kind, n, len)) = typed_marker_at(s, at) else { return Ok(None) };
+    if at.off < len {
+        return Ok(None); // the caret is inside the marker: a plain Enter
+    }
+    let Some((items, idx)) = typing_context(s, &at.path) else { return Ok(None) };
+    let depth = items[idx].depth;
+    let para_len = s.doc.para_at(at).map(|p| p.len()).unwrap_or(0);
+    let empty = s.doc.para_at(at).map(|p| p.text.get(len..).unwrap_or("").trim().is_empty()).unwrap_or(false) && at.off >= para_len;
+    if empty {
+        if depth == 0 {
+            // the end of the list: the marker goes, the paragraph is plain text again
+            let a = Pos::new(StoryRef::Body, at.path.clone(), 0);
+            s.doc.delete_range(&a, &Pos::new(StoryRef::Body, at.path.clone(), para_len))?;
+            let para = s.doc.para_mut(StoryRef::Body, &at.path)?;
+            para.props.indent_left = None;
+            para.props.indent_first = None;
+            para.props.tabs = None;
+            para.touch();
+            fix_numbers_from(s, &at.path)?;
+            caret_after_marker(s, &at.path, 0);
+            return Ok(Some(Pos::new(StoryRef::Body, at.path.clone(), 0)));
+        }
+        // one level out: the marker of the level above, counting on from its last sibling
+        let up = depth - 1;
+        let (new_kind, new_n, like) = match previous_sibling(&items, idx, up) {
+            Some((p, k, m)) => (k, m + 1, Some(p)),
+            None => (Kind::from_depth((kind.index() + 5) % 6), 1, like_at_depth(&items, idx, up)),
+        };
+        let new_len = put_marker(s, &at.path, len, new_kind, new_n, like.as_ref())?;
+        if like.is_none() {
+            estimate_indent(s, &at.path, up)?;
+        }
+        fix_numbers_from(s, &at.path)?;
+        caret_after_marker(s, &at.path, new_len);
+        return Ok(Some(Pos::new(StoryRef::Body, at.path.clone(), new_len)));
+    }
+    // a new item of the same level, numbered one more
+    let new = super::split_para(s, at)?;
+    let marker_props_of = at.path.clone();
+    let sep = if s.doc.para_at(at).and_then(|p| p.text.get(..len)).is_some_and(|m| m.ends_with('\t')) { "\t" } else { " " };
+    let new_len = put_marker_sep(s, &new.path, 0, kind, n + 1, Some(&marker_props_of), Some(sep))?;
+    fix_numbers_from(s, &new.path)?;
+    caret_after_marker(s, &new.path, new_len);
+    s.pending = None;
+    Ok(Some(Pos::new(StoryRef::Body, new.path.clone(), new_len)))
+}
+
+/// Tab (`back` false) or Shift+Tab on a typed marker (`prefs.service_autonumber`): the item steps
+/// one level in or out — its marker becomes that level's, numbered after its new siblings — and
+/// the numbers after it are put right. False when the caret is not at a marker.
+pub(crate) fn auto_tab(s: &mut Session, back: bool) -> Result<bool, CmdError> {
+    if !s.prefs.service_autonumber || !s.sel.is_collapsed() {
+        return Ok(false);
+    }
+    let at = s.sel.focus.clone();
+    let Some((kind, _n, len)) = typed_marker_at(s, &at) else { return Ok(false) };
+    if at.off > len {
+        return Ok(false); // inside the text: Tab is a Tab
+    }
+    let Some((items, idx)) = typing_context(s, &at.path) else { return Ok(false) };
+    let depth = items[idx].depth;
+    let target = if back {
+        if depth == 0 {
+            return Ok(true); // already at the top: nothing to do, and no stray tab in the marker
+        }
+        depth - 1
+    } else {
+        depth + 1
+    };
+    let found = previous_sibling(&items, idx, target);
+    let (new_kind, new_n, like) = match found {
+        Some((p, k, m)) => (k, m + 1, Some(p)),
+        None => {
+            let k = Kind::from_depth(if back { (kind.index() + 5) % 6 } else { (kind.index() + 1) % 6 });
+            (k, 1, like_at_depth(&items, idx, target))
+        }
+    };
+    let new_len = put_marker(s, &at.path, len, new_kind, new_n, like.as_ref())?;
+    if like.is_none() {
+        estimate_indent(s, &at.path, target)?;
+    }
+    fix_numbers_from(s, &at.path)?;
+    caret_after_marker(s, &at.path, new_len);
+    Ok(true)
 }
 
 // ------------------------------------------------------------- page furniture

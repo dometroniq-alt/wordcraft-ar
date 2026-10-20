@@ -1832,6 +1832,8 @@ fn service(app: &mut WordApp, ui: &mut Ui) {
     group(ui, "Numbering", None, app, |ui, app| {
         big(ui, app, "serviceRenumber", "Renumber\nCycle", "service.renumber", json!({}), false);
         big(ui, app, "serviceList", "Service\nList", "service.applyList", json!({}), false);
+        let auto = app.session.prefs.service_autonumber;
+        big_toggle(ui, app, "serviceAuto", "Auto\nNumber", "service.autoNumber", auto);
         stack(ui, |ui| {
             small(ui, app, "finalDot", Some("Final Dot"), "End Items with a Dot", "service.finalDot", json!({}), false);
             small(

@@ -1140,3 +1140,65 @@ fn typing_after_a_citation_goes_outside_its_field() {
     let inside = Pos { off: f[0].start.off + wordcraft_doc::para::OBJ.len_utf8(), ..f[0].start.clone() };
     assert_eq!(s.doc.copy_range(&inside, &f[0].end).plain_text(), "(Smith 2020)");
 }
+
+// ---- WordCraft AR: numbering while typing (Service tab, `service.autoNumber`)
+
+fn svc_texts(s: &Session) -> Vec<String> {
+    paras(s).into_iter().map(|p| p.0).collect()
+}
+
+#[test]
+fn service_enter_writes_the_next_marker_of_the_cycle() {
+    // Only the first marker is typed: every Enter after a marker writes the next one of that level.
+    let s = typed("١. المهمة\n");
+    assert_eq!(svc_texts(&s), ["١. المهمة", "٢. "]);
+    let s = typed("أولاً. بند\nبند آخر\n");
+    assert_eq!(svc_texts(&s), ["أولا\u{64b}. بند", "ثانيا\u{64b}. بند آخر", "ثالثا\u{64b}. "]);
+}
+
+#[test]
+fn service_tab_and_shift_tab_change_the_level() {
+    // «١.» Enter → «٢.»; Tab → the item steps in: «أ.»; Shift+Tab → back to «٢.»
+    let mut s = typed("١. أول\n");
+    typ(&mut s, "\t");
+    assert_eq!(svc_texts(&s), ["١. أول", "أ. "]);
+    run(&mut s, "text.backTab", json!({}));
+    assert_eq!(svc_texts(&s), ["١. أول", "٢. "]);
+    // inside the item's text Tab stays a Tab
+    typ(&mut s, "نص\t");
+    assert_eq!(svc_texts(&s), ["١. أول", "٢. نص\t"]);
+}
+
+#[test]
+fn service_enter_on_an_empty_item_steps_out_and_ends_the_list() {
+    let mut s = typed("١. أول\n\t");
+    assert_eq!(svc_texts(&s), ["١. أول", "أ. "]);
+    typ(&mut s, "\n");
+    assert_eq!(svc_texts(&s), ["١. أول", "٢. "]);
+    typ(&mut s, "\n");
+    assert_eq!(svc_texts(&s), ["١. أول", ""]);
+}
+
+#[test]
+fn service_numbers_after_an_inserted_item_are_put_right() {
+    let mut s = s();
+    run(&mut s, "service.autoNumber", json!({"value": false}));
+    typ(&mut s, "أ. واحد\nب. اثنان\nجـ. ثلاثة");
+    run(&mut s, "service.autoNumber", json!({"value": true}));
+    // Enter at the end of the first item: the new «ب.» pushes the others down
+    let first = s.doc.para_paths(StoryRef::Body)[0].clone();
+    let end = s.doc.para(StoryRef::Body, &first).unwrap().len();
+    s.sel = crate::Selection::caret(Pos::new(StoryRef::Body, first, end));
+    typ(&mut s, "\n");
+    assert_eq!(svc_texts(&s), ["أ. واحد", "ب. ", "جـ. اثنان", "د. ثلاثة"]);
+}
+
+#[test]
+fn service_auto_number_can_be_switched_off() {
+    let mut s = s();
+    run(&mut s, "service.autoNumber", json!({"value": false}));
+    typ(&mut s, "١. أول\n");
+    assert_eq!(svc_texts(&s), ["١. أول", ""]);
+    run(&mut s, "service.autoNumber", json!({}));
+    assert!(s.prefs.service_autonumber);
+}

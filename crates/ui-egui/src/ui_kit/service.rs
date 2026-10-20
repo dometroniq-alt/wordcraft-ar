@@ -26,6 +26,11 @@ pub const ENTRIES: &[Entry] = &[
         |d| d.service_list(),
     ),
     Entry::new(
+        "service.autoNumber",
+        "Numbering while you type: press Enter after «أ.» and the next marker «ب.» is written for you; Tab on a fresh marker steps one level in («أولاً.»), Shift+Tab one level out. Click again to switch it off and type plain text. Example: «١. المهمة» Enter gives «٢.».",
+        |d| d.auto_number(),
+    ),
+    Entry::new(
         "service.finalDot",
         "Puts a full stop at the end of every item that lacks one, as service writing requires. Example: «فحص المرضى» becomes «فحص المرضى.».",
         |d| d.final_dot(),
@@ -197,6 +202,29 @@ impl Draw<'_> {
                 );
             }
         }
+    }
+
+    /// Enter after a marker writes the next marker; the caret waits after it.
+    fn auto_number(&self) {
+        let page = self.page(40.0, 8.0, 90.0, 88.0);
+        let grey = self.t.text_dim;
+        let marks = ["أ.", "ب.", "جـ.", "د."];
+        for (i, m) in marks.iter().enumerate() {
+            let y = page.min.y + 10.0 + i as f32 * 18.0;
+            let land = if i == 0 { 1.0 } else { self.reveal(0.15 + (i as f32 - 1.0) * 0.25, 0.35 + (i as f32 - 1.0) * 0.25) };
+            if land <= 0.0 {
+                continue;
+            }
+            // The marker pops in at the right, the line is typed running left from it.
+            let col = if i == 0 { grey } else { self.t.accent.linear_multiply(0.4 + 0.6 * land) };
+            self.label(pos2(page.max.x - 6.0, y), m, 9.0, col, Align2::RIGHT_CENTER);
+            let w = [46.0, 38.0, 52.0, 30.0][i] * land;
+            self.line(pos2(page.max.x - 28.0 - w, y), pos2(page.max.x - 28.0, y), grey, 1.5);
+        }
+        // the Enter key
+        let key = Rect::from_center_size(pos2(page.min.x + 14.0, page.max.y - 12.0), vec2(22.0, 12.0));
+        self.p.rect_stroke(key, 2.0, Stroke::new(1.0, self.t.accent), egui::StrokeKind::Outside);
+        self.label(key.center(), "↵", 8.0, self.t.accent, Align2::CENTER_CENTER);
     }
 
     /// The stamp comes down on the header, then on the footer.

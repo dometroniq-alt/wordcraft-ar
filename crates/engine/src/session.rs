@@ -530,6 +530,10 @@ pub struct Prefs {
     /// 14 pt for both scripts, Arabic (Iraq) as the complex-script language — whatever the
     /// interface language. Off, new documents are WordCraft's (Aptos, left to right).
     pub arabic_documents: bool,
+    /// WordCraft AR, Service tab: numbering while typing — Enter after a service marker writes the
+    /// next marker of the cycle, Tab/Shift+Tab on a fresh marker change its level
+    /// (`service.autoNumber` switches it, the Service tab has the button).
+    pub service_autonumber: bool,
 }
 
 impl Default for Prefs {
@@ -552,6 +556,7 @@ impl Default for Prefs {
             detect_language: true,
             autocorrect: Default::default(),
             arabic_documents: true,
+            service_autonumber: true,
         }
     }
 }
