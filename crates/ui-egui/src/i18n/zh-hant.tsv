@@ -59,6 +59,7 @@
 	AutoFit Contents	依內容自動調整
 	AutoFit Window	依視窗自動調整
 	AutoSave writes your changes to the file a moment after you stop typing.	停止輸入片刻後，自動儲存會將變更寫入檔案。
+	Auto\nNumber	自動\n編號
 	Automatic	自動
 	Automatic ({language})	自動（{language}）
 	Automatic follows your system's language. Menus and commands change; your documents don't.	「自動」會跟隨系統語言。功能表與命令會改變，文件內容不會改變。

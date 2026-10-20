@@ -70,6 +70,7 @@
 	AutoFit Contents	Добір розміру за вмістом
 	AutoFit Window	Добір розміру за шириною вікна
 	AutoSave writes your changes to the file a moment after you stop typing.	Автозбереження записує зміни у файл невдовзі після того, як ви припините вводити текст.
+	Auto\nNumber	Авто-\nнумерація
 	Automatic	Автоматично
 	Automatic ({language})	Автоматично ({language})
 	Automatic follows your system's language. Menus and commands change; your documents don't.	Автоматичний режим використовує мову вашої системи. Змінюються меню й команди, а вміст документів залишається незмінним.

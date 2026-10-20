@@ -59,6 +59,7 @@
 	AutoFit Contents	내용에 맞게 자동 맞춤
 	AutoFit Window	창에 맞게 자동 맞춤
 	AutoSave writes your changes to the file a moment after you stop typing.	입력을 멈추면 잠시 후 자동 저장이 변경 내용을 파일에 기록합니다.
+	Auto\nNumber	자동\n번호
 	Automatic	자동
 	Automatic ({language})	자동({language})
 	Automatic follows your system's language. Menus and commands change; your documents don't.	자동은 시스템 언어를 따릅니다. 메뉴와 명령의 언어만 바뀌며 문서 내용은 바뀌지 않습니다.

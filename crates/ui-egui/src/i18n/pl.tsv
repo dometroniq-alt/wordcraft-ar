@@ -64,6 +64,7 @@
 	AutoSave	Autozapis
 	AutoSave saves every change to the file (needs a saved document)	Autozapis zapisuje każdą zmianę w pliku (dokument musi być już zapisany)
 	AutoText	Autotekst
+	Auto\nNumber	Autonu-\nmerowanie
 	Automatic	Automatyczny
 	Automatic ({language})	Automatycznie ({language})
 	Automatic Table 1 (3 levels)	Tabela automatyczna 1 (3 poziomy)
