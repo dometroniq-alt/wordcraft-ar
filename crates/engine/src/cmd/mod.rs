@@ -37,6 +37,7 @@ pub mod references;
 pub mod review;
 pub mod send;
 pub mod service;
+pub mod service_outline;
 pub mod smart_art;
 pub mod speech;
 pub mod table;
@@ -103,6 +104,7 @@ pub fn registry() -> Registry {
     v.extend(speech::specs());
     v.extend(controls::specs());
     v.extend(service::specs());
+    v.extend(service_outline::specs());
     v.extend(send::specs());
     Registry::new(v)
 }

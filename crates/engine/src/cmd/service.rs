@@ -50,7 +50,7 @@ pub fn specs() -> Vec<CommandSpec> {
 
 /// Marker kinds of the cycle, in order.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum Kind {
+pub(super) enum Kind {
     Digit = 0,
     Abjad = 1,
     Ordinal = 2,
@@ -60,7 +60,7 @@ enum Kind {
 }
 
 impl Kind {
-    fn from_depth(d: usize) -> Kind {
+    pub(super) fn from_depth(d: usize) -> Kind {
         match d % 6 {
             0 => Kind::Digit,
             1 => Kind::Abjad,
@@ -70,7 +70,7 @@ impl Kind {
             _ => Kind::OrdinalParen,
         }
     }
-    fn index(self) -> usize {
+    pub(super) fn index(self) -> usize {
         self as usize
     }
 }
@@ -133,7 +133,7 @@ const ORDINAL_WORDS: [&str; 30] = [
 const ABJAD_LETTERS: &str = "أابجدهوزحطيكلمنسعفصقرشتثخذضظغ";
 
 /// A typed marker at the start of `text`: (kind, number, byte length including the space after).
-fn detect(text: &str) -> Option<(Kind, u32, usize)> {
+pub(super) fn detect(text: &str) -> Option<(Kind, u32, usize)> {
     let t = text.trim_start_matches([' ', '\u{00A0}', '\t']);
     let lead = text.len() - t.len();
     let (paren, body) = match t.strip_prefix(['(', '（']) {
@@ -201,7 +201,7 @@ fn detect(text: &str) -> Option<(Kind, u32, usize)> {
 }
 
 /// Marker text for a level (0-based depth) and number.
-fn marker_text(depth: usize, n: u32) -> String {
+pub(super) fn marker_text(depth: usize, n: u32) -> String {
     let core = match Kind::from_depth(depth) {
         Kind::Digit | Kind::DigitParen => ar::arabic_indic(n),
         Kind::Abjad | Kind::AbjadParen => ar::abjad(n),
@@ -226,14 +226,14 @@ fn hang_for(depth: usize, size: f32) -> f32 {
 
 /// Paragraphs of the scope with their detected markers and resolved depths (`None` depth: an
 /// unnumbered paragraph under the previous marker).
-struct Item {
-    path: wordcraft_doc::Path,
-    marker: Option<(Kind, u32, usize)>,
-    depth: usize,
-    numbered: bool,
+pub(super) struct Item {
+    pub(super) path: wordcraft_doc::Path,
+    pub(super) marker: Option<(Kind, u32, usize)>,
+    pub(super) depth: usize,
+    pub(super) numbered: bool,
 }
 
-fn analyse(s: &Session, paths: &[wordcraft_doc::Path], first_is_top: bool) -> Vec<Item> {
+pub(super) fn analyse(s: &Session, paths: &[wordcraft_doc::Path], first_is_top: bool) -> Vec<Item> {
     let mut items = Vec::new();
     let mut prev_depth: i32 = -1;
     let mut typed_depth: i32 = -1;
@@ -401,7 +401,7 @@ fn apply_list(s: &mut Session, v: &Value) -> CmdResult {
 // ------------------------------------------------------- numbering while typing
 
 /// Marker text of a kind and number: «٣.», «جـ.»-style abjad, «ثالثاً.», «(٣).», …
-fn marker_for_kind(kind: Kind, n: u32) -> String {
+pub(super) fn marker_for_kind(kind: Kind, n: u32) -> String {
     let core = match kind {
         Kind::Digit | Kind::DigitParen => ar::arabic_indic(n),
         Kind::Abjad | Kind::AbjadParen => ar::abjad(n),
@@ -435,13 +435,20 @@ fn typed_marker_at(s: &Session, at: &Pos) -> Option<(Kind, u32, usize)> {
 /// marker is written with the character formatting of `like` (a paragraph of that level) or of
 /// the paragraph's own first run; when `like` is given its indents and tab stop are copied too,
 /// so the item lands on the level's column. Returns the new marker's length.
-fn put_marker(s: &mut Session, path: &wordcraft_doc::Path, old_len: usize, kind: Kind, n: u32, like: Option<&wordcraft_doc::Path>) -> Result<usize, CmdError> {
+pub(super) fn put_marker(
+    s: &mut Session,
+    path: &wordcraft_doc::Path,
+    old_len: usize,
+    kind: Kind,
+    n: u32,
+    like: Option<&wordcraft_doc::Path>,
+) -> Result<usize, CmdError> {
     put_marker_sep(s, path, old_len, kind, n, like, None)
 }
 
 /// [`put_marker`] with the separator after the marker: a tab or one space. `None` keeps the one
 /// the replaced marker had (a tab when there was none).
-fn put_marker_sep(
+pub(super) fn put_marker_sep(
     s: &mut Session,
     path: &wordcraft_doc::Path,
     old_len: usize,
@@ -478,7 +485,7 @@ fn put_marker_sep(
 
 /// Set a paragraph's hanging indent for a level by the engine's estimate (used when the document
 /// has no item of that level to copy the column from).
-fn estimate_indent(s: &mut Session, path: &wordcraft_doc::Path, depth: usize) -> Result<(), CmdError> {
+pub(super) fn estimate_indent(s: &mut Session, path: &wordcraft_doc::Path, depth: usize) -> Result<(), CmdError> {
     let size = para_size(s, path);
     let hang = hang_for(depth, size);
     let start: f32 = (0..depth).map(|d| hang_for(d, size) * 0.9).sum();
@@ -518,7 +525,11 @@ fn fix_numbers_from(s: &mut Session, from: &wordcraft_doc::Path) -> Result<(), C
         }
         last_depth = it.depth;
         let want = counters.get(it.depth).copied().unwrap_or(1);
-        if after && let Some((kind, n, len)) = it.marker && n != want && &it.path != from {
+        if after
+            && let Some((kind, n, len)) = it.marker
+            && n != want
+            && &it.path != from
+        {
             edits.push((it.path.clone(), kind, want, len));
         }
     }
@@ -546,7 +557,7 @@ fn previous_sibling(items: &[Item], idx: usize, depth: usize) -> Option<(wordcra
 }
 
 /// Any item of exactly `depth` in the document nearest to `idx` (to copy its column and look).
-fn like_at_depth(items: &[Item], idx: usize, depth: usize) -> Option<wordcraft_doc::Path> {
+pub(super) fn like_at_depth(items: &[Item], idx: usize, depth: usize) -> Option<wordcraft_doc::Path> {
     let before = items[..idx].iter().rev().find(|i| i.numbered && i.depth == depth && i.marker.is_some());
     let after = items.get(idx + 1..).and_then(|r| r.iter().find(|i| i.numbered && i.depth == depth && i.marker.is_some()));
     before.or(after).map(|i| i.path.clone())
